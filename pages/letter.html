@@ -113,38 +113,38 @@
       transform: translateY(1px);
     }
 
-    /* 📜 Paper wrapper */
+    /* 📜 Paper wrapper (smaller + centered for iPhone) */
     .paperWrap{
       position:relative;
       z-index: 2;
-      width: min(900px, 94vw);
-      height: min(980px, 80vh);
+
+      width: min(820px, 92vw);
+      height: auto;
+      max-height: 72svh;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
     }
 
-    /* ✅ REAL parchment */
+    /* ✅ REAL parchment (shrink naturally) */
     .paper{
       position:relative;
       width:100%;
-      height:100%;
+      height:auto;
+      min-height: 520px;
+      max-height: 72svh;
+
       border-radius: 22px;
       overflow:hidden;
 
       background:
-        /* light bloom */
         radial-gradient(circle at 30% 20%, rgba(255,255,255,.55), transparent 60%),
         radial-gradient(circle at 70% 15%, rgba(255,255,255,.35), transparent 62%),
-
-        /* natural soft stains */
         radial-gradient(circle at 18% 60%, rgba(120,70,35,.12), transparent 55%),
         radial-gradient(circle at 85% 65%, rgba(120,70,35,.10), transparent 58%),
         radial-gradient(circle at 52% 92%, rgba(120,70,35,.14), transparent 65%),
-
-        /* parchment depth */
-        linear-gradient(180deg,
-          #fff5dc 0%,
-          #f2d7ad 55%,
-          #deb980 100%
-        );
+        linear-gradient(180deg, #fff5dc 0%, #f2d7ad 55%, #deb980 100%);
 
       box-shadow:
         0 30px 90px rgba(0,0,0,.18),
@@ -152,11 +152,10 @@
         inset 0 25px 55px rgba(80,40,15,.18);
 
       border: 1px solid rgba(80,40,18,.18);
-
       padding: clamp(18px, 3.5vw, 50px);
     }
 
-    /* ✅ Organic dirty vignette edges */
+    /* Organic dirty vignette edges */
     .paper::before{
       content:"";
       position:absolute;
@@ -168,14 +167,13 @@
         radial-gradient(circle at 90% 15%, rgba(60,30,10,.25), transparent 58%),
         radial-gradient(circle at 15% 90%, rgba(60,30,10,.28), transparent 60%),
         radial-gradient(circle at 85% 95%, rgba(60,30,10,.33), transparent 62%),
-
         radial-gradient(circle at 50% 50%, transparent 65%, rgba(60,30,10,.22) 120%);
 
       opacity:.75;
       filter: blur(10px);
     }
 
-    /* ✅ Tiny paper grain (no repeating fake pattern) */
+    /* Tiny paper grain */
     .paper::after{
       content:"";
       position:absolute;
@@ -287,6 +285,37 @@
       color: rgba(120,55,80,.88);
     }
 
+    /* iPhone tweaks */
+    @media (max-width: 480px){
+      .stage{ padding: 18px; }
+
+      .paperWrap{
+        width: 92vw;
+        max-height: 68svh;
+      }
+
+      .paper{
+        padding: 22px;
+        border-radius: 18px;
+        min-height: 480px;
+        max-height: 68svh;
+      }
+
+      .title{
+        font-size: 52px;
+      }
+
+      .body{
+        font-size: 15px;
+        line-height: 1.65;
+        margin-top: 18px;
+      }
+
+      .signature{
+        font-size: 32px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce){
       .petal, .cursor{ animation:none !important; }
     }
@@ -304,14 +333,13 @@
     <div class="paperWrap">
       <div class="paper">
         <div class="paperInner">
-
           <div class="titleRow">
             <h1 class="title">My Dearest Lily</h1>
             <div class="envelope">✉️</div>
           </div>
 
           <div class="body">
-            <span id="typedText"></span><span class="cursor">|</span>
+            <span id="typedText"></span><span class="cursor" id="cursor">|</span>
           </div>
 
           <div class="signature">— your stinky bf 💗</div>
@@ -322,38 +350,44 @@
     <a class="backMini" href="./menu.html">← Back to Menu</a>
   </div>
 
-  <!-- 🌸 Petals -->
+  <!-- 🌸 Petals (respect reduced motion + pause when tab hidden) -->
   <script>
     const layer = document.getElementById("petalLayer");
     const petals = ["🌸","🌷","💮","🌺"];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     function spawnPetal(){
-      if(layer.childElementCount > 20) return;
+      if (reduceMotion) return;
+      if (document.hidden) return;
+      if (layer.childElementCount > 20) return;
 
       const p = document.createElement("div");
-      p.className="petal";
+      p.className = "petal";
       p.textContent = petals[Math.floor(Math.random()*petals.length)];
 
-      const x = Math.random()*100;
-      const drift = (Math.random()*40-20)+"vw";
-      const size = 18 + Math.random()*16;
+      const x = Math.random() * 100;
+      const drift = (Math.random() * 40 - 20) + "vw";
+      const size = 18 + Math.random() * 16;
 
-      p.style.setProperty("--x", x+"vw");
+      p.style.setProperty("--x", x + "vw");
       p.style.setProperty("--drift", drift);
-      p.style.fontSize = size+"px";
-      p.style.animationDuration = (10+Math.random()*7)+"s";
+      p.style.fontSize = size + "px";
+      p.style.animationDuration = (10 + Math.random() * 7) + "s";
 
       layer.appendChild(p);
-      setTimeout(()=>p.remove(), 18000);
+      setTimeout(() => p.remove(), 18000);
     }
 
     setInterval(spawnPetal, 900);
   </script>
 
-  <!-- ✅ Typewriter (ONLY EDIT THIS MESSAGE) -->
+  <!-- ✅ Typewriter (ONLY EDIT THIS MESSAGE) + reduced motion support -->
   <script>
     const typedEl = document.getElementById("typedText");
+    const reduceMotion2 = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // ✅ ONLY CHANGE THIS MESSAGE:
+    // Tip: if you ever need a backtick ` inside, write it as \`
     const letter = `Hi Puppy,
 
 This is where your real letter goes.
@@ -362,16 +396,24 @@ and romantic, just for her...
 
 Every word here will mean everything.`;
 
-    let i = 0;
-    function tick(){
-      i++;
-      typedEl.textContent = letter.slice(0,i);
+    if (reduceMotion2) {
+      typedEl.textContent = letter;
+    } else {
+      let i = 0;
+      function tick(){
+        i++;
+        typedEl.textContent = letter.slice(0, i);
 
-      if(i < letter.length){
-        setTimeout(tick, 22);
+        if(i < letter.length){
+          const ch = letter[i - 1];
+          let delay = 22;
+          if (ch === "." || ch === "!" || ch === "?") delay += 180;
+          if (ch === ",") delay += 90;
+          setTimeout(tick, delay);
+        }
       }
+      tick();
     }
-    tick();
   </script>
 
   <!-- Global music player -->
