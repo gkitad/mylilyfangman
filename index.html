@@ -216,7 +216,7 @@
       transform: translateY(52px) scale(.98);
       will-change: transform, opacity;
 
-      /* important: prevent accidental taps until we allow it */
+      /* prevent accidental taps until enabled */
       pointer-events: none;
       touch-action: manipulation;
     }
@@ -245,7 +245,7 @@
       backdrop-filter: blur(2px);
       z-index: 180;
       opacity: 0;
-      pointer-events: none; /* will be enabled later */
+      pointer-events: none;
       transition: opacity 260ms ease;
     }
     .letterBackdrop.show{
@@ -268,9 +268,8 @@
       z-index: 200;
 
       overflow: hidden;
-      cursor: pointer;
+      cursor: default;
 
-      /* stop fly animation completely */
       animation: none !important;
     }
     @media (max-width:520px){
@@ -279,6 +278,15 @@
         overflow: auto;
         -webkit-overflow-scrolling: touch;
       }
+    }
+
+    /* ✅ Levitate subtle (only when centered) */
+    .paper.centered.levitate{
+      animation: levitate 3.6s ease-in-out infinite !important;
+    }
+    @keyframes levitate{
+      0%,100%{ transform: translate(-50%, -50%) translateY(0); }
+      50%{ transform: translate(-50%, -50%) translateY(-6px); }
     }
 
     .paperInner{
@@ -315,10 +323,42 @@
       color: rgba(179,21,90,.72);
     }
 
+    /* Continue button (hidden until ready) */
+    .continueWrap{
+      margin-top: 18px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 300ms ease, transform 300ms ease;
+      pointer-events: none;
+    }
+    .continueWrap.show{
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .continueBtn{
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,79,163,.45);
+      background: rgba(255,255,255,.92);
+      color: rgba(179,21,90,.90);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 16px 34px rgba(179,21,90,.14);
+      transition: transform 140ms ease, box-shadow 220ms ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .continueBtn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 20px 44px rgba(179,21,90,.18);
+    }
+    .continueBtn:active{ transform: translateY(0) scale(.99); }
+
     .tapHint{
       margin-top: 10px;
       font-weight: 800;
-      opacity: .68;
+      opacity: .55;
       font-size: .95rem;
       color: rgba(42,31,37,.62);
     }
@@ -391,6 +431,12 @@
       15%  { opacity: .75; }
       100% { opacity: 0; transform: translateY(-34px) scale(1.06); }
     }
+
+    @media (prefers-reduced-motion: reduce){
+      .heart, .burstHeart{ animation: none !important; }
+      .envelope, .musicBtn, .btnRow button, .continueWrap{ transition: none !important; }
+      .paper.centered.levitate{ animation: none !important; }
+    }
   </style>
 </head>
 
@@ -400,7 +446,7 @@
 
   <button class="musicBtn posTopLeft" id="musicBtn" type="button">Music for you 💗</button>
 
-  <!-- Backdrop (NO click handler; prevents auto-close) -->
+  <!-- Backdrop -->
   <div class="letterBackdrop" id="letterBackdrop" aria-hidden="true"></div>
 
   <section class="screen" id="screenEnvelope">
@@ -410,13 +456,21 @@
       <div class="paper" id="paper" aria-label="Open letter" role="button" tabindex="0">
         <div class="paperInner">
           <div class="letterTitle">Hi Puppy,</div>
+
           <p class="letterBody">
             I wanted to ask you in a special way, and I thought of making this little detail just for you.
             <br><br>
             I hope you like it. 💗
           </p>
+
           <div class="sig">— your stinky bf</div>
-          <div class="tapHint">(tap the letter)</div>
+
+          <!-- ✅ Continue button -->
+          <div class="continueWrap" id="continueWrap">
+            <button class="continueBtn" id="continueBtn" type="button">Continue 💗</button>
+          </div>
+
+          <div class="tapHint">(tap the button)</div>
         </div>
       </div>
 
@@ -469,6 +523,7 @@
   <!-- Music -->
   <script src="/assets/player.js"></script>
   <script>
+    // Intro track for index
     LilyPlayer.setTrack("/assets/intro.mp3");
 
     const musicBtn = document.getElementById("musicBtn");
@@ -483,9 +538,27 @@
     const card = document.getElementById("questionCard");
     const backdrop = document.getElementById("letterBackdrop");
 
+    const continueWrap = document.getElementById("continueWrap");
+    const continueBtn = document.getElementById("continueBtn");
+
     let opened = false;
     let paperCentered = false;
     let openedAt = 0;
+
+    // ✅ tiny SFX (optional files)
+    const sfxOpen = new Audio("/assets/open.mp3");
+    const sfxContinue = new Audio("/assets/continue.mp3");
+    sfxOpen.preload = "auto";
+    sfxContinue.preload = "auto";
+
+    function playSfx(aud, volume = 0.25){
+      try{
+        aud.pause();
+        aud.currentTime = 0;
+        aud.volume = volume;
+        aud.play().catch(()=>{});
+      }catch(_){}
+    }
 
     function burstHearts(anchorEl){
       const heartSet = ["💗","💞","💖"];
@@ -510,52 +583,61 @@
     }
 
     function openEnvelopeFromPointer(e){
-      // stop the same gesture from creating a follow-up "click" that closes things
       e.preventDefault();
 
       if (opened) return;
       opened = true;
       openedAt = Date.now();
 
+      // ✅ play subtle open sound
+      playSfx(sfxOpen, 0.22);
+
       env.classList.add("is-opening");
       env.classList.add("open");
       burstHearts(env);
 
       setTimeout(() => {
-        // Move paper to BODY (so fixed centering is correct in all browsers)
+        // Move paper to BODY so fixed centering works in all browsers
         document.body.appendChild(paper);
 
-        // Stop the fly animation completely so it won't keep transforming
+        // Stop fly animation
         paper.style.animation = "none";
         paper.style.opacity = "1";
 
-        // Show backdrop
+        // Show backdrop + center
         backdrop.classList.add("show");
-
-        // Center the paper
         paper.classList.add("centered");
+        paper.classList.add("levitate");
+
         paperCentered = true;
 
-        // IMPORTANT: enable pointer events ONLY AFTER the lock window
+        // Lock interactions briefly (prevents ghost clicks)
         paper.style.pointerEvents = "none";
         backdrop.style.pointerEvents = "none";
+        continueWrap.classList.remove("show");
 
         setTimeout(() => {
           paper.style.pointerEvents = "auto";
           backdrop.style.pointerEvents = "auto";
-        }, 900); // lock window to ignore the original tap/click delay
+
+          // ✅ show Continue button after lock (so it feels intentional)
+          continueWrap.classList.add("show");
+          continueBtn.focus?.();
+        }, 900);
 
         env.classList.remove("is-opening");
       }, 1100);
     }
 
     function goToValentine(e){
-      // Require an actual user event + lock window
       if (!e || !e.isTrusted) return;
       if (!paperCentered) return;
 
-      // Ignore any "ghost click" right after opening
+      // extra safety: ignore any ghost interaction right after open
       if (Date.now() - openedAt < 900) return;
+
+      // ✅ play subtle continue sound
+      playSfx(sfxContinue, 0.18);
 
       paper.style.transition = "opacity 220ms ease";
       paper.style.opacity = "0";
@@ -569,34 +651,34 @@
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
 
+        // Move same music button into card
         card.insertBefore(musicBtn, card.firstChild);
         musicBtn.classList.remove("posTopLeft");
         musicBtn.classList.add("posCentered");
       }, 240);
     }
 
-    // ✅ Use pointerdown instead of click to prevent delayed mobile "click" ghosting
+    // Open with pointerdown (prevents mobile delayed click issues)
     env.addEventListener("pointerdown", openEnvelopeFromPointer, { passive: false });
 
     // Keyboard accessibility
     env.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        // fake a minimal event object compatible with go logic
-        openEnvelopeFromPointer({ preventDefault(){}, });
+        openEnvelopeFromPointer({ preventDefault(){} });
       }
     });
 
-    // Only the paper itself continues (backdrop has NO click handler)
-    paper.addEventListener("pointerdown", (e) => {
+    // ✅ Only Continue button advances (no more tap-the-letter auto closes)
+    continueBtn.addEventListener("pointerdown", (e) => {
       e.stopPropagation();
       goToValentine(e);
     }, { passive: true });
 
-    paper.addEventListener("keydown", (e) => {
+    continueBtn.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        goToValentine({ isTrusted: true }); // keyboard is trusted interaction
+        goToValentine({ isTrusted: true });
       }
     });
   </script>
