@@ -5,39 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Letter 💌</title>
 
-  <!-- Fonts to match the screenshot vibe -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,500&family=Special+Elite&display=swap" rel="stylesheet">
 
   <style>
+    :root{
+      --pink1:#ffd6e6;
+      --pink2:#f8bcd2;
+      --pink3:#ffeaf2;
+
+      --ink:#4a2b33;
+      --inkSoft: rgba(74,43,51,.78);
+
+      --pillBg: rgba(255,255,255,.55);
+      --pillBd: rgba(255,255,255,.75);
+      --pillSh: 0 18px 40px rgba(0,0,0,.10);
+
+      --paper1:#fff3dc;
+      --paper2:#f3d7b0;
+      --paperInk:#3f2a22;
+    }
+
     *{ box-sizing:border-box; }
 
-    /* FULLSCREEN image background (identical look) */
     body{
       margin:0;
       min-height:100vh;
       overflow:hidden;
-      background: #f7c9d8;
       font-family: "Playfair Display", serif;
+
+      background:
+        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.80), transparent 60%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
+        linear-gradient(180deg, var(--pink1), var(--pink2));
     }
 
     .stage{
       position:relative;
       width:100%;
       height:100vh;
-      background-image: url("../assets/letter-bg.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      display:grid;
+      place-items:center;
+      padding: 26px;
     }
 
-    /* Top-left Song pill (overlay) */
+    /* Floating petals */
+    #petalLayer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+    .petal{
+      position:absolute;
+      top:-10vh;
+      opacity:.20;
+      user-select:none;
+      filter: blur(.15px);
+      animation: fall linear forwards;
+    }
+    @keyframes fall{
+      0%{ transform: translateX(var(--x)) translateY(-10vh) rotate(0deg); opacity:0; }
+      18%{ opacity:.20; }
+      100%{
+        transform: translateX(calc(var(--x) + var(--drift)))
+                   translateY(120vh)
+                   rotate(260deg);
+        opacity:0;
+      }
+    }
+
+    /* Top-left song pill */
     .songBtn{
       position:absolute;
-      top: 22px;
-      left: 22px;
-      z-index: 20;
+      top: 18px;
+      left: 18px;
+      z-index: 5;
 
       height: 54px;
       padding: 0 22px;
@@ -47,258 +94,50 @@
       align-items:center;
       gap: 14px;
 
-      border: 1px solid rgba(255,255,255,.75);
-      background: rgba(255,255,255,.55);
+      border: 1px solid var(--pillBd);
+      background: var(--pillBg);
       backdrop-filter: blur(10px);
+      box-shadow: var(--pillSh);
 
       color: rgba(125, 60, 85, .95);
       font-weight: 700;
       font-size: 24px;
+
       cursor:pointer;
       user-select:none;
-
-      box-shadow: 0 18px 40px rgba(0,0,0,.08);
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
-    }
-    .songBtn .icon{
-      font-size: 22px;
-      opacity:.95;
-    }
-    .songBtn .play{
-      font-size: 22px;
-      margin-left: 8px;
-      opacity:.9;
     }
     .songBtn:active{ transform: translateY(1px); }
+    .songBtn .icon{ font-size: 22px; }
+    .songBtn .play{ margin-left: 6px; opacity:.9; }
 
-    /* Letter overlay area: position tuned to the screenshot */
-    .letterOverlay{
-      position:absolute;
-      inset: 0;
-      z-index: 10;
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-      padding-top: 110px; /* pushes text into parchment */
-      pointer-events:none; /* so only buttons are clickable */
-    }
-
-    .letterBox{
-      width: min(820px, 88vw);
-      height: min(980px, 74vh);
-      position: relative;
-      pointer-events:none;
-    }
-
-    .title{
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(44px, 5.8vw, 74px);
-      color: rgba(70, 34, 40, .85);
-      text-align:center;
-      margin: 40px 0 12px;
-      text-shadow: 0 2px 0 rgba(255,255,255,.35);
-    }
-
-    .body{
-      font-style: italic;
-      font-size: clamp(20px, 2.2vw, 30px);
-      line-height: 1.75;
-      color: rgba(65, 35, 38, .78);
-      padding: 10px 70px 0;
-      white-space: pre-wrap;
-    }
-
-    .sig{
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(26px, 3.2vw, 44px);
-      color: rgba(80, 42, 50, .70);
-      text-align:right;
-      padding: 24px 88px 0;
-    }
-
-    /* Typewriter cursor */
-    .cursor{
-      display:inline-block;
-      width: 12px;
-      margin-left: 4px;
-      transform: translateY(2px);
-      opacity: .85;
-      animation: blink .9s steps(2,end) infinite;
-      font-style: normal;
-    }
-    @keyframes blink { 50%{ opacity:0; } }
-
-    /* Bottom buttons (overlay, clickable) */
-    .actions{
-      position:absolute;
-      left: 0;
-      right: 0;
-      bottom: 70px;
-      z-index: 25;
+    /* Center parchment */
+    .paperWrap{
+      position:relative;
+      z-index: 2;
+      width: min(860px, 94vw);
+      height: min(980px, 78vh);
 
       display:flex;
+      align-items:stretch;
       justify-content:center;
-      gap: 34px;
-      padding: 0 22px;
     }
 
-    .pill{
-      pointer-events:auto;
-      height: 74px;
-      min-width: 320px;
-      padding: 0 28px;
-      border-radius: 999px;
+    .paper{
+      position:relative;
+      width:100%;
+      height:100%;
+      border-radius: 18px;
 
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap: 12px;
+      /* “old paper” */
+      background:
+        radial-gradient(1200px 900px at 35% 25%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1000px 800px at 80% 10%, rgba(255,255,255,.35), transparent 60%),
+        radial-gradient(1200px 900px at 50% 80%, rgba(140,80,35,.12), transparent 60%),
+        linear-gradient(180deg, var(--paper1), var(--paper2));
 
-      background: rgba(255,255,255,.55);
-      border: 1px solid rgba(255,255,255,.75);
-      backdrop-filter: blur(10px);
-
-      color: rgba(120, 55, 80, .95);
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-      font-size: 28px;
-      text-decoration:none;
-
-      box-shadow: 0 18px 40px rgba(0,0,0,.08);
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-
-    .pill:active{ transform: translateY(1px); }
-
-    /* Mobile tuning */
-    @media (max-width: 560px){
-      .songBtn{
-        top: 14px; left: 14px;
-        height: 46px;
-        padding: 0 16px;
-        font-size: 18px;
-      }
-      .actions{
-        bottom: 36px;
-        flex-direction: column;
-        gap: 14px;
-      }
-      .pill{
-        min-width: 0;
-        width: min(92vw, 420px);
-        height: 62px;
-        font-size: 22px;
-      }
-      .letterOverlay{ padding-top: 92px; }
-      .body{ padding: 10px 34px 0; }
-      .sig{ padding: 18px 44px 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .cursor{ animation:none !important; }
-    }
-  </style>
-</head>
-
-<!-- ✅ Track for global player (relative because this file is /pages/) -->
-<body data-track="../assets/cancionmenu.mp3">
-  <div class="stage">
-
-    <!-- Song button (must be id="songBtn" for your valentine-player.js) -->
-    <button class="songBtn" id="songBtn" type="button" aria-label="Play song">
-      <span class="icon">🎵</span>
-      <span>Song</span>
-      <span class="play">▶</span>
-    </button>
-
-    <!-- Text overlay (typewriter) -->
-    <div class="letterOverlay">
-      <div class="letterBox" aria-label="Letter text">
-        <div class="title" id="letterTitle">My Dearest Lily ✉️</div>
-
-        <!-- typed text goes here -->
-        <div class="body"><span id="typedText"></span><span class="cursor" id="cursor">|</span></div>
-
-        <div class="sig" id="signature">— your stinky bf 💗</div>
-      </div>
-    </div>
-
-    <!-- Bottom buttons -->
-    <div class="actions">
-      <a class="pill" href="./menu.html">← Back to Menu</a>
-      <button class="pill" id="downloadBtn" type="button">📜 Download Letter</button>
-    </div>
-
-  </div>
-
-  <!-- ⌨️ Typewriter (YOU ONLY EDIT const letter) -->
-  <script>
-    const typedEl = document.getElementById("typedText");
-    const cursorEl = document.getElementById("cursor");
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    // ✅ ONLY EDIT THIS MESSAGE:
-    // (Tip: if you ever need a backtick ` inside, write it as \` )
-    const letter = `Hi Puppy,
-
-This is where your message will go.
-You can write something sweet, personal,
-and romantic, just for her...
-
-Every word here will mean everything.`;
-
-    function showAll(){
-      typedEl.textContent = letter;
-    }
-
-    function typeWriter(text){
-      let i = 0;
-      function tick(){
-        i++;
-        typedEl.textContent = text.slice(0, i);
-
-        if (i < text.length){
-          const ch = text[i - 1];
-          let delay = 22;
-          if (ch === "." || ch === "!" || ch === "?") delay += 180;
-          if (ch === ",") delay += 90;
-          setTimeout(tick, delay);
-        } else {
-          // optional: remove cursor when done
-          // cursorEl.remove();
-        }
-      }
-      tick();
-    }
-
-    if (reduceMotion) showAll();
-    else typeWriter(letter);
-  </script>
-
-  <!-- Download letter as .txt (optional, matches button) -->
-  <script>
-    document.getElementById("downloadBtn").addEventListener("click", () => {
-      const title = (document.getElementById("letterTitle").textContent || "letter").trim();
-      const text = `${title}\n\n${document.getElementById("typedText").textContent}\n\n${document.getElementById("signature").textContent}`;
-
-      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "letter.txt";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      URL.revokeObjectURL(url);
-    });
-  </script>
-
-  <!-- ✅ Global music player -->
-  <script src="../assets/valentine-player.js?v=5"></script>
-</body>
-</html>
+      box-shadow:
+        0 26px 80px rgba(0,0,0,.16),
+        inset 0 0 0 1px rgba(255,255,255,.35),
+        inset 0 20px 46px rgba
