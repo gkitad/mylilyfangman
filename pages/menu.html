@@ -218,21 +218,23 @@
       font-weight: 800;
       font-family: "Courier New", monospace;
     }
-    /* 📱 Mobile: 1 column for the 4 options */
-@media (max-width: 520px){
-  .options{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  margin-top: 14px;
-}
 
+    /* ✅ Mobile: 1 column + cleaner titlebar spacing */
+    @media (max-width: 520px){
+      .options{
+        grid-template-columns: 1fr; /* ✅ only change needed */
+      }
 
-  .window{
-    width: 95%;
-  }
-}
+      .window{
+        width: 95%;
+      }
 
+      /* optional: make titlebar less cramped on phone */
+      .win-controls{ display:none; }
+      .titlebar{ padding: 6px 8px; }
+      .titlebar__text{ font-size: 12px; }
+      .playbtn{ height: 18px; padding: 0 8px; font-size: 11px; }
+    }
   </style>
 </head>
 
@@ -244,7 +246,6 @@
       <div class="titlebar__text">💗 MY VALENTINE 💗</div>
 
       <div class="titlebar__actions">
-        <!-- ✅ Only MP3 Song button -->
         <button class="playbtn" id="songBtn" type="button">🎶 Song ▶</button>
 
         <div class="win-controls" aria-hidden="true">
@@ -257,7 +258,6 @@
 
     <div class="window__body">
       <h1>Pick a surprise😚</h1>
-
 
       <div class="options">
         <div class="option" onclick="location.href='letter.html'">💌 Letter</div>
@@ -298,7 +298,6 @@
     /* 🎶 Song Button MP3 */
     const songBtn = document.getElementById("songBtn");
     const song = new Audio("/assets/cancionmenu.mp3");
-
     song.loop = true;
 
     function setLabel(){
