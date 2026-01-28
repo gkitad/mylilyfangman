@@ -7,23 +7,25 @@
 
   <style>
     /* -----------------------------
-      VALENTINE WIN95/98 THEME
+      RETRO WIN95/98 VALENTINE THEME
+      (more square + harder bevels)
     ------------------------------*/
     :root{
-      --pink-1:#fff7fb;
-      --pink-2:#ffd6e8;
-      --win-bg:#ffeaf3;          /* window interior */
-      --titlebar:#ffb7d6;        /* title bar */
-      --titlebar-2:#ff8fbe;
-      --accent:#b3155a;
+      --bg1:#fff4fa;
+      --bg2:#ffd1e6;
 
-      /* Win95-ish 3D borders */
-      --hi:#ffffff;              /* top/left highlight */
-      --mid:#ffd0e3;
-      --lo:#b86a8c;              /* bottom/right shadow */
-      --deep:#7a3554;
+      --win:#ffe8f3;            /* window surface */
+      --title1:#ff7fb9;         /* titlebar gradient */
+      --title2:#ffb3d6;
 
       --text:#2a2a2a;
+      --accent:#b3155a;
+
+      /* classic 3D borders */
+      --hi:#ffffff;             /* highlight */
+      --hi2:#ffe7f2;            /* inner highlight */
+      --sh:#b86a8c;             /* shadow */
+      --sh2:#7a3554;            /* deep shadow */
     }
 
     body{
@@ -31,177 +33,175 @@
       min-height:100vh;
       display:grid;
       place-items:center;
-      font-family: "MS Sans Serif", Tahoma, Verdana, Arial, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 50% 20%, #ffffff 0%, var(--pink-1) 45%, var(--pink-2) 100%);
+      font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
       color:var(--text);
+
+      /* more "retro" background texture */
+      background:
+        radial-gradient(900px 520px at 50% 25%, #ffffff 0%, var(--bg1) 45%, var(--bg2) 100%),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.10) 0px,
+          rgba(255,255,255,0.10) 2px,
+          rgba(0,0,0,0.02) 3px
+        );
     }
 
-    /* A subtle pixel-ish look for headings without importing fonts */
-    h1, .titlebar__text{
-      letter-spacing: 0.5px;
+    /* pixel-like heading without external font */
+    h1{
+      font-family: "Courier New", Courier, monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     /* -----------------------------
-      WINDOW (replaces card style)
+      WINDOW FRAME (Win95 style)
     ------------------------------*/
     .window{
-      width: min(720px, 92%);
-      background: var(--win-bg);
-      border-radius: 18px; /* rounded but still "soft win98" */
-      padding: 0;
-      box-shadow: 0 18px 55px rgba(0,0,0,.18);
-      /* 3D frame */
-      border: 2px solid var(--mid);
+      width:min(720px, 92%);
+      background: var(--win);
+      border-radius: 0;          /* <- square */
       position: relative;
-      overflow: hidden;
+      padding:0;
+      box-shadow: 0 18px 55px rgba(0,0,0,.22);
+
+      /* outer frame */
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--sh2);
+      border-bottom: 3px solid var(--sh2);
     }
 
-    /* win95-ish outer bevel */
+    /* inner frame like old dialogs */
     .window::before{
       content:"";
       position:absolute;
-      inset:0;
+      inset: 4px;
       pointer-events:none;
-      border-top: 3px solid var(--hi);
-      border-left: 3px solid var(--hi);
-      border-right: 3px solid var(--lo);
-      border-bottom: 3px solid var(--lo);
-      border-radius: 18px;
-      opacity:.95;
+      border-top: 2px solid var(--hi2);
+      border-left: 2px solid var(--hi2);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
     }
 
     .titlebar{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      padding: 10px 12px;
-      background: linear-gradient(90deg, var(--titlebar-2), var(--titlebar));
-      border-bottom: 2px solid var(--mid);
-      position: relative;
+      gap:10px;
+      padding: 8px 10px;
+      background: linear-gradient(90deg, var(--title1), var(--title2));
+      border-bottom: 2px solid rgba(0,0,0,.12);
+      user-select:none;
     }
 
     .titlebar__text{
-      font-weight: 700;
-      font-size: 14px;
-      color: #5a1030;
+      font-size: 13px;
+      font-weight: 800;
+      color:#4c0f2a;
       display:flex;
       align-items:center;
       gap:8px;
-      user-select:none;
     }
 
-    .titlebar__dots{
+    .win-controls{
       display:flex;
       gap:6px;
-      margin-left:auto;
     }
 
-    /* faux window buttons */
+    /* classic square system buttons */
     .winbtn{
       width: 22px;
       height: 18px;
-      background: #ffe1ee;
-      border-radius: 4px;
+      background: #ffe3f0;
+      border-radius: 0;  /* <- square */
       border-top: 2px solid var(--hi);
       border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--lo);
-      border-bottom: 2px solid var(--lo);
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
       display:grid;
       place-items:center;
       font-size: 12px;
-      color:#6b2242;
+      color:#5e1f3c;
       line-height: 1;
-      user-select:none;
     }
 
     .winbtn:active{
-      border-top: 2px solid var(--lo);
-      border-left: 2px solid var(--lo);
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
       border-right: 2px solid var(--hi);
       border-bottom: 2px solid var(--hi);
-      transform: translateY(1px);
+      transform: translate(1px,1px);
     }
 
     .window__body{
-      padding: 34px 34px 26px;
+      padding: 26px 28px 22px;
       text-align:center;
     }
 
     h1{
-      font-size: 2.6rem;
-      margin: 0 0 8px;
+      font-size: 2.2rem;
+      margin: 6px 0 10px;
       color: var(--accent);
-      text-shadow: 0 2px 0 rgba(255,255,255,.6);
+      text-shadow: 1px 1px 0 rgba(255,255,255,.75);
     }
 
     p{
-      margin: 0 0 22px;
-      color: rgba(0,0,0,.6);
-      font-size: 0.98rem;
+      margin:0 0 18px;
+      color: rgba(0,0,0,.65);
+      font-size: 0.95rem;
     }
 
     /* -----------------------------
-      OPTIONS = Win95 buttons
+      BUTTON GRID = Win95 buttons
     ------------------------------*/
     .options{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 12px;
       margin-top: 14px;
     }
 
     .option{
-      padding: 14px 14px;
+      padding: 12px 12px;
       background: #ffeef6;
       cursor:pointer;
-      font-weight: 700;
-      border-radius: 12px;
+      font-weight: 800;
+      border-radius: 0; /* <- square */
 
-      /* 3D bevel */
       border-top: 3px solid var(--hi);
       border-left: 3px solid var(--hi);
-      border-right: 3px solid var(--lo);
-      border-bottom: 3px solid var(--lo);
+      border-right: 3px solid var(--sh2);
+      border-bottom: 3px solid var(--sh2);
 
-      box-shadow:
-        inset 0 0 0 1px rgba(0,0,0,.05),
-        0 8px 18px rgba(0,0,0,.10);
-
-      transition: transform 0.08s ease;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
       user-select:none;
     }
 
     .option:hover{
-      transform: translateY(-1px);
+      filter: brightness(1.02);
     }
 
     .option:active{
-      transform: translateY(1px);
-      border-top: 3px solid var(--lo);
-      border-left: 3px solid var(--lo);
+      border-top: 3px solid var(--sh2);
+      border-left: 3px solid var(--sh2);
       border-right: 3px solid var(--hi);
       border-bottom: 3px solid var(--hi);
-      box-shadow:
-        inset 0 0 0 1px rgba(0,0,0,.06),
-        0 6px 14px rgba(0,0,0,.10);
+      transform: translate(1px,1px);
     }
 
     .back{
-      margin-top: 20px;
+      margin-top: 18px;
       display:inline-block;
       color: var(--accent);
       text-decoration:none;
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-weight: 800;
+      font-family: "Courier New", Courier, monospace;
     }
-
     .back:hover{ text-decoration: underline; }
 
     /* -----------------------------
-      MODAL OVERLAY (Win95 dialog)
+      MODAL = Win95 dialog
     ------------------------------*/
     .overlay{
       position: fixed;
@@ -213,102 +213,93 @@
       padding: 20px;
       z-index: 999;
     }
-
     .overlay.active{ display:flex; }
 
     .spotify-box{
       width: min(560px, 95vw);
-      background: var(--win-bg);
-      border-radius: 16px;
+      background: var(--win);
+      border-radius: 0;
       padding: 0;
-      box-shadow: 0 22px 70px rgba(0,0,0,.28);
+      box-shadow: 0 22px 70px rgba(0,0,0,.30);
       position: relative;
-      overflow:hidden;
-      border: 2px solid var(--mid);
-      animation: pop 0.2s ease;
+
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--sh2);
+      border-bottom: 3px solid var(--sh2);
     }
 
     .spotify-box::before{
       content:"";
       position:absolute;
-      inset:0;
+      inset: 4px;
       pointer-events:none;
-      border-top: 3px solid var(--hi);
-      border-left: 3px solid var(--hi);
-      border-right: 3px solid var(--lo);
-      border-bottom: 3px solid var(--lo);
-      border-radius: 16px;
+      border-top: 2px solid var(--hi2);
+      border-left: 2px solid var(--hi2);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
     }
 
-    @keyframes pop{
-      from{ transform: scale(0.96); opacity: 0; }
-      to{ transform: scale(1); opacity: 1; }
-    }
-
-    /* modal titlebar */
     .spotify-titlebar{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding: 10px 12px;
-      background: linear-gradient(90deg, var(--titlebar-2), var(--titlebar));
-      border-bottom: 2px solid var(--mid);
+      padding: 8px 10px;
+      background: linear-gradient(90deg, var(--title1), var(--title2));
+      border-bottom: 2px solid rgba(0,0,0,.12);
+      user-select:none;
     }
 
     .spotify-titlebar h2{
       margin:0;
-      font-size: 14px;
-      color:#5a1030;
-      font-weight: 800;
-      user-select:none;
+      font-size: 13px;
+      color:#4c0f2a;
+      font-weight: 900;
+      font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
     }
 
     .close-btn{
-      /* make it look like a win button */
-      width: 26px;
-      height: 20px;
-      border-radius: 4px;
-      background: #ffe1ee;
+      width: 24px;
+      height: 18px;
+      border-radius: 0;
+      background: #ffe3f0;
       border-top: 2px solid var(--hi);
       border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--lo);
-      border-bottom: 2px solid var(--lo);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
       cursor:pointer;
       font-weight: 900;
-      color:#6b2242;
-      line-height: 1;
+      color:#5e1f3c;
       display:grid;
       place-items:center;
+      line-height: 1;
     }
 
     .close-btn:active{
-      border-top: 2px solid var(--lo);
-      border-left: 2px solid var(--lo);
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
       border-right: 2px solid var(--hi);
       border-bottom: 2px solid var(--hi);
-      transform: translateY(1px);
+      transform: translate(1px,1px);
     }
 
     .spotify-body{
-      padding: 16px 16px 18px;
+      padding: 14px 14px 16px;
       text-align:center;
     }
 
     .spotify-body iframe{
-      width:100%;
+      width: 100%;
       height: 380px;
-      border-radius: 12px;
       border: none;
-      background: #fff;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+      border-radius: 0; /* more retro */
+      background: white;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.10);
     }
 
-    /* -----------------------------
-      MOBILE
-    ------------------------------*/
     @media (max-width: 520px){
-      .window__body{ padding: 26px 18px 20px; }
-      h1{ font-size: 2.1rem; }
+      .window__body{ padding: 22px 16px 18px; }
+      h1{ font-size: 1.8rem; }
       .options{ grid-template-columns: 1fr; }
       .spotify-body iframe{ height: 300px; }
     }
@@ -319,8 +310,8 @@
 
   <div class="window">
     <div class="titlebar">
-      <div class="titlebar__text">💗 Valentine Menu.exe</div>
-      <div class="titlebar__dots" aria-hidden="true">
+      <div class="titlebar__text">💗 WILL YOU BE MY VALENTINE?</div>
+      <div class="win-controls" aria-hidden="true">
         <div class="winbtn">_</div>
         <div class="winbtn">□</div>
         <div class="winbtn">×</div>
@@ -334,10 +325,7 @@
       <div class="options">
         <div class="option">💌 Letter</div>
         <div class="option">📸 Photos</div>
-
-        <!-- Spotify Option -->
         <div class="option" id="openSpotify">🎵 Our Song</div>
-
         <div class="option">😂 Memes</div>
       </div>
 
