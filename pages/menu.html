@@ -3,424 +3,433 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Valentine Menu 💗</title>
+  <title>Menu ✨</title>
 
   <style>
-    :root {
-      --bg1:#fff4fa;
-      --bg2:#ffd1e6;
-
-      --win:#ffe8f3;
-      --title1:#ff7fb9;
-      --title2:#ffb3d6;
-
-      --text:#2a2a2a;
-      --accent:#b3155a;
-
-      --hi:#ffffff;
-      --hi2:#ffe7f2;
-      --sh:#b86a8c;
-      --sh2:#7a3554;
-    }
-
-    body {
+    * { box-sizing: border-box; }
+    body{
       margin:0;
       min-height:100vh;
       display:grid;
       place-items:center;
-      font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
-      color:var(--text);
-
-      background:
-        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
-        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.55), transparent 60%),
-        radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-
-      overflow:hidden;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#fff7fb, #ffd6e8);
+      padding: 18px;
     }
 
-    /* 💗 floating hearts */
-    #heartLayer{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-      overflow:hidden;
-    }
-    .heart{
-      position:absolute;
-      opacity: .14;
-      animation: drift linear forwards;
-      user-select:none;
-      filter: blur(.1px);
-    }
-    @keyframes drift{
-      0%   { transform: translate(var(--x), 110vh) scale(var(--s)); opacity: 0; }
-      15%  { opacity: .14; }
-      50%  { transform: translate(calc(var(--x) + var(--wiggle)), 45vh) scale(var(--s)); }
-      100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
-    }
-
-    /* Window */
-    .window {
-      width:min(720px, 92%);
-      background: var(--win);
-      border-radius: 0;
-      position: relative;
-      padding:0;
-      box-shadow: 0 18px 55px rgba(0,0,0,.22);
-
-      border-top: 3px solid var(--hi);
-      border-left: 3px solid var(--hi);
-      border-right: 3px solid var(--sh2);
-      border-bottom: 3px solid var(--sh2);
-
-      z-index: 5;
-    }
-    .window::before {
-      content:"";
-      position:absolute;
-      inset: 4px;
-      pointer-events:none;
-      border-top: 2px solid var(--hi2);
-      border-left: 2px solid var(--hi2);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-    }
-
-    .titlebar {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 8px 10px;
-      background: linear-gradient(90deg, var(--title1), var(--title2));
-      border-bottom: 2px solid rgba(0,0,0,.12);
-      user-select:none;
-      gap: 10px;
-    }
-
-    .titlebar__left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width: 0;
-    }
-
-    .titlebar__text {
-      font-size: 13px;
-      font-weight: 800;
-      color:#4c0f2a;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* ✅ new: playlist button in titlebar */
-    .titlebar__actions{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      flex: 0 0 auto;
-    }
-
-    .winbtn {
-      width: 22px;
-      height: 18px;
-      background: #ffe3f0;
-      border-radius: 0;
-      border-top: 2px solid var(--hi);
-      border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-      display:grid;
-      place-items:center;
-      font-size: 12px;
-      color:#5e1f3c;
-      padding: 0;
-    }
-
-    .playbtn{
-      height: 20px;
-      padding: 0 10px;
-      background: #ffe3f0;
-      border-radius: 0;
-
-      border-top: 2px solid var(--hi);
-      border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-
-      font-size: 12px;
-      font-weight: 900;
-      color:#5e1f3c;
-      cursor:pointer;
-
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .playbtn:active{
-      border-top: 2px solid var(--sh);
-      border-left: 2px solid var(--sh);
-      border-right: 2px solid var(--hi);
-      border-bottom: 2px solid var(--hi);
-      transform: translate(1px,1px);
-    }
-
-    .win-controls {
-      display:flex;
-      gap:6px;
-    }
-
-    .window__body {
-      padding: 26px 28px 22px;
+    .card{
+      background: rgba(255,255,255,.75);
+      padding: 26px;
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.15);
+      width: min(900px, 95vw);
       text-align:center;
     }
 
-    h1 {
-      font-family: "Courier New", Courier, monospace;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      font-size: 2.2rem;
-      margin: 6px 0 10px;
-      color: var(--accent);
-      text-shadow: 1px 1px 0 rgba(255,255,255,.75);
+    /* Top tabs */
+    .tabs{
+      display:flex;
+      gap: 10px;
+      justify-content:center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
     }
 
-    p {
-      margin:0 0 18px;
-      color: rgba(0,0,0,.65);
-      font-size: 0.95rem;
+    .tab-btn{
+      border: 0;
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      font-weight: 700;
+      color: #b3155a;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .tab-btn:hover{ transform: scale(1.03); }
+    .tab-btn[aria-selected="true"]{ outline: 2px solid rgba(179,21,90,.25); }
+    .tab-btn[aria-selected="false"]{ opacity: .8; }
+
+    .tab-panel{ display:none; }
+    .tab-panel.active{ display:block; }
+
+    h1{
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      color: #b3155a;
+      margin: 10px 0 8px;
+    }
+    p{
+      color: rgba(0,0,0,.55);
+      margin: 0 0 18px;
     }
 
-    .options {
+    .options{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 15px;
       margin-top: 14px;
     }
 
-    .option {
-      padding: 12px;
-      background: #ffeef6;
-      cursor:pointer;
-      font-weight: 800;
-      border-radius: 0;
-
-      border-top: 3px solid var(--hi);
-      border-left: 3px solid var(--hi);
-      border-right: 3px solid var(--sh2);
-      border-bottom: 3px solid var(--sh2);
-
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-
-    .option:active {
-      border-top: 3px solid var(--sh2);
-      border-left: 3px solid var(--sh2);
-      border-right: 3px solid var(--hi);
-      border-bottom: 3px solid var(--hi);
-      transform: translate(1px,1px);
-    }
-
-    .back {
-      margin-top: 18px;
-      display:inline-block;
-      color: var(--accent);
+    .option{
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.85);
+      font-weight: bold;
+      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+      transition: transform 0.15s;
+      text-align:center;
+      display:block;
       text-decoration:none;
-      font-weight: 800;
-      font-family: "Courier New", monospace;
+      color: inherit;
+      user-select:none;
+      cursor:pointer;
+    }
+    .option:hover{ transform: scale(1.05); }
+
+    /* ===== Pretty Player ===== */
+    .music-wrap{
+      display:grid;
+      justify-items:center;
+      padding: 6px 4px 2px;
     }
 
-    /* Modal */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      z-index: 999;
-    }
-    .overlay.active { display:flex; }
-
-    .spotify-box {
-      width: min(720px, 96vw);
-      background: var(--win);
-      border-radius: 0;
-      padding: 0;
-
-      border-top: 3px solid var(--hi);
-      border-left: 3px solid var(--hi);
-      border-right: 3px solid var(--sh2);
-      border-bottom: 3px solid var(--sh2);
-
-      box-shadow: 0 18px 55px rgba(0,0,0,.22);
+    .player-card{
+      width: min(720px, 100%);
+      background: rgba(255,255,255,.88);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.12);
+      text-align: left;
     }
 
-    .spotify-titlebar {
+    .player-top{
+      display:grid;
+      grid-template-columns: 92px 1fr;
+      gap: 14px;
+      align-items:center;
+    }
+
+    .cover{
+      width: 92px;
+      height: 92px;
+      border-radius: 18px;
+      background: rgba(179,21,90,.10);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+    .cover .emoji{
+      font-size: 40px;
+      color: #b3155a;
+      opacity: 0.9;
+    }
+
+    .track-meta h2{
+      margin: 0 0 6px;
+      color: #b3155a;
+      font-size: 1.4rem;
+    }
+    .track-meta .sub{
+      margin: 0;
+      color: rgba(0,0,0,.55);
+      font-size: 0.98rem;
+    }
+
+    .controls{
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      padding: 8px 10px;
-      background: linear-gradient(90deg, var(--title1), var(--title2));
-      border-bottom: 2px solid rgba(0,0,0,.12);
-      user-select:none;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
     }
 
-    .spotify-titlebar h2 {
-      margin:0;
-      font-size: 13px;
-      font-weight: 900;
-      color:#4c0f2a;
-    }
-
-    .close-btn {
-      width: 24px;
-      height: 18px;
-      border-radius: 0;
-      background: #ffe3f0;
-      border-top: 2px solid var(--hi);
-      border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
+    .big-btn{
+      border: 0;
       cursor:pointer;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: rgba(179,21,90,.12);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      display:grid;
+      place-items:center;
       font-weight: 900;
-      color:#5e1f3c;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
+      color: #b3155a;
+      transition: transform .15s;
+      flex: 0 0 auto;
+    }
+    .big-btn:hover{ transform: scale(1.05); }
+
+    .small-btn{
+      border: 0;
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+      font-weight: 800;
+      color: #b3155a;
+      transition: transform .15s;
+    }
+    .small-btn:hover{ transform: scale(1.03); }
+
+    .progress-wrap{
+      margin-top: 14px;
+      background: rgba(0,0,0,.06);
+      border-radius: 999px;
+      height: 12px;
+      position: relative;
+      cursor: pointer;
+      overflow:hidden;
     }
 
-    .spotify-body { padding: 14px; }
-    .spotify-body iframe {
-      width: 100%;
-      height: 380px;
-      border: none;
-      background: #fff;
+    .progress{
+      height: 100%;
+      width: 0%;
+      background: rgba(179,21,90,.55);
+      border-radius: 999px;
     }
 
-    @media(max-width:520px){
-      .options { grid-template-columns: 1fr; }
-      h1 { font-size: 1.8rem; }
-      .spotify-body iframe { height: 300px; }
-      .playbtn{ padding: 0 8px; }
+    .time-row{
+      display:flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      color: rgba(0,0,0,.55);
+      font-size: 0.95rem;
+      gap: 10px;
     }
 
-    @media (prefers-reduced-motion: reduce){
-      .heart{ animation: none !important; }
+    .right-tools{
+      margin-left:auto;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+
+    .vol{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      background: rgba(255,255,255,.95);
+      border-radius: 999px;
+      padding: 8px 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+    .vol input[type="range"]{ width: 120px; }
+
+    .hint{
+      margin-top: 10px;
+      color: rgba(0,0,0,.45);
+      font-size: 0.92rem;
+    }
+
+    .back{
+      margin-top: 16px;
+      display:inline-block;
+      color:#b3155a;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    @media (max-width: 520px){
+      .options{ grid-template-columns: 1fr; }
+      .card{ padding: 20px; }
+      .player-top{ grid-template-columns: 78px 1fr; }
+      .cover{ width:78px; height:78px; border-radius: 16px; }
+      .vol{ display:none; } /* hide volume on small screens */
     }
   </style>
 </head>
 
 <body>
-  <div id="heartLayer"></div>
-
-  <div class="window">
-    <div class="titlebar">
-      <div class="titlebar__left">
-        <div class="titlebar__text">💗 WILL YOU BE MY VALENTINE?</div>
-      </div>
-
-      <!-- ✅ Playlist button + window controls -->
-      <div class="titlebar__actions">
-        <button class="playbtn" id="openSpotify" type="button">🎵 Playlist</button>
-
-        <div class="win-controls" aria-hidden="true">
-          <div class="winbtn">_</div>
-          <div class="winbtn">□</div>
-          <div class="winbtn">×</div>
-        </div>
-      </div>
+  <div class="card">
+    <div class="tabs" role="tablist" aria-label="Menu tabs">
+      <button class="tab-btn" id="tab-menu" role="tab" aria-controls="panel-menu" aria-selected="true">✨ Menu</button>
+      <button class="tab-btn" id="tab-music" role="tab" aria-controls="panel-music" aria-selected="false">🎵 Our Song</button>
     </div>
 
-    <div class="window__body">
+    <!-- MENU TAB -->
+    <section id="panel-menu" class="tab-panel active" role="tabpanel" aria-labelledby="tab-menu">
       <h1>Pick a surprise 💗</h1>
-      <p>Tap any option…</p>
+      <p>Tap any option, more coming soon…</p>
 
       <div class="options">
-        <div class="option" onclick="location.href='letter.html'">💌 Letter</div>
-        <div class="option" onclick="location.href='photos.html'">📸 Photos</div>
-        <div class="option" onclick="location.href='g.html'">🐶 G</div>
-        <div class="option" onclick="location.href='date.html'">🌹 Date</div>
+        <!-- These match your repo (pages/*.html) -->
+        <a class="option" href="letter.html">💌 Letter</a>
+        <a class="option" href="photos.html">📸 Photos</a>
+        <a class="option" href="gif.html">😂 Memes</a>
+        <a class="option" href="../index.html">← Back to start</a>
       </div>
+    </section>
 
-      <a class="back" href="../index.html">← Back to start</a>
-    </div>
-  </div>
+    <!-- MUSIC TAB -->
+    <section id="panel-music" class="tab-panel" role="tabpanel" aria-labelledby="tab-music">
+      <div class="music-wrap">
+        <div class="player-card">
+          <div class="player-top">
+            <div class="cover" aria-hidden="true">
+              <span class="emoji">🎶</span>
+            </div>
 
-  <!-- ✅ Spotify Modal -->
-  <div class="overlay" id="spotifyModal" role="dialog" aria-modal="true" aria-label="Spotify playlist">
-    <div class="spotify-box">
-      <div class="spotify-titlebar">
-        <h2>Our Playlist 🎶</h2>
-        <button class="close-btn" id="closeSpotify" type="button">×</button>
+            <div class="track-meta">
+              <h2 id="trackTitle">Our Song</h2>
+              <p class="sub" id="trackSub">Tap play to listen 💗</p>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="big-btn" id="playPauseBtn" aria-label="Play/Pause">▶</button>
+            <button class="small-btn" id="restartBtn" aria-label="Restart">⟲ Restart</button>
+
+            <div class="right-tools">
+              <button class="small-btn" id="muteBtn" aria-label="Mute">🔊</button>
+
+              <div class="vol" title="Volume">
+                <span style="color:#b3155a;font-weight:900;">Vol</span>
+                <input id="volRange" type="range" min="0" max="1" step="0.01" value="0.9" />
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-wrap" id="progressWrap" aria-label="Seek bar">
+            <div class="progress" id="progressBar"></div>
+          </div>
+
+          <div class="time-row">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
+
+          <div class="hint">On iPhone, autoplay is blocked — the user must press play.</div>
+
+          <!-- Hidden audio element -->
+          <audio id="audio" preload="metadata"></audio>
+        </div>
+
+        <a class="back" href="../index.html">← Back to start</a>
       </div>
-
-      <div class="spotify-body">
-        <iframe
-          src="https://open.spotify.com/embed/playlist/7cEhoMx0fj3xahSwyyK2Ps"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy">
-        </iframe>
-      </div>
-    </div>
+    </section>
   </div>
 
   <script>
-    // hearts
-    const layer = document.getElementById("heartLayer");
-    const hearts = ["♡","♥","❥","❤","💕"];
-    function spawnHeart(){
-      const h = document.createElement("div");
-      h.className = "heart";
-      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    // ====== AUDIO PATH (IMPORTANT) ======
+    // menu.html is in /pages, mp3 is in /assets, so we go up one level:
+    const AUDIO_SRC = "../assets/our-song.mp3";
 
-      const x = Math.random()*100;
-      const s = 0.6 + Math.random()*1.2;
-      const wiggle = (Math.random()*40 - 20) + "vw";
+    const TITLE = "Our Song";
+    const SUBTITLE = "Tap play to listen 💗";
 
-      h.style.setProperty("--x", x + "vw");
-      h.style.setProperty("--s", s.toFixed(2));
-      h.style.setProperty("--wiggle", wiggle);
-      h.style.fontSize = (16 + Math.random()*26) + "px";
-      h.style.animationDuration = (10 + Math.random()*10) + "s";
+    // ====== Tabs ======
+    const tabMenu = document.getElementById('tab-menu');
+    const tabMusic = document.getElementById('tab-music');
+    const panelMenu = document.getElementById('panel-menu');
+    const panelMusic = document.getElementById('panel-music');
 
-      layer.appendChild(h);
-      setTimeout(()=>h.remove(), 22000);
+    function activate(which) {
+      const isMenu = which === 'menu';
+      tabMenu.setAttribute('aria-selected', String(isMenu));
+      tabMusic.setAttribute('aria-selected', String(!isMenu));
+      panelMenu.classList.toggle('active', isMenu);
+      panelMusic.classList.toggle('active', !isMenu);
     }
-    setInterval(spawnHeart, 520);
+    tabMenu.addEventListener('click', () => activate('menu'));
+    tabMusic.addEventListener('click', () => activate('music'));
 
-    // spotify modal open/close
-    const openBtn = document.getElementById("openSpotify");
-    const modal = document.getElementById("spotifyModal");
-    const closeBtn = document.getElementById("closeSpotify");
+    // ====== Player ======
+    const audio = document.getElementById("audio");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const muteBtn = document.getElementById("muteBtn");
+    const volRange = document.getElementById("volRange");
+    const progressWrap = document.getElementById("progressWrap");
+    const progressBar = document.getElementById("progressBar");
+    const currentTimeEl = document.getElementById("currentTime");
+    const durationEl = document.getElementById("duration");
 
-    function openModal(){
-      modal.classList.add("active");
-      closeBtn.focus?.();
+    document.getElementById("trackTitle").textContent = TITLE;
+    document.getElementById("trackSub").textContent = SUBTITLE;
+
+    audio.src = AUDIO_SRC;
+    audio.volume = Number(volRange.value || 0.9);
+
+    function fmtTime(sec){
+      if (!Number.isFinite(sec) || sec < 0) return "0:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${String(s).padStart(2, "0")}`;
     }
-    function closeModal(){
-      modal.classList.remove("active");
-      openBtn.focus?.();
+
+    function setPlayIcon(isPlaying){
+      playPauseBtn.textContent = isPlaying ? "❚❚" : "▶";
+      playPauseBtn.setAttribute("aria-label", isPlaying ? "Pause" : "Play");
     }
 
-    openBtn.addEventListener("click", openModal);
-    closeBtn.addEventListener("click", closeModal);
+    async function togglePlay(){
+      if (audio.paused) {
+        try {
+          await audio.play(); // required user gesture on mobile
+          setPlayIcon(true);
+        } catch (e) {
+          // If blocked, user needs to tap again or audio not found
+          console.warn(e);
+        }
+      } else {
+        audio.pause();
+        setPlayIcon(false);
+      }
+    }
 
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
+    playPauseBtn.addEventListener("click", togglePlay);
+
+    restartBtn.addEventListener("click", () => {
+      audio.currentTime = 0;
+      audio.play().then(() => setPlayIcon(true)).catch(()=>{});
     });
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    muteBtn.addEventListener("click", () => {
+      audio.muted = !audio.muted;
+      muteBtn.textContent = audio.muted ? "🔇" : "🔊";
     });
+
+    volRange.addEventListener("input", () => {
+      audio.volume = Number(volRange.value);
+      if (audio.volume === 0) {
+        audio.muted = true;
+        muteBtn.textContent = "🔇";
+      } else {
+        audio.muted = false;
+        muteBtn.textContent = "🔊";
+      }
+    });
+
+    audio.addEventListener("loadedmetadata", () => {
+      durationEl.textContent = fmtTime(audio.duration);
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      currentTimeEl.textContent = fmtTime(audio.currentTime);
+      const pct = (audio.duration ? (audio.currentTime / audio.duration) : 0) * 100;
+      progressBar.style.width = `${pct}%`;
+    });
+
+    audio.addEventListener("ended", () => {
+      setPlayIcon(false);
+    });
+
+    // Seek by clicking the bar
+    progressWrap.addEventListener("click", (e) => {
+      const rect = progressWrap.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const ratio = Math.min(Math.max(x / rect.width, 0), 1);
+      if (audio.duration) {
+        audio.currentTime = ratio * audio.duration;
+      }
+    });
+
+    // Start with correct icon
+    setPlayIcon(false);
   </script>
 </body>
 </html>
