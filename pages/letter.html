@@ -33,13 +33,58 @@
       font-family: Inter, system-ui, sans-serif;
       color: var(--ink);
 
-      /* ✅ Warm paper background */
       background:
         radial-gradient(900px 650px at 30% 20%, rgba(255,255,255,.95), transparent 60%),
         radial-gradient(900px 650px at 70% 70%, rgba(255,214,232,.35), transparent 60%),
         linear-gradient(180deg, var(--paper), var(--paper2));
 
       overflow:hidden;
+    }
+
+    /* ✅ Song button (fixed, like a small floating control) */
+    .songBtn{
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 9999;
+
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 999px;
+
+      border: 2px solid rgba(179,21,90,.35);
+      background: rgba(255,255,255,.90);
+      color: rgba(179,21,90,.95);
+
+      font-weight: 900;
+      cursor:pointer;
+
+      box-shadow: 0 14px 30px rgba(179,21,90,.12);
+      transition: transform .15s ease, box-shadow .22s ease;
+
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      backdrop-filter: blur(10px);
+    }
+
+    .songBtn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 20px 44px rgba(179,21,90,.16);
+    }
+
+    .songBtn:active{
+      transform: translateY(0) scale(.99);
+    }
+
+    @media (max-width:520px){
+      .songBtn{
+        top: 10px;
+        left: 10px;
+        height: 34px;
+        padding: 0 12px;
+        font-size: 13px;
+      }
+      body{ padding-top: 54px; } /* gives space so button never overlaps */
     }
 
     /* -----------------------------
@@ -155,14 +200,17 @@
   </style>
 </head>
 
-<body>
+<!-- ✅ Track for global player -->
+<body data-track="/assets/cancionmenu.mp3">
+
+  <!-- ✅ Global Song button -->
+  <button class="songBtn" id="songBtn" type="button">🎶 Song ▶</button>
 
   <!-- 🌸 Petals Layer -->
   <div id="petalLayer"></div>
 
   <!-- 💌 Letter -->
   <div class="letterCard">
-
     <h1 class="title">My Letter 💌</h1>
 
     <p class="bodyText">
@@ -180,9 +228,7 @@
       — your stinky bf 💗
     </div>
 
-    <!-- Back Button -->
     <a class="backBtn" href="menu.html">← Back to Menu</a>
-
   </div>
 
   <!-- 🌸 Falling Petals Script -->
@@ -206,13 +252,14 @@
       p.style.animationDuration = (8 + Math.random() * 6) + "s";
 
       layer.appendChild(p);
-
       setTimeout(() => p.remove(), 14000);
     }
 
     setInterval(spawnPetal, 700);
   </script>
 
+  <!-- ✅ Global music player (shared across pages) -->
+  <script src="/assets/valentine-player.js"></script>
+
 </body>
 </html>
-
