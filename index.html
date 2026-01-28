@@ -90,11 +90,13 @@
       transition: transform .14s ease, box-shadow .22s ease;
       z-index: 60;
       user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
     .musicBtn:hover{
       transform: translateY(-2px);
       box-shadow: 0 22px 60px rgba(179,21,90,.20);
     }
+    .musicBtn:active{ transform: translateY(0) scale(.99); }
 
     @keyframes pulseGlow{
       0%,100%{ box-shadow:0 0 18px rgba(255,79,163,.15), 0 18px 45px rgba(179,21,90,.12); }
@@ -133,6 +135,18 @@
       user-select: none;
       filter: drop-shadow(0 34px 70px rgba(0,0,0,.14));
       transform: translateZ(0);
+      -webkit-tap-highlight-color: transparent;
+
+      /* micro */
+      transition: transform 260ms ease, filter 260ms ease;
+      will-change: transform;
+    }
+    .envelope:hover{
+      transform: translateY(-2px);
+      filter: drop-shadow(0 44px 90px rgba(0,0,0,.16));
+    }
+    .envelope:active{
+      transform: translateY(0) scale(.995);
     }
 
     .envBack{
@@ -229,6 +243,9 @@
 
     .open .flap{ transform: rotateX(170deg); }
     .open .paper{ transform: translateY(-58px); opacity: 1; }
+
+    /* block taps while opening/opened */
+    .is-opening{ pointer-events:none; }
     .open{ pointer-events:none; }
 
     /* ===== QUESTION CARD ===== */
@@ -272,11 +289,13 @@
       min-width:170px;
       transition: transform .12s ease, box-shadow .2s ease;
       box-shadow: 0 14px 30px rgba(0,0,0,.10);
+      -webkit-tap-highlight-color: transparent;
     }
     .btnRow button:hover{
       transform: translateY(-2px);
       box-shadow: 0 18px 40px rgba(0,0,0,.14);
     }
+    .btnRow button:active{ transform: translateY(0) scale(.99); }
 
     .tiny{
       margin-top:18px;
@@ -293,6 +312,40 @@
         text-align:center;
       }
     }
+
+    /* ===== reveal animation for the question content ===== */
+    .reveal{
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+    .reveal.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== burst hearts on open (clean, short) ===== */
+    .burstHeart{
+      position:absolute;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(0);
+      animation: floatUp 1200ms ease forwards;
+      user-select:none;
+      pointer-events:none;
+      filter: blur(.1px);
+    }
+    @keyframes floatUp{
+      0%   { opacity: 0; transform: translateY(8px) scale(0.92); }
+      15%  { opacity: .75; }
+      100% { opacity: 0; transform: translateY(-34px) scale(1.06); }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .heart, .burstHeart{ animation: none !important; }
+      .envelope, .musicBtn, .btnRow button, .reveal{ transition: none !important; }
+    }
   </style>
 </head>
 
@@ -301,11 +354,13 @@
   <div id="heartLayer"></div>
 
   <!-- ✅ ONLY ONE MUSIC BUTTON -->
-  <button class="musicBtn posTopLeft" id="musicBtn" type="button">Music for you 💗</button>
+  <button class="musicBtn posTopLeft" id="musicBtn" type="button" aria-label="Toggle music">
+    Music for you 💗
+  </button>
 
   <!-- Screen 1: Closed envelope only -->
   <section class="screen" id="screenEnvelope">
-    <div class="envelope" id="envelope" aria-label="Open envelope">
+    <div class="envelope" id="envelope" aria-label="Open envelope" role="button" tabindex="0">
       <div class="envBack"></div>
       <div class="paper"><div class="paperInner">💕</div></div>
       <div class="envFront"></div>
@@ -316,7 +371,7 @@
 
   <!-- Screen 2: Question -->
   <section class="screen hidden" id="screenMain">
-    <div class="card">
+    <div class="card reveal" id="questionCard">
       <!-- Music button will be moved here (centered) -->
       <h1>Will you be my Valentine?</h1>
       <p>(You better answer correctly 🙂‍↕️)</p>
@@ -355,7 +410,9 @@
       layer.appendChild(h);
       setTimeout(()=>h.remove(), 22000);
     }
-    setInterval(spawnHeart, 420);
+
+    // Slightly less spammy but still romantic
+    setInterval(spawnHeart, 520);
   </script>
 
   <!-- Music -->
@@ -371,26 +428,73 @@
       await LilyPlayer.toggle();
     });
 
-    // When envelope opens, move button into the card centered
+    // ===== envelope open flow =====
     const env = document.getElementById("envelope");
     const scrEnv = document.getElementById("screenEnvelope");
     const scrMain = document.getElementById("screenMain");
+    const card = document.getElementById("questionCard");
 
-    env.addEventListener("click", () => {
+    let opened = false;
+
+    function burstHearts(anchorEl){
+      const heartSet = ["💗","💞","💖"];
+      const rect = anchorEl.getBoundingClientRect();
+
+      // anchor relative so hearts place nicely
+      anchorEl.style.position = "relative";
+
+      for (let i = 0; i < 9; i++){
+        const h = document.createElement("div");
+        h.className = "burstHeart";
+        h.textContent = heartSet[Math.floor(Math.random()*heartSet.length)];
+
+        const x = rect.width * (0.2 + Math.random() * 0.6);
+        const y = rect.height * (0.25 + Math.random() * 0.35);
+
+        h.style.left = `${x}px`;
+        h.style.top = `${y}px`;
+        h.style.animationDelay = `${Math.random() * 120}ms`;
+
+        anchorEl.appendChild(h);
+        setTimeout(() => h.remove(), 1400);
+      }
+    }
+
+    function openEnvelope(){
+      if (opened) return;
+      opened = true;
+
+      env.classList.add("is-opening");
       env.classList.add("open");
+      burstHearts(env);
 
+      // Match your flap+paper timing (you were using 950ms)
       setTimeout(() => {
         // Switch screens
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
 
         // Move the same button into the card and center it
-        const card = scrMain.querySelector(".card");
         card.insertBefore(musicBtn, card.firstChild);
-
         musicBtn.classList.remove("posTopLeft");
         musicBtn.classList.add("posCentered");
+
+        // Reveal card content smoothly
+        requestAnimationFrame(() => card.classList.add("show"));
+
+        env.classList.remove("is-opening");
       }, 950);
+    }
+
+    // Click/tap
+    env.addEventListener("click", openEnvelope);
+
+    // Keyboard accessibility (Enter/Space)
+    env.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openEnvelope();
+      }
     });
   </script>
 
