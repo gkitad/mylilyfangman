@@ -1,1 +1,464 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lily Fangman 💘</title>
+  <style>
+    :root{
+      --bg1:#ffe6f0;
+      --bg2:#fff7fb;
+      --accent:#d63384;
+      --accent2:#ff4d88;
+      --text:#2b2b2b;
+      --card:#ffffffcc;
+      --shadow: 0 12px 30px rgba(0,0,0,.08);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% 10%, var(--bg2), var(--bg1));
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* floating hearts layer */
+    #hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      z-index: 0;
+      overflow:hidden;
+    }
+    .heart{
+      position:absolute;
+      bottom:-60px;
+      font-size: 18px;
+      opacity:.75;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.08));
+    }
+    @keyframes floatUp{
+      to { transform: translateY(-120vh) rotate(35deg); opacity:0; }
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 70px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 16px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      font-weight:600;
+    }
+    .badge small{ font-weight:700; color: var(--accent); }
+
+    .btn{
+      border:none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor:pointer;
+      font-weight:700;
+      transition: transform .08s ease, filter .2s ease;
+      box-shadow: 0 10px 22px rgba(214,51,132,.18);
+      background: linear-gradient(135deg, #ff7ab3, var(--accent2));
+      color:white;
+    }
+    .btn:active{ transform: scale(.98); }
+
+    .btn.ghost{
+      background: rgba(255,255,255,.7);
+      color: var(--accent);
+      box-shadow: var(--shadow);
+      border:1px solid rgba(255,255,255,.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 16px;
+    }
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+    }
+
+    h1{
+      margin: 4px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      line-height: 1.05;
+    }
+    .sub{
+      margin:0 0 14px;
+      font-size: 1.05rem;
+      opacity:.9;
+    }
+    .quote{
+      margin: 14px 0 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.75);
+      border: 1px dashed rgba(214,51,132,.35);
+    }
+    .quote b{ color: var(--accent); }
+    .quote em{ font-style: normal; font-weight:800; }
+
+    .cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin-top: 12px;
+      align-items:center;
+    }
+
+    #no{
+      position: relative;
+      background: #eaeaea;
+      color: #555;
+      box-shadow: 0 8px 18px rgba(0,0,0,.08);
+    }
+
+    .photo{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      height:100%;
+    }
+    .imgbox{
+      border-radius: var(--radius);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.75);
+      box-shadow: var(--shadow);
+      background:white;
+      min-height: 260px;
+    }
+    .imgbox img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+    .smallnote{
+      font-size:.92rem;
+      opacity:.85;
+      margin:0;
+    }
+
+    .section{
+      margin-top: 18px;
+    }
+    .section h2{
+      margin: 0 0 10px;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
+
+    .memes{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 860px){
+      .memes{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px){
+      .memes{ grid-template-columns: 1fr; }
+    }
+    .meme{
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.75);
+      box-shadow: var(--shadow);
+      background:white;
+      aspect-ratio: 1 / 1;
+    }
+    .meme img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    /* overlay result */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      display:none;
+      place-items:center;
+      background: rgba(255, 230, 240, .55);
+      backdrop-filter: blur(8px);
+      z-index: 50;
+      padding: 16px;
+    }
+    .overlay.show{ display:grid; }
+    .modal{
+      max-width: 720px;
+      width: 100%;
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 26px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.12);
+      padding: 18px;
+      text-align:center;
+    }
+    .modal h2{
+      margin: 6px 0 8px;
+      color: var(--accent);
+      font-size: clamp(26px, 3.5vw, 40px);
+    }
+    .modal p{
+      margin: 6px 0;
+      font-size: 1.05rem;
+    }
+    .modal .mini{
+      opacity:.9;
+      font-size:.95rem;
+    }
+
+    /* confetti */
+    canvas#confetti{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      z-index: 60;
+      display:none;
+    }
+    canvas#confetti.show{ display:block; }
+  </style>
+</head>
+
+<body>
+  <div id="hearts"></div>
+  <canvas id="confetti"></canvas>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="badge">💌 For <small>Lily Fangman</small></div>
+      <button class="btn ghost" id="musicBtn" type="button">🎵 Play our song</button>
+    </div>
+
+    <div class="hero">
+      <div class="card">
+        <h1>💘 Lily… will you be my Valentine? 💘</h1>
+        <p class="sub">I made this little corner of the internet just for you 🥰</p>
+
+        <div class="quote">
+          <div><b>Message:</b></div>
+          <div style="margin-top:6px;font-size:1.15rem;">
+            <em>“Thank you for being my favorite place.”</em> 💗
+          </div>
+        </div>
+
+        <p class="smallnote">Tip: try to click “No”… if you can 😅</p>
+
+        <div class="cta">
+          <button class="btn" id="yes" type="button">Yes 💖</button>
+          <button class="btn" id="no" type="button">No 😢</button>
+        </div>
+      </div>
+
+      <div class="photo card">
+        <div class="imgbox">
+          <!-- Cambia el archivo por tu foto -->
+          <img src="assets/photo.jpg" alt="Us ❤️" />
+        </div>
+        <p class="smallnote">
+          (Pon aquí una foto de ustedes: <b>assets/photo.jpg</b>)
+        </p>
+      </div>
+    </div>
+
+    <div class="section card" style="margin-top:18px;">
+      <h2>😂 A few memes (because of course)</h2>
+      <p class="smallnote" style="margin-bottom:12px;">
+        Sube tus memes a <b>assets/memes/</b> y reemplaza los nombres de abajo.
+      </p>
+
+      <div class="memes">
+        <div class="meme"><img src="assets/memes/meme1.gif" alt="meme 1"></div>
+        <div class="meme"><img src="assets/memes/meme2.jpg" alt="meme 2"></div>
+        <div class="meme"><img src="assets/memes/meme3.png" alt="meme 3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Música (archivo local) -->
+  <audio id="song" preload="auto" loop>
+    <source src="assets/song.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Modal final -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>🥰 I knew you’d say yes 🥰</h2>
+      <p>Happy Valentine’s Day, Lily 💕</p>
+      <p class="mini">Now you’re officially my favorite forever.</p>
+      <div style="margin-top:12px;">
+        <button class="btn" id="close" type="button">Awww 💘</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Floating hearts =====
+    const heartsLayer = document.getElementById("hearts");
+    const heartEmojis = ["💗","💖","💘","💕","❤️","💞","💓"];
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+      const size = 14 + Math.random()*22;
+      h.style.fontSize = size + "px";
+      h.style.left = (Math.random()*100) + "vw";
+      h.style.animationDuration = (6 + Math.random()*6) + "s";
+      h.style.opacity = (0.35 + Math.random()*0.55).toFixed(2);
+      heartsLayer.appendChild(h);
+      setTimeout(()=>h.remove(), 13000);
+    }
+    setInterval(spawnHeart, 260);
+
+    // ===== "No" button dodge =====
+    const noBtn = document.getElementById("no");
+    function moveNo(){
+      const padding = 20;
+      const rect = noBtn.getBoundingClientRect();
+      const maxX = window.innerWidth - rect.width - padding;
+      const maxY = window.innerHeight - rect.height - padding;
+
+      // random position within viewport
+      const x = Math.max(padding, Math.random() * maxX);
+      const y = Math.max(padding, Math.random() * maxY);
+
+      noBtn.style.position = "fixed";
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+    }
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveNo(); }, {passive:false});
+
+    // ===== Music (autoplay is often blocked; button makes it work) =====
+    const song = document.getElementById("song");
+    const musicBtn = document.getElementById("musicBtn");
+    let playing = false;
+
+    async function toggleMusic(){
+      try{
+        if(!playing){
+          await song.play();
+          playing = true;
+          musicBtn.textContent = "🔊 Music: ON";
+        }else{
+          song.pause();
+          playing = false;
+          musicBtn.textContent = "🎵 Play our song";
+        }
+      }catch(err){
+        alert("Tu navegador bloqueó el autoplay. Toca el botón otra vez 🙂");
+      }
+    }
+    musicBtn.addEventListener("click", toggleMusic);
+
+    // ===== Confetti =====
+    const confettiCanvas = document.getElementById("confetti");
+    const ctx = confettiCanvas.getContext("2d");
+    function resizeCanvas(){
+      confettiCanvas.width = window.innerWidth * devicePixelRatio;
+      confettiCanvas.height = window.innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function launchConfetti(durationMs=1600){
+      confettiCanvas.classList.add("show");
+      const pieces = Array.from({length: 170}).map(()=>({
+        x: Math.random()*window.innerWidth,
+        y: -20 - Math.random()*window.innerHeight*0.4,
+        r: 2 + Math.random()*5,
+        vy: 2 + Math.random()*5,
+        vx: -2 + Math.random()*4,
+        rot: Math.random()*Math.PI,
+        vrot: -0.12 + Math.random()*0.24,
+        alpha: 0.7 + Math.random()*0.3
+      }));
+
+      const start = performance.now();
+      function frame(t){
+        const elapsed = t - start;
+        ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+        for(const p of pieces){
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vrot;
+          p.vy += 0.03; // gravity
+
+          // draw (simple rectangles)
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillRect(-p.r*1.2, -p.r*0.6, p.r*2.4, p.r*1.2);
+          ctx.restore();
+        }
+        if(elapsed < durationMs){
+          requestAnimationFrame(frame);
+        }else{
+          ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+          confettiCanvas.classList.remove("show");
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // ===== Yes => modal + confetti =====
+    const overlay = document.getElementById("overlay");
+    document.getElementById("yes").addEventListener("click", ()=>{
+      launchConfetti();
+      overlay.classList.add("show");
+      // Start music softly if not playing (still requires user gesture; click counts)
+      if(!playing) toggleMusic();
+    });
+    document.getElementById("close").addEventListener("click", ()=>{
+      overlay.classList.remove("show");
+    });
+    overlay.addEventListener("click", (e)=>{
+      if(e.target === overlay) overlay.classList.remove("show");
+    });
+  </script>
+</body>
+</html>
