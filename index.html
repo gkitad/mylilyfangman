@@ -195,4 +195,218 @@
       top:0;
       height:60%;
       background: rgba(255,214,232,.55);
-      clip-path: polygon(0 0, 100
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform .75s cubic-bezier(.2,.9,.2,1);
+      border-bottom: 1px solid rgba(179,21,90,.10);
+    }
+
+    /* Heart seal */
+    .seal{
+      position:absolute;
+      left:50%;
+      top:55%;
+      transform: translate(-50%,-50%);
+      width:60px;
+      height:60px;
+      border-radius:999px;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.95),
+        rgba(255,182,214,.90)
+      );
+      border:2px solid rgba(255,79,163,.35);
+      box-shadow: 0 18px 40px rgba(179,21,90,.18);
+      display:grid;
+      place-items:center;
+      font-size:20px;
+      color: var(--wine);
+    }
+
+    /* Open animation */
+    .open .flap{
+      transform: rotateX(170deg);
+    }
+
+    .open .paper{
+      transform: translateY(-55px);
+    }
+
+    /* Main Question Card */
+    .card{
+      margin:auto;
+      padding: 42px 28px 34px;
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .musicBtn{
+      margin-bottom: 18px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #b3155a;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.95),
+        rgba(255,214,232,.75)
+      );
+      border: 2px solid rgba(255,79,163,.45);
+      cursor:pointer;
+      animation: pulseGlow 2.2s infinite;
+    }
+
+    @keyframes pulseGlow{
+      0%,100%{ box-shadow:0 0 18px rgba(255,79,163,.15); }
+      50%{ box-shadow:0 0 28px rgba(255,79,163,.25); }
+    }
+
+    h1{
+      font-family:"Playfair Display", serif;
+      color: var(--wine);
+      font-size: clamp(34px,6vw,64px);
+      margin-bottom: 10px;
+    }
+
+    p{
+      margin-bottom: 22px;
+      color: var(--muted);
+    }
+
+    .btnRow{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .btnRow button{
+      padding:14px 22px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.90);
+      color: rgba(0,0,0,.55);
+      cursor:pointer;
+      font-weight:700;
+      min-width:170px;
+    }
+
+    .tiny{
+      margin-top:18px;
+      font-size:.9rem;
+      color: rgba(42,31,37,.55);
+    }
+
+    @media(max-width:520px){
+      .btnRow button{ width:100%; min-width:0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="heartLayer"></div>
+
+  <!-- Floating Sound Toggle -->
+  <button class="soundFab" id="soundFab">
+    <span class="soundIcon">🔇</span>
+    <span id="soundText">Sound off</span>
+  </button>
+
+  <!-- Screen 1: Envelope -->
+  <section class="screen" id="screenEnvelope">
+    <div class="envelopeWrap">
+      <h2 class="envelopeTitle">A little note for you</h2>
+      <p class="envelopeHint">Tap the envelope 💌</p>
+
+      <div class="envelope" id="envelope">
+        <div class="envBase"></div>
+        <div class="paper">To Lily 💗</div>
+        <div class="flap"></div>
+        <div class="seal">♥</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screen 2: Question -->
+  <section class="screen hidden" id="screenMain">
+    <div class="card">
+      <button class="musicBtn" onclick="LilyPlayer.toggle()">Music for you 💗</button>
+
+      <h1>Will you be my Valentine?</h1>
+      <p>(You better answer correctly 🙂‍↕️)</p>
+
+      <div class="btnRow">
+        <button onclick="location.href='pages/menu.html'">Yes</button>
+        <button onclick="location.href='pages/menu.html'">
+          Why are you looking for another option?
+        </button>
+      </div>
+
+      <div class="tiny">Made by your stinky bf</div>
+    </div>
+  </section>
+
+  <!-- Hearts -->
+  <script>
+    const layer=document.getElementById("heartLayer");
+    const hearts=["♡","♥","❥","❤","💕"];
+    function spawnHeart(){
+      const h=document.createElement("div");
+      h.className="heart";
+      h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+      const x=Math.random()*100;
+      const s=0.6+Math.random()*1.2;
+      const wiggle=(Math.random()*40-20)+"vw";
+      h.style.setProperty("--x",x+"vw");
+      h.style.setProperty("--s",s.toFixed(2));
+      h.style.setProperty("--wiggle",wiggle);
+      h.style.fontSize=(16+Math.random()*26)+"px";
+      h.style.animationDuration=(10+Math.random()*10)+"s";
+      layer.appendChild(h);
+      setTimeout(()=>h.remove(),22000);
+    }
+    setInterval(spawnHeart,380);
+  </script>
+
+  <!-- Music -->
+  <script src="/assets/player.js"></script>
+  <script>
+    LilyPlayer.setTrack("/assets/intro.mp3");
+
+    const fab=document.getElementById("soundFab");
+    const txt=document.getElementById("soundText");
+    const icon=fab.querySelector(".soundIcon");
+
+    function refreshSound(){
+      const on=localStorage.getItem("lily_audio_on")==="1";
+      txt.textContent=on?"Sound on":"Sound off";
+      icon.textContent=on?"🔊":"🔇";
+    }
+
+    fab.addEventListener("click", async()=>{
+      await LilyPlayer.toggle();
+      setTimeout(refreshSound,80);
+    });
+    refreshSound();
+
+    // Envelope open
+    const env=document.getElementById("envelope");
+    const scrEnv=document.getElementById("screenEnvelope");
+    const scrMain=document.getElementById("screenMain");
+
+    env.addEventListener("click", ()=>{
+      env.classList.add("open");
+      setTimeout(()=>{
+        scrEnv.classList.add("hidden");
+        scrMain.classList.remove("hidden");
+      },800);
+    });
+  </script>
+
+</body>
+</html>
