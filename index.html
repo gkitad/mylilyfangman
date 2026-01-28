@@ -103,14 +103,12 @@
       50%{ box-shadow:0 0 28px rgba(255,79,163,.25), 0 22px 60px rgba(179,21,90,.16); }
     }
 
-    /* Position A: top-left (before opening envelope) */
     .musicBtn.posTopLeft{
       position: fixed;
       top: 18px;
       left: 18px;
     }
 
-    /* Position B: centered above question (after open) */
     .musicBtn.posCentered{
       position: relative;
       margin: 0 auto 18px;
@@ -191,7 +189,6 @@
       z-index: 3;
     }
 
-    /* Romantic font label */
     .label{
       position:absolute;
       left:50%;
@@ -215,7 +212,7 @@
       white-space: nowrap;
     }
 
-    /* ===== THE LETTER (fly-out + center to read) ===== */
+    /* ===== THE LETTER ===== */
     .paper{
       position:absolute;
       left: 10%;
@@ -236,24 +233,22 @@
       will-change: transform, opacity;
     }
 
-    /* fly out */
     .open .paper{
       opacity: 1;
       animation: letterFly 1050ms cubic-bezier(.2,.9,.2,1) forwards;
     }
 
-    /* centered as reading card (FIXED: true center, no right shift) */
+    /* ✅ Fix: no scrollbar on desktop; true center; internal content centered */
     .paper.centered{
       position: fixed;
       left: 50%;
       top: 50%;
-      bottom: auto;
       transform: translate(-50%, -50%);
       margin: 0;
 
       width: min(760px, calc(100vw - 32px));
-      max-height: min(78svh, 560px);
-      overflow: auto;
+      /* no scrollbar unless needed on very small screens */
+      overflow: hidden;
 
       padding: clamp(18px, 4.8vw, 42px);
       border-radius: var(--radius);
@@ -263,58 +258,59 @@
 
       cursor: pointer;
       pointer-events: auto;
-      -webkit-overflow-scrolling: touch;
-
-      /* remove default scrollbar gutter shifting */
-      scrollbar-gutter: stable both-edges;
     }
 
-    /* inner content centered */
+    /* On small devices, allow scrolling if it ever overflows */
+    @media (max-width:520px){
+      .paper.centered{
+        max-height: 78svh;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+
     .paperInner{
       width: 100%;
-      max-width: 54ch;
+      max-width: 52ch;
       margin: 0 auto;
       text-align: center;
 
       font-family: Inter, system-ui, sans-serif;
-      color: rgba(42,31,37,.72);
+      color: rgba(42,31,37,.70);
       letter-spacing: .2px;
-      line-height: 1.65;
+      line-height: 1.7;
     }
 
     /* Romantic header */
     .letterTitle{
       font-family: "Great Vibes", cursive;
       font-weight: 400;
-      color: rgba(179,21,90,.88);
-      font-size: clamp(40px, 8vw, 64px);
-      margin: 0 0 8px;
+      color: rgba(179,21,90,.90);
+      font-size: clamp(44px, 9vw, 70px);
+      margin: 0 0 10px;
       line-height: 1;
-      letter-spacing: .3px;
       text-shadow: 0 12px 26px rgba(179,21,90,.12);
     }
 
     .letterBody{
-      font-size: clamp(1rem, 2.9vw, 1.12rem);
+      font-size: clamp(1.02rem, 3.2vw, 1.14rem);
       margin: 0;
       color: rgba(42,31,37,.66);
     }
 
-    .tapHint{
-      margin-top: 14px;
-      font-weight: 800;
-      opacity: .7;
-      font-size: .95rem;
-      color: rgba(42,31,37,.62);
-    }
-
-    /* tiny signature */
     .sig{
       margin-top: 18px;
       font-family: "Great Vibes", cursive;
-      font-size: clamp(26px, 5.6vw, 38px);
+      font-size: clamp(26px, 6vw, 42px);
       color: rgba(179,21,90,.72);
-      opacity: .95;
+    }
+
+    .tapHint{
+      margin-top: 10px;
+      font-weight: 800;
+      opacity: .68;
+      font-size: .95rem;
+      color: rgba(42,31,37,.62);
     }
 
     @keyframes letterFly{
@@ -326,8 +322,6 @@
     }
 
     .open .flap{ transform: rotateX(170deg); }
-
-    /* block taps while opening (ONLY during animation) */
     .is-opening{ pointer-events:none; }
 
     /* ===== QUESTION CARD ===== */
@@ -385,19 +379,6 @@
       color: rgba(42,31,37,.55);
     }
 
-    @media(max-width:520px){
-      .btnRow button{ width:100%; min-width:0; }
-      .label{
-        font-size: clamp(28px, 7vw, 44px);
-        padding: 8px 14px;
-        white-space: normal;
-        text-align:center;
-      }
-      .paper.centered{
-        max-height: min(78svh, 520px);
-      }
-    }
-
     /* reveal animation for the question content */
     .reveal{
       opacity: 0;
@@ -426,7 +407,6 @@
       100% { opacity: 0; transform: translateY(-34px) scale(1.06); }
     }
 
-    /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce){
       .heart, .burstHeart{ animation: none !important; }
       .envelope, .musicBtn, .btnRow button, .reveal{ transition: none !important; }
@@ -439,17 +419,14 @@
 
   <div id="heartLayer"></div>
 
-  <!-- ✅ ONLY ONE MUSIC BUTTON -->
   <button class="musicBtn posTopLeft" id="musicBtn" type="button" aria-label="Toggle music">
     Music for you 💗
   </button>
 
-  <!-- Screen 1: Closed envelope only -->
   <section class="screen" id="screenEnvelope">
     <div class="envelope" id="envelope" aria-label="Open envelope" role="button" tabindex="0">
       <div class="envBack"></div>
 
-      <!-- Letter (flies out, then centers to read) -->
       <div class="paper" id="paper" aria-label="Open letter" role="button" tabindex="0">
         <div class="paperInner">
           <div class="letterTitle">Hi Puppy,</div>
@@ -471,7 +448,6 @@
     </div>
   </section>
 
-  <!-- Screen 2: Question -->
   <section class="screen hidden" id="screenMain">
     <div class="card reveal" id="questionCard">
       <h1>Will you be my Valentine?</h1>
@@ -488,7 +464,6 @@
     </div>
   </section>
 
-  <!-- Floating hearts background -->
   <script>
     const layer = document.getElementById("heartLayer");
     const hearts = ["♡","♥","❥","❤","💕"];
@@ -515,14 +490,11 @@
     setInterval(spawnHeart, 520);
   </script>
 
-  <!-- Music -->
   <script src="/assets/player.js"></script>
   <script>
-    // Track for index (intro)
     LilyPlayer.setTrack("/assets/intro.mp3");
 
     const musicBtn = document.getElementById("musicBtn");
-
     musicBtn.addEventListener("click", async () => {
       await LilyPlayer.toggle();
     });
@@ -542,7 +514,7 @@
       anchorEl.style.position = "relative";
 
       for (let i = 0; i < 9; i++){
-        const h = document.createElement("div");
+        const h = document ezielement("div");
         h.className = "burstHeart";
         h.textContent = heartSet[Math.floor(Math.random()*heartSet.length)];
 
@@ -583,7 +555,6 @@
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
 
-        // Move the same music button into the question card
         card.insertBefore(musicBtn, card.firstChild);
         musicBtn.classList.remove("posTopLeft");
         musicBtn.classList.add("posCentered");
@@ -592,10 +563,7 @@
       }, 220);
     }
 
-    // Click/tap to open envelope
     env.addEventListener("click", openEnvelope);
-
-    // Keyboard accessibility for envelope
     env.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
@@ -603,13 +571,11 @@
       }
     });
 
-    // Tap/click the centered letter to proceed
     paper.addEventListener("click", (e) => {
       e.stopPropagation();
       goToValentine();
     });
 
-    // Keyboard accessibility for letter
     paper.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
