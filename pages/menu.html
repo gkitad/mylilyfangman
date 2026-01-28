@@ -6,9 +6,6 @@
   <title>Valentine Menu 💗</title>
 
   <style>
-    /* -----------------------------
-      RETRO WIN95/98 VALENTINE THEME
-    ------------------------------*/
     :root {
       --bg1:#fff4fa;
       --bg2:#ffd1e6;
@@ -26,7 +23,6 @@
       --sh2:#7a3554;
     }
 
-    /* ✅ Same romantic background as index */
     body {
       margin:0;
       min-height:100vh;
@@ -44,9 +40,7 @@
       overflow:hidden;
     }
 
-    /* -----------------------------
-      💗 FLOATING HEARTS BACKGROUND
-    ------------------------------*/
+    /* 💗 floating hearts */
     #heartLayer{
       position:fixed;
       inset:0;
@@ -54,7 +48,6 @@
       z-index:0;
       overflow:hidden;
     }
-
     .heart{
       position:absolute;
       opacity: .14;
@@ -62,7 +55,6 @@
       user-select:none;
       filter: blur(.1px);
     }
-
     @keyframes drift{
       0%   { transform: translate(var(--x), 110vh) scale(var(--s)); opacity: 0; }
       15%  { opacity: .14; }
@@ -70,9 +62,7 @@
       100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
     }
 
-    /* -----------------------------
-      WINDOW FRAME (Win95 style)
-    ------------------------------*/
+    /* Window */
     .window {
       width:min(720px, 92%);
       background: var(--win);
@@ -88,7 +78,6 @@
 
       z-index: 5;
     }
-
     .window::before {
       content:"";
       position:absolute;
@@ -108,20 +97,31 @@
       background: linear-gradient(90deg, var(--title1), var(--title2));
       border-bottom: 2px solid rgba(0,0,0,.12);
       user-select:none;
+      gap: 10px;
+    }
+
+    .titlebar__left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 0;
     }
 
     .titlebar__text {
       font-size: 13px;
       font-weight: 800;
       color:#4c0f2a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ✅ new: playlist button in titlebar */
+    .titlebar__actions{
       display:flex;
       align-items:center;
       gap:8px;
-    }
-
-    .win-controls {
-      display:flex;
-      gap:6px;
+      flex: 0 0 auto;
     }
 
     .winbtn {
@@ -137,6 +137,43 @@
       place-items:center;
       font-size: 12px;
       color:#5e1f3c;
+      padding: 0;
+    }
+
+    .playbtn{
+      height: 20px;
+      padding: 0 10px;
+      background: #ffe3f0;
+      border-radius: 0;
+
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+
+      font-size: 12px;
+      font-weight: 900;
+      color:#5e1f3c;
+      cursor:pointer;
+
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .playbtn:active{
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+      transform: translate(1px,1px);
+    }
+
+    .win-controls {
+      display:flex;
+      gap:6px;
     }
 
     .window__body {
@@ -145,6 +182,9 @@
     }
 
     h1 {
+      font-family: "Courier New", Courier, monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       font-size: 2.2rem;
       margin: 6px 0 10px;
       color: var(--accent);
@@ -157,9 +197,6 @@
       font-size: 0.95rem;
     }
 
-    /* -----------------------------
-      BUTTON OPTIONS
-    ------------------------------*/
     .options {
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -180,6 +217,8 @@
       border-bottom: 3px solid var(--sh2);
 
       user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .option:active {
@@ -199,9 +238,79 @@
       font-family: "Courier New", monospace;
     }
 
+    /* Modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 999;
+    }
+    .overlay.active { display:flex; }
+
+    .spotify-box {
+      width: min(720px, 96vw);
+      background: var(--win);
+      border-radius: 0;
+      padding: 0;
+
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--sh2);
+      border-bottom: 3px solid var(--sh2);
+
+      box-shadow: 0 18px 55px rgba(0,0,0,.22);
+    }
+
+    .spotify-titlebar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 8px 10px;
+      background: linear-gradient(90deg, var(--title1), var(--title2));
+      border-bottom: 2px solid rgba(0,0,0,.12);
+      user-select:none;
+    }
+
+    .spotify-titlebar h2 {
+      margin:0;
+      font-size: 13px;
+      font-weight: 900;
+      color:#4c0f2a;
+    }
+
+    .close-btn {
+      width: 24px;
+      height: 18px;
+      border-radius: 0;
+      background: #ffe3f0;
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+      cursor:pointer;
+      font-weight: 900;
+      color:#5e1f3c;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .spotify-body { padding: 14px; }
+    .spotify-body iframe {
+      width: 100%;
+      height: 380px;
+      border: none;
+      background: #fff;
+    }
+
     @media(max-width:520px){
       .options { grid-template-columns: 1fr; }
       h1 { font-size: 1.8rem; }
+      .spotify-body iframe { height: 300px; }
+      .playbtn{ padding: 0 8px; }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -211,18 +320,23 @@
 </head>
 
 <body>
-
-  <!-- 💗 Floating Hearts Background -->
   <div id="heartLayer"></div>
 
-  <!-- Main Window -->
   <div class="window">
     <div class="titlebar">
-      <div class="titlebar__text">💗 WILL YOU BE MY VALENTINE?</div>
-      <div class="win-controls">
-        <div class="winbtn">_</div>
-        <div class="winbtn">□</div>
-        <div class="winbtn">×</div>
+      <div class="titlebar__left">
+        <div class="titlebar__text">💗 WILL YOU BE MY VALENTINE?</div>
+      </div>
+
+      <!-- ✅ Playlist button + window controls -->
+      <div class="titlebar__actions">
+        <button class="playbtn" id="openSpotify" type="button">🎵 Playlist</button>
+
+        <div class="win-controls" aria-hidden="true">
+          <div class="winbtn">_</div>
+          <div class="winbtn">□</div>
+          <div class="winbtn">×</div>
+        </div>
       </div>
     </div>
 
@@ -230,34 +344,39 @@
       <h1>Pick a surprise 💗</h1>
       <p>Tap any option…</p>
 
-      <!-- ✅ Buttons open different pages -->
       <div class="options">
-        <div class="option" onclick="location.href='letter.html'">
-          💌 Letter
-        </div>
-
-        <div class="option" onclick="location.href='photos.html'">
-          📸 Photos
-        </div>
-
-        <div class="option" onclick="location.href='g.html'">
-          🐶 G
-        </div>
-
-        <div class="option" onclick="location.href='date.html'">
-          🌹 Date
-        </div>
+        <div class="option" onclick="location.href='letter.html'">💌 Letter</div>
+        <div class="option" onclick="location.href='photos.html'">📸 Photos</div>
+        <div class="option" onclick="location.href='g.html'">🐶 G</div>
+        <div class="option" onclick="location.href='date.html'">🌹 Date</div>
       </div>
 
       <a class="back" href="../index.html">← Back to start</a>
     </div>
   </div>
 
-  <!-- ✅ Floating Hearts Script -->
+  <!-- ✅ Spotify Modal -->
+  <div class="overlay" id="spotifyModal" role="dialog" aria-modal="true" aria-label="Spotify playlist">
+    <div class="spotify-box">
+      <div class="spotify-titlebar">
+        <h2>Our Playlist 🎶</h2>
+        <button class="close-btn" id="closeSpotify" type="button">×</button>
+      </div>
+
+      <div class="spotify-body">
+        <iframe
+          src="https://open.spotify.com/embed/playlist/7cEhoMx0fj3xahSwyyK2Ps"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // hearts
     const layer = document.getElementById("heartLayer");
     const hearts = ["♡","♥","❥","❤","💕"];
-
     function spawnHeart(){
       const h = document.createElement("div");
       h.className = "heart";
@@ -276,9 +395,32 @@
       layer.appendChild(h);
       setTimeout(()=>h.remove(), 22000);
     }
-
     setInterval(spawnHeart, 520);
-  </script>
 
+    // spotify modal open/close
+    const openBtn = document.getElementById("openSpotify");
+    const modal = document.getElementById("spotifyModal");
+    const closeBtn = document.getElementById("closeSpotify");
+
+    function openModal(){
+      modal.classList.add("active");
+      closeBtn.focus?.();
+    }
+    function closeModal(){
+      modal.classList.remove("active");
+      openBtn.focus?.();
+    }
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    });
+  </script>
 </body>
 </html>
