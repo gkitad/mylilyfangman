@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>For Lily 💘</title>
 
-  <!-- Romantic Fonts -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -32,6 +32,8 @@
       place-items:center;
       font-family: Inter, system-ui, sans-serif;
       color: var(--text);
+      text-align:center;
+      padding: 24px 16px;
 
       background:
         radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
@@ -40,11 +42,9 @@
         linear-gradient(180deg, var(--bg1), var(--bg2));
 
       overflow:hidden;
-      text-align:center;
-      padding: 24px 16px;
     }
 
-    /* Floating Hearts */
+    /* Floating hearts (subtle) */
     #heartLayer{
       position:fixed;
       inset:0;
@@ -54,24 +54,24 @@
     }
     .heart{
       position:absolute;
-      opacity: .18;
+      opacity: .14;
       animation: drift linear forwards;
       user-select:none;
+      filter: blur(.1px);
     }
     @keyframes drift{
       0%   { transform: translate(var(--x), 110vh) scale(var(--s)); opacity: 0; }
-      15%  { opacity: .18; }
+      15%  { opacity: .14; }
       50%  { transform: translate(calc(var(--x) + var(--wiggle)), 45vh) scale(var(--s)); }
       100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
     }
 
-    /* Floating Sound Toggle */
+    /* Sound toggle */
     .soundFab{
       position: fixed;
       top: 18px;
       left: 18px;
       z-index: 50;
-
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -86,8 +86,9 @@
 
       color: rgba(0,0,0,.62);
       font-weight: 750;
-      transition: 0.2s;
+      transition: transform .15s ease;
     }
+    .soundFab:hover{ transform: translateY(-2px); }
     .soundIcon{
       width: 34px;
       height: 34px;
@@ -101,134 +102,135 @@
     /* Screens */
     .screen{
       z-index: 2;
-      width: min(820px, 100%);
+      width: min(860px, 100%);
       display:grid;
       place-items:center;
     }
     .hidden{ display:none; }
 
-    /* ===== Minimal Envelope (solo sobre) ===== */
+    /* ===== CLEAN CLOSED ENVELOPE ===== */
     .envelope{
-      width: min(420px, 92vw);
-      height: min(270px, 58vw);
-      max-height: 290px;
+      width: min(520px, 92vw);
+      height: min(320px, 58vw);
+      max-height: 340px;
       position: relative;
       cursor: pointer;
-      user-select:none;
-      filter: drop-shadow(0 30px 60px rgba(0,0,0,.12));
+      user-select: none;
+      filter: drop-shadow(0 34px 70px rgba(0,0,0,.14));
       transform: translateZ(0);
     }
 
-    /* body of envelope */
-    .envBase{
+    /* back body */
+    .envBack{
       position:absolute;
       inset:0;
-      border-radius: 22px;
+      border-radius: 26px;
       background: rgba(255,255,255,.92);
-      border: 2px solid rgba(255,79,163,.18);
+      border: 2px solid rgba(255,79,163,.14);
       overflow:hidden;
     }
 
-    /* bottom flap triangle */
-    .envBase::before{
+    /* FRONT: closed envelope face (covers everything behind) */
+    .envFront{
+      position:absolute;
+      inset:0;
+      border-radius: 26px;
+      background: rgba(255,255,255,.92);
+      border: 2px solid rgba(255,79,163,.12);
+      overflow:hidden;
+    }
+
+    /* front triangles for clean "closed" look */
+    .envFront::before{
       content:"";
       position:absolute;
       inset:0;
-      clip-path: polygon(0 100%, 50% 56%, 100% 100%);
-      background: rgba(255,214,232,.75);
+      background:
+        linear-gradient(135deg, rgba(255,214,232,.42), transparent 55%),
+        linear-gradient(225deg, rgba(255,214,232,.42), transparent 55%),
+        linear-gradient(0deg, rgba(255,214,232,.25), rgba(255,255,255,0));
+      opacity: .85;
     }
 
-    /* side triangles */
-    .envLeft, .envRight{
-      position:absolute;
-      top:0; bottom:0;
-      width: 55%;
-      background: rgba(255,214,232,.40);
-    }
-    .envLeft{
-      left:0;
-      clip-path: polygon(0 0, 100% 50%, 0 100%);
-    }
-    .envRight{
-      right:0;
-      clip-path: polygon(100% 0, 0 50%, 100% 100%);
-    }
-
-    /* letter paper (inside) */
-    .paper{
-      position:absolute;
-      left: 8%;
-      width: 84%;
-      height: 78%;
-      bottom: 10%;
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,214,232,.52));
-      border: 1px solid rgba(255,79,163,.22);
-      transform: translateY(36px);
-      transition: transform .95s cubic-bezier(.2,.9,.2,1);
-      display:grid;
-      place-items:center;
-    }
-
-    .paperText{
-      font-family: "Playfair Display", serif;
-      font-weight: 700;
-      font-size: clamp(22px, 4.3vw, 34px);
-      color: rgba(179,21,90,.72);
-      letter-spacing: -.3px;
-    }
-
-    /* top flap */
+    /* top flap (closed) */
     .flap{
       position:absolute;
       left:0; right:0; top:0;
       height: 62%;
+      border-radius: 26px 26px 18px 18px;
       background: rgba(255,214,232,.55);
       clip-path: polygon(0 0, 100% 0, 50% 100%);
       transform-origin: top center;
+      transform: rotateX(0deg);
       transition: transform .75s cubic-bezier(.2,.9,.2,1);
       border-bottom: 1px solid rgba(179,21,90,.08);
+      z-index: 3;
     }
 
-    /* seal */
-    .seal{
+    /* label text */
+    .label{
       position:absolute;
       left:50%;
-      top:56%;
+      top:55%;
       transform: translate(-50%,-50%);
-      width: 66px;
-      height: 66px;
+      z-index: 4;
+
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      font-size: clamp(22px, 4.1vw, 34px);
+      color: rgba(179,21,90,.72);
+      letter-spacing: -.2px;
+
+      padding: 10px 18px;
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,182,214,.90));
-      border: 2px solid rgba(255,79,163,.35);
-      box-shadow: 0 18px 40px rgba(179,21,90,.18);
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,79,163,.10);
+      backdrop-filter: blur(10px);
+    }
+
+    /* the letter (hidden behind until open) */
+    .paper{
+      position:absolute;
+      left: 10%;
+      width: 80%;
+      height: 78%;
+      bottom: 10%;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,214,232,.55));
+      border: 1px solid rgba(255,79,163,.18);
+      box-shadow: 0 18px 45px rgba(179,21,90,.10);
+      transform: translateY(52px);
+      opacity: 0;
+      transition: transform .95s cubic-bezier(.2,.9,.2,1), opacity .35s ease;
+      z-index: 1;
       display:grid;
       place-items:center;
-      font-size: 20px;
-      color: var(--wine);
+    }
+    .paperInner{
+      font-family: Inter, system-ui, sans-serif;
+      font-weight: 700;
+      color: rgba(42,31,37,.55);
+      letter-spacing: .2px;
     }
 
-    /* hover micro effect */
-    .envelope:hover{
-      transform: translateY(-2px);
-      transition: transform .2s ease;
-    }
-
-    /* open animation */
+    /* OPEN state */
     .open .flap{ transform: rotateX(170deg); }
-    .open .paper{ transform: translateY(-62px); }
+    .open .paper{
+      transform: translateY(-58px);
+      opacity: 1;
+    }
     .open{ pointer-events:none; }
 
-    /* ===== Question Card ===== */
+    /* ===== QUESTION CARD ===== */
     .card{
       width: min(780px, 100%);
-      margin:auto;
       padding: 42px 28px 34px;
       background: var(--card);
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
+      margin:auto;
     }
 
     .musicBtn{
@@ -275,6 +277,12 @@
       cursor:pointer;
       font-weight:700;
       min-width:170px;
+      transition: transform .12s ease, box-shadow .2s ease;
+      box-shadow: 0 14px 30px rgba(0,0,0,.10);
+    }
+    .btnRow button:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(0,0,0,.14);
     }
 
     .tiny{
@@ -285,7 +293,7 @@
 
     @media(max-width:520px){
       .btnRow button{ width:100%; min-width:0; }
-      .seal{ width: 60px; height: 60px; }
+      .label{ padding: 8px 14px; }
     }
   </style>
 </head>
@@ -294,21 +302,28 @@
 
   <div id="heartLayer"></div>
 
-  <!-- Floating Sound Toggle -->
-  <button class="soundFab" id="soundFab">
-    <span class="soundIcon">🔇</span>
+  <!-- Sound Toggle -->
+  <button class="soundFab" id="soundFab" type="button">
+    <span class="soundIcon" aria-hidden="true">🔇</span>
     <span id="soundText">Sound off</span>
   </button>
 
-  <!-- Screen 1: ONLY envelope -->
+  <!-- Screen 1: Closed envelope only -->
   <section class="screen" id="screenEnvelope">
     <div class="envelope" id="envelope" aria-label="Open envelope">
-      <div class="envBase"></div>
-      <div class="envLeft"></div>
-      <div class="envRight"></div>
-      <div class="paper"><div class="paperText">Lily</div></div>
+      <div class="envBack"></div>
+
+      <!-- The letter is BEHIND -->
+      <div class="paper">
+        <div class="paperInner">💕</div>
+      </div>
+
+      <!-- Closed envelope FRONT -->
+      <div class="envFront"></div>
       <div class="flap"></div>
-      <div class="seal">♥</div>
+
+      <!-- Only visible text -->
+      <div class="label">To Lily Fangman</div>
     </div>
   </section>
 
@@ -333,24 +348,28 @@
 
   <!-- Hearts -->
   <script>
-    const layer=document.getElementById("heartLayer");
-    const hearts=["♡","♥","❥","❤","💕"];
+    const layer = document.getElementById("heartLayer");
+    const hearts = ["♡","♥","❥","❤","💕"];
+
     function spawnHeart(){
-      const h=document.createElement("div");
-      h.className="heart";
-      h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
-      const x=Math.random()*100;
-      const s=0.6+Math.random()*1.2;
-      const wiggle=(Math.random()*40-20)+"vw";
-      h.style.setProperty("--x",x+"vw");
-      h.style.setProperty("--s",s.toFixed(2));
-      h.style.setProperty("--wiggle",wiggle);
-      h.style.fontSize=(16+Math.random()*26)+"px";
-      h.style.animationDuration=(10+Math.random()*10)+"s";
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+
+      const x = Math.random()*100;
+      const s = 0.6 + Math.random()*1.2;
+      const wiggle = (Math.random()*40 - 20)+"vw";
+
+      h.style.setProperty("--x", x+"vw");
+      h.style.setProperty("--s", s.toFixed(2));
+      h.style.setProperty("--wiggle", wiggle);
+      h.style.fontSize = (16 + Math.random()*26)+"px";
+      h.style.animationDuration = (10 + Math.random()*10)+"s";
+
       layer.appendChild(h);
-      setTimeout(()=>h.remove(),22000);
+      setTimeout(()=>h.remove(), 22000);
     }
-    setInterval(spawnHeart,380);
+    setInterval(spawnHeart, 420);
   </script>
 
   <!-- Music -->
@@ -358,33 +377,33 @@
   <script>
     LilyPlayer.setTrack("/assets/intro.mp3");
 
-    const fab=document.getElementById("soundFab");
-    const txt=document.getElementById("soundText");
-    const icon=fab.querySelector(".soundIcon");
+    const fab = document.getElementById("soundFab");
+    const txt = document.getElementById("soundText");
+    const icon = fab.querySelector(".soundIcon");
 
     function refreshSound(){
-      const on=localStorage.getItem("lily_audio_on")==="1";
-      txt.textContent=on?"Sound on":"Sound off";
-      icon.textContent=on?"🔊":"🔇";
+      const on = localStorage.getItem("lily_audio_on") === "1";
+      txt.textContent = on ? "Sound on" : "Sound off";
+      icon.textContent = on ? "🔊" : "🔇";
     }
 
-    fab.addEventListener("click", async()=>{
+    fab.addEventListener("click", async () => {
       await LilyPlayer.toggle();
-      setTimeout(refreshSound,80);
+      setTimeout(refreshSound, 80);
     });
     refreshSound();
 
-    // Envelope open -> show question
-    const env=document.getElementById("envelope");
-    const scrEnv=document.getElementById("screenEnvelope");
-    const scrMain=document.getElementById("screenMain");
+    // Open envelope -> show question
+    const env = document.getElementById("envelope");
+    const scrEnv = document.getElementById("screenEnvelope");
+    const scrMain = document.getElementById("screenMain");
 
-    env.addEventListener("click", ()=>{
+    env.addEventListener("click", () => {
       env.classList.add("open");
-      setTimeout(()=>{
+      setTimeout(() => {
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
-      }, 820);
+      }, 950);
     });
   </script>
 
