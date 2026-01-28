@@ -14,18 +14,13 @@
     :root{
       --pink1:#ffd6e6;
       --pink2:#f8bcd2;
-      --pink3:#ffeaf2;
 
-      --ink:#4a2b33;
-      --inkSoft: rgba(74,43,51,.78);
+      --pillBg: rgba(255,255,255,.45);
+      --pillBd: rgba(255,255,255,.55);
 
-      --pillBg: rgba(255,255,255,.55);
-      --pillBd: rgba(255,255,255,.75);
-      --pillSh: 0 18px 40px rgba(0,0,0,.10);
-
-      --paper1:#fff3dc;
-      --paper2:#f3d7b0;
-      --paperInk:#3f2a22;
+      --inkTitle: rgba(70, 34, 40, .88);
+      --inkType: rgba(54, 35, 30, .86);
+      --inkSoft: rgba(95, 50, 70, .70);
     }
 
     *{ box-sizing:border-box; }
@@ -34,13 +29,12 @@
       margin:0;
       min-height:100vh;
       overflow:hidden;
-      font-family: "Playfair Display", serif;
-
       background:
-        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.80), transparent 60%),
-        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.78), transparent 60%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.42), transparent 60%),
         radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
         linear-gradient(180deg, var(--pink1), var(--pink2));
+      font-family: "Playfair Display", serif;
     }
 
     .stage{
@@ -52,7 +46,7 @@
       padding: 26px;
     }
 
-    /* Floating petals */
+    /* Floating petals (soft, not too busy) */
     #petalLayer{
       position:absolute;
       inset:0;
@@ -63,14 +57,14 @@
     .petal{
       position:absolute;
       top:-10vh;
-      opacity:.20;
+      opacity:.18;
       user-select:none;
-      filter: blur(.15px);
+      filter: blur(.2px);
       animation: fall linear forwards;
     }
     @keyframes fall{
       0%{ transform: translateX(var(--x)) translateY(-10vh) rotate(0deg); opacity:0; }
-      18%{ opacity:.20; }
+      20%{ opacity:.18; }
       100%{
         transform: translateX(calc(var(--x) + var(--drift)))
                    translateY(120vh)
@@ -79,29 +73,29 @@
       }
     }
 
-    /* Top-left song pill */
+    /* Song button */
     .songBtn{
       position:absolute;
-      top: 18px;
-      left: 18px;
+      top: 16px;
+      left: 16px;
       z-index: 5;
 
-      height: 54px;
-      padding: 0 22px;
+      height: 48px;
+      padding: 0 18px;
       border-radius: 999px;
 
       display:flex;
       align-items:center;
-      gap: 14px;
+      gap: 12px;
 
-      border: 1px solid var(--pillBd);
       background: var(--pillBg);
+      border: 1px solid var(--pillBd);
       backdrop-filter: blur(10px);
-      box-shadow: var(--pillSh);
+      box-shadow: 0 14px 34px rgba(0,0,0,.10);
 
       color: rgba(125, 60, 85, .95);
       font-weight: 700;
-      font-size: 24px;
+      font-size: 20px;
 
       cursor:pointer;
       user-select:none;
@@ -109,126 +103,145 @@
       touch-action: manipulation;
     }
     .songBtn:active{ transform: translateY(1px); }
-    .songBtn .icon{ font-size: 22px; }
-    .songBtn .play{ margin-left: 6px; opacity:.9; }
+    .songBtn .icon{ font-size: 20px; }
+    .songBtn .play{ margin-left: 4px; opacity:.9; }
 
-    /* Center parchment */
+    /* Parchment wrapper */
     .paperWrap{
       position:relative;
       z-index: 2;
-      width: min(860px, 94vw);
-      height: min(980px, 78vh);
-
-      display:flex;
-      align-items:stretch;
-      justify-content:center;
+      width: min(900px, 94vw);
+      height: min(980px, 80vh);
     }
 
     .paper{
       position:relative;
       width:100%;
       height:100%;
-      border-radius: 18px;
+      border-radius: 20px;
+      overflow:hidden;
 
-      /* “old paper” */
+      /* parchment base */
       background:
-        radial-gradient(1200px 900px at 35% 25%, rgba(255,255,255,.55), transparent 60%),
-        radial-gradient(1000px 800px at 80% 10%, rgba(255,255,255,.35), transparent 60%),
-        radial-gradient(1200px 900px at 50% 80%, rgba(140,80,35,.12), transparent 60%),
-        linear-gradient(180deg, var(--paper1), var(--paper2));
+        radial-gradient(1200px 900px at 32% 18%, rgba(255,255,255,.55), transparent 62%),
+        radial-gradient(900px 700px at 85% 10%, rgba(255,255,255,.30), transparent 62%),
+        radial-gradient(1200px 900px at 50% 78%, rgba(140,80,35,.16), transparent 65%),
+        linear-gradient(180deg, #fff4dd 0%, #f0d1a6 55%, #e0b987 100%);
 
       box-shadow:
         0 26px 80px rgba(0,0,0,.16),
-        inset 0 0 0 1px rgba(255,255,255,.35),
-        inset 0 20px 46px rgba(80,40,18,.10);
+        inset 0 0 0 1px rgba(255,255,255,.32),
+        inset 0 22px 52px rgba(80,40,18,.10);
 
-      border: 1px solid rgba(80,40,18,.20);
-      overflow:hidden;
-      padding: clamp(18px, 3.5vw, 48px);
+      border: 1px solid rgba(80,40,18,.22);
+      padding: clamp(18px, 3.5vw, 50px);
     }
 
-    /* paper fibers + vignette edges */
+    /* realistic paper fibers + tiny specks */
     .paper::before{
       content:"";
       position:absolute;
       inset:0;
       pointer-events:none;
-      opacity:.26;
+      opacity:.28;
+
       background:
+        radial-gradient(circle at 20% 30%, rgba(120,70,35,.08), transparent 35%),
+        radial-gradient(circle at 80% 20%, rgba(120,70,35,.07), transparent 40%),
+        radial-gradient(circle at 55% 65%, rgba(120,70,35,.06), transparent 38%),
         repeating-linear-gradient(0deg,
-          rgba(60,30,10,.06) 0px,
-          rgba(60,30,10,.06) 1px,
-          transparent 2px,
-          transparent 6px
-        ),
-        repeating-linear-gradient(90deg,
-          rgba(60,30,10,.04) 0px,
-          rgba(60,30,10,.04) 1px,
+          rgba(60,30,10,.05) 0px,
+          rgba(60,30,10,.05) 1px,
           transparent 2px,
           transparent 7px
+        ),
+        repeating-linear-gradient(90deg,
+          rgba(60,30,10,.035) 0px,
+          rgba(60,30,10,.035) 1px,
+          transparent 2px,
+          transparent 8px
         );
       mix-blend-mode: multiply;
-      filter: blur(.25px);
+      filter: blur(.2px);
     }
+
+    /* burnt/aged edges (the key part) */
     .paper::after{
       content:"";
       position:absolute;
-      inset:-30px;
+      inset:-40px;
       pointer-events:none;
-      background: radial-gradient(closest-side at 50% 40%, transparent 62%, rgba(60,30,10,.22) 120%);
-      opacity:.75;
+
+      background:
+        radial-gradient(closest-side at 50% 40%, transparent 60%, rgba(65,30,10,.28) 120%),
+        radial-gradient(closest-side at 0% 0%, rgba(65,30,10,.38), transparent 60%),
+        radial-gradient(closest-side at 100% 0%, rgba(65,30,10,.34), transparent 60%),
+        radial-gradient(closest-side at 0% 100%, rgba(65,30,10,.34), transparent 60%),
+        radial-gradient(closest-side at 100% 100%, rgba(65,30,10,.38), transparent 60%);
+      opacity:.78;
+      filter: blur(1px);
     }
 
-    /* layout inside paper: mimic screenshot spacing */
+    /* inner layout */
     .paperInner{
       position:relative;
-      z-index:1;
+      z-index: 1;
       height:100%;
       display:flex;
       flex-direction:column;
       align-items:center;
     }
 
+    .titleRow{
+      width: min(720px, 94%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
     .title{
       font-family: "Great Vibes", cursive;
       font-size: clamp(44px, 6.4vw, 78px);
-      color: rgba(70, 34, 40, .85);
-      margin: 16px 0 14px;
+      color: var(--inkTitle);
       text-shadow: 0 2px 0 rgba(255,255,255,.35);
+      margin: 0;
       text-align:center;
+    }
+
+    .envelope{
+      font-size: clamp(28px, 3.4vw, 44px);
+      opacity: .85;
+      transform: translateY(6px);
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.10));
     }
 
     .body{
       width: min(640px, 92%);
-      margin-top: 12px;
+      margin-top: 22px;
+      padding: 6px 4px 0;
+      flex: 1;
+      overflow:auto;
 
-      /* “typewriter-ish” */
       font-family: "Special Elite", ui-monospace, monospace;
       font-size: clamp(16px, 2.2vw, 20px);
       line-height: 1.75;
-      color: rgba(63,42,34,.85);
-
-      /* keep line breaks */
+      color: var(--inkType);
       white-space: pre-wrap;
-
-      /* if letter is long, scroll inside paper */
-      overflow:auto;
-      padding: 6px 4px 0;
-      flex: 1;
     }
 
     .signature{
       width: min(640px, 92%);
-      padding-top: 10px;
-      padding-bottom: 6px;
+      padding: 10px 0 6px;
       text-align:right;
 
       font-family: "Great Vibes", cursive;
       font-size: clamp(26px, 3.6vw, 44px);
-      color: rgba(80, 42, 50, .70);
+      color: var(--inkSoft);
     }
 
-    /* Cursor */
+    /* Typewriter cursor */
     .cursor{
       display:inline-block;
       width: 10px;
@@ -236,76 +249,47 @@
       transform: translateY(2px);
       opacity:.85;
       animation: blink .9s steps(2,end) infinite;
+      font-family: "Special Elite", ui-monospace, monospace;
+      font-style: normal;
     }
     @keyframes blink{ 50%{ opacity:0; } }
 
-    /* Bottom pills */
-    .actions{
+    /* Smaller + less flashy back button */
+    .backMini{
       position:absolute;
-      left: 0;
-      right: 0;
-      bottom: 22px;
-      z-index: 4;
+      right: 18px;
+      bottom: 16px;
+      z-index: 6;
 
-      display:flex;
-      justify-content:center;
-      gap: 26px;
-      padding: 0 18px;
-    }
+      font-family: Inter, system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .02em;
 
-    .pill{
-      height: 74px;
-      min-width: 320px;
-      padding: 0 28px;
-      border-radius: 999px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap: 12px;
-
-      background: var(--pillBg);
-      border: 1px solid var(--pillBd);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--pillSh);
-
-      color: rgba(120, 55, 80, .95);
-      font-weight: 600;
-      font-size: 28px;
+      color: rgba(120, 55, 80, .75);
       text-decoration:none;
 
-      cursor:pointer;
-      user-select:none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.40);
+      background: rgba(255,255,255,.25);
+      backdrop-filter: blur(8px);
+
+      box-shadow: 0 10px 26px rgba(0,0,0,.08);
+      transition: transform .15s ease, background .2s ease, color .2s ease;
       -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
     }
-    .pill:active{ transform: translateY(1px); }
+    .backMini:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.32);
+      color: rgba(120, 55, 80, .85);
+    }
+    .backMini:active{ transform: translateY(0); }
 
-    /* Mobile */
     @media (max-width: 560px){
-      .songBtn{
-        height: 46px;
-        padding: 0 16px;
-        font-size: 18px;
-        top: 12px;
-        left: 12px;
-      }
-
-      .paperWrap{
-        height: min(980px, 72vh);
-      }
-
-      .actions{
-        flex-direction:column;
-        bottom: 12px;
-        gap: 12px;
-      }
-      .pill{
-        width: min(92vw, 420px);
-        min-width: 0;
-        height: 62px;
-        font-size: 22px;
-      }
+      .paperWrap{ height: min(980px, 76vh); }
+      .songBtn{ height: 44px; font-size: 18px; top: 12px; left: 12px; }
+      .backMini{ right: 12px; bottom: 10px; }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -318,7 +302,6 @@
   <div class="stage">
     <div id="petalLayer"></div>
 
-    <!-- keep this id for your global player -->
     <button class="songBtn" id="songBtn" type="button">
       <span class="icon">🎵</span>
       <span>Song</span>
@@ -328,10 +311,11 @@
     <div class="paperWrap">
       <div class="paper">
         <div class="paperInner">
-          <!-- You can change this title if you want -->
-          <div class="title" id="letterTitle">My Dearest Lily ✉️</div>
+          <div class="titleRow">
+            <h1 class="title" id="letterTitle">My Dearest Lily</h1>
+            <div class="envelope" aria-hidden="true">✉️</div>
+          </div>
 
-          <!-- Typewriter writes here -->
           <div class="body"><span id="typedText"></span><span class="cursor" id="cursor">|</span></div>
 
           <div class="signature" id="signature">— your stinky bf 💗</div>
@@ -339,10 +323,7 @@
       </div>
     </div>
 
-    <div class="actions">
-      <a class="pill" href="./menu.html">← Back to Menu</a>
-      <button class="pill" id="downloadBtn" type="button">📜 Download Letter</button>
-    </div>
+    <a class="backMini" href="./menu.html">← Back to Menu</a>
   </div>
 
   <!-- Petals -->
@@ -351,7 +332,7 @@
     const petals = ["🌸","🌷","💮","🌺","🌸","🌸"];
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const MAX = 26;
+    const MAX = 22;
 
     function spawnPetal(){
       if (layer.childElementCount >= MAX) return;
@@ -360,19 +341,19 @@
       p.textContent = petals[Math.floor(Math.random()*petals.length)];
 
       const x = Math.random() * 100;
-      const drift = (Math.random() * 50 - 25) + "vw";
+      const drift = (Math.random() * 46 - 23) + "vw";
       const size = 18 + Math.random() * 18;
 
       p.style.setProperty("--x", x + "vw");
       p.style.setProperty("--drift", drift);
       p.style.fontSize = size + "px";
-      p.style.animationDuration = (9 + Math.random() * 7) + "s";
+      p.style.animationDuration = (10 + Math.random() * 8) + "s";
 
       layer.appendChild(p);
-      setTimeout(() => p.remove(), 17000);
+      setTimeout(() => p.remove(), 19000);
     }
 
-    if (!reduceMotion) setInterval(spawnPetal, 850);
+    if (!reduceMotion) setInterval(spawnPetal, 950);
   </script>
 
   <!-- Typewriter (ONLY EDIT const letter) -->
@@ -381,8 +362,8 @@
     const cursorEl = document.getElementById("cursor");
     const reduceMotion2 = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // ✅ ONLY CHANGE THIS:
-    // If you ever need a backtick ` inside, write it like \`
+    // ✅ ONLY CHANGE THIS MESSAGE:
+    // Tip: if you ever need a backtick ` inside, write it as \`
     const letter = `Hi Puppy,
 
 This is where your message will go.
@@ -408,7 +389,7 @@ Every word here will mean everything.`;
           if (ch === ",") delay += 90;
           setTimeout(tick, delay);
         } else {
-          // Optional: remove cursor when finished
+          // optional: remove cursor when finished
           // cursorEl.remove();
         }
       }
@@ -417,28 +398,6 @@ Every word here will mean everything.`;
 
     if (reduceMotion2) showAll();
     else typeWriter(letter);
-  </script>
-
-  <!-- Download as .txt -->
-  <script>
-    document.getElementById("downloadBtn").addEventListener("click", () => {
-      const title = (document.getElementById("letterTitle").textContent || "Letter").trim();
-      const sig = (document.getElementById("signature").textContent || "").trim();
-      const body = (document.getElementById("typedText").textContent || "").trim();
-
-      const text = `${title}\n\n${body}\n\n${sig}\n`;
-      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "letter.txt";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      URL.revokeObjectURL(url);
-    });
   </script>
 
   <!-- Global music player -->
