@@ -91,6 +91,7 @@
       z-index: 90;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     @keyframes pulseGlow{
       0%,100%{ box-shadow:0 0 18px rgba(255,79,163,.15), 0 18px 45px rgba(179,21,90,.12); }
@@ -126,6 +127,7 @@
       -webkit-tap-highlight-color: transparent;
       transition: transform 260ms ease, filter 260ms ease;
       will-change: transform;
+      touch-action: manipulation;
     }
     .envelope:hover{
       transform: translateY(-2px);
@@ -213,6 +215,10 @@
       opacity: 0;
       transform: translateY(52px) scale(.98);
       will-change: transform, opacity;
+
+      /* important: prevent accidental taps until we allow it */
+      pointer-events: none;
+      touch-action: manipulation;
     }
 
     .open .paper{
@@ -239,15 +245,14 @@
       backdrop-filter: blur(2px);
       z-index: 180;
       opacity: 0;
-      pointer-events: none;
+      pointer-events: none; /* will be enabled later */
       transition: opacity 260ms ease;
     }
     .letterBackdrop.show{
       opacity: 1;
-      pointer-events: auto;
     }
 
-    /* Centered reading mode (applied AFTER we move it to body) */
+    /* Centered reading mode */
     .paper.centered{
       position: fixed;
       left: 50%;
@@ -264,9 +269,8 @@
 
       overflow: hidden;
       cursor: pointer;
-      pointer-events: auto;
 
-      /* important: stop fly animation so it doesn't keep changing transforms */
+      /* stop fly animation completely */
       animation: none !important;
     }
     @media (max-width:520px){
@@ -359,11 +363,13 @@
       transition: transform .12s ease, box-shadow .2s ease;
       box-shadow: 0 14px 30px rgba(0,0,0,.10);
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .btnRow button:hover{
       transform: translateY(-2px);
       box-shadow: 0 18px 40px rgba(0,0,0,.14);
     }
+
     .tiny{
       margin-top:18px;
       font-size:.9rem;
@@ -394,7 +400,7 @@
 
   <button class="musicBtn posTopLeft" id="musicBtn" type="button">Music for you 💗</button>
 
-  <!-- backdrop for centered letter -->
+  <!-- Backdrop (NO click handler; prevents auto-close) -->
   <div class="letterBackdrop" id="letterBackdrop" aria-hidden="true"></div>
 
   <section class="screen" id="screenEnvelope">
@@ -479,7 +485,7 @@
 
     let opened = false;
     let paperCentered = false;
-    let allowTapToContinue = false;
+    let openedAt = 0;
 
     function burstHearts(anchorEl){
       const heartSet = ["💗","💞","💖"];
@@ -503,41 +509,53 @@
       }
     }
 
-    function openEnvelope(){
+    function openEnvelopeFromPointer(e){
+      // stop the same gesture from creating a follow-up "click" that closes things
+      e.preventDefault();
+
       if (opened) return;
       opened = true;
+      openedAt = Date.now();
 
       env.classList.add("is-opening");
       env.classList.add("open");
       burstHearts(env);
 
-      // When fly animation ends, move to body and center it (stable in all browsers)
       setTimeout(() => {
-        // Move element to body
+        // Move paper to BODY (so fixed centering is correct in all browsers)
         document.body.appendChild(paper);
 
-        // Stop any remaining animation/transform from the fly state
+        // Stop the fly animation completely so it won't keep transforming
         paper.style.animation = "none";
-        paper.style.transform = "translate(-50%, -50%)";
         paper.style.opacity = "1";
 
-        // Show backdrop and center
+        // Show backdrop
         backdrop.classList.add("show");
+
+        // Center the paper
         paper.classList.add("centered");
-
         paperCentered = true;
-        env.classList.remove("is-opening");
 
-        // Prevent accidental instant tap while centering
-        allowTapToContinue = false;
-        setTimeout(() => { allowTapToContinue = true; }, 450);
+        // IMPORTANT: enable pointer events ONLY AFTER the lock window
+        paper.style.pointerEvents = "none";
+        backdrop.style.pointerEvents = "none";
+
+        setTimeout(() => {
+          paper.style.pointerEvents = "auto";
+          backdrop.style.pointerEvents = "auto";
+        }, 900); // lock window to ignore the original tap/click delay
+
+        env.classList.remove("is-opening");
       }, 1100);
     }
 
-    function goToValentine(){
-      if (!paperCentered || !allowTapToContinue) return;
+    function goToValentine(e){
+      // Require an actual user event + lock window
+      if (!e || !e.isTrusted) return;
+      if (!paperCentered) return;
 
-      allowTapToContinue = false;
+      // Ignore any "ghost click" right after opening
+      if (Date.now() - openedAt < 900) return;
 
       paper.style.transition = "opacity 220ms ease";
       paper.style.opacity = "0";
@@ -557,28 +575,30 @@
       }, 240);
     }
 
-    env.addEventListener("click", openEnvelope);
+    // ✅ Use pointerdown instead of click to prevent delayed mobile "click" ghosting
+    env.addEventListener("pointerdown", openEnvelopeFromPointer, { passive: false });
+
+    // Keyboard accessibility
     env.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        openEnvelope();
+        // fake a minimal event object compatible with go logic
+        openEnvelopeFromPointer({ preventDefault(){}, });
       }
     });
 
-    paper.addEventListener("click", (e) => {
+    // Only the paper itself continues (backdrop has NO click handler)
+    paper.addEventListener("pointerdown", (e) => {
       e.stopPropagation();
-      goToValentine();
-    });
+      goToValentine(e);
+    }, { passive: true });
+
     paper.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        e.stopPropagation();
-        goToValentine();
+        goToValentine({ isTrusted: true }); // keyboard is trusted interaction
       }
     });
-
-    // Optional: clicking the dim background also continues
-    backdrop.addEventListener("click", goToValentine);
   </script>
 
 </body>
