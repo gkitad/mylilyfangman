@@ -3,32 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Menu ✨</title>
+  <title>Valentine Menu 💗</title>
 
   <style>
     /* -----------------------------
       RETRO WIN95/98 VALENTINE THEME
-      (more square + harder bevels)
     ------------------------------*/
-    :root{
+    :root {
       --bg1:#fff4fa;
       --bg2:#ffd1e6;
 
-      --win:#ffe8f3;            /* window surface */
-      --title1:#ff7fb9;         /* titlebar gradient */
+      --win:#ffe8f3;
+      --title1:#ff7fb9;
       --title2:#ffb3d6;
 
       --text:#2a2a2a;
       --accent:#b3155a;
 
-      /* classic 3D borders */
-      --hi:#ffffff;             /* highlight */
-      --hi2:#ffe7f2;            /* inner highlight */
-      --sh:#b86a8c;             /* shadow */
-      --sh2:#7a3554;            /* deep shadow */
+      --hi:#ffffff;
+      --hi2:#ffe7f2;
+      --sh:#b86a8c;
+      --sh2:#7a3554;
     }
 
-    body{
+    body {
       margin:0;
       min-height:100vh;
       display:grid;
@@ -36,7 +34,6 @@
       font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
       color:var(--text);
 
-      /* more "retro" background texture */
       background:
         radial-gradient(900px 520px at 50% 25%, #ffffff 0%, var(--bg1) 45%, var(--bg2) 100%),
         repeating-linear-gradient(
@@ -47,33 +44,61 @@
         );
     }
 
-    /* pixel-like heading without external font */
-    h1{
+    h1 {
       font-family: "Courier New", Courier, monospace;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
     /* -----------------------------
+      🐶 FLOATING PUPPIES BACKGROUND
+    ------------------------------*/
+    #puppy-container {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .puppy {
+      position: absolute;
+      font-size: 28px;
+      opacity: 0.8;
+      animation: floatUp 6s linear forwards;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 0.9;
+      }
+      to {
+        transform: translateY(-120vh) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    /* -----------------------------
       WINDOW FRAME (Win95 style)
     ------------------------------*/
-    .window{
+    .window {
       width:min(720px, 92%);
       background: var(--win);
-      border-radius: 0;          /* <- square */
+      border-radius: 0;
       position: relative;
       padding:0;
       box-shadow: 0 18px 55px rgba(0,0,0,.22);
 
-      /* outer frame */
       border-top: 3px solid var(--hi);
       border-left: 3px solid var(--hi);
       border-right: 3px solid var(--sh2);
       border-bottom: 3px solid var(--sh2);
+
+      z-index: 5;
     }
 
-    /* inner frame like old dialogs */
-    .window::before{
+    .window::before {
       content:"";
       position:absolute;
       inset: 4px;
@@ -84,18 +109,17 @@
       border-bottom: 2px solid var(--sh);
     }
 
-    .titlebar{
+    .titlebar {
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:10px;
       padding: 8px 10px;
       background: linear-gradient(90deg, var(--title1), var(--title2));
       border-bottom: 2px solid rgba(0,0,0,.12);
       user-select:none;
     }
 
-    .titlebar__text{
+    .titlebar__text {
       font-size: 13px;
       font-weight: 800;
       color:#4c0f2a;
@@ -104,17 +128,16 @@
       gap:8px;
     }
 
-    .win-controls{
+    .win-controls {
       display:flex;
       gap:6px;
     }
 
-    /* classic square system buttons */
-    .winbtn{
+    .winbtn {
       width: 22px;
       height: 18px;
       background: #ffe3f0;
-      border-radius: 0;  /* <- square */
+      border-radius: 0;
       border-top: 2px solid var(--hi);
       border-left: 2px solid var(--hi);
       border-right: 2px solid var(--sh);
@@ -123,66 +146,52 @@
       place-items:center;
       font-size: 12px;
       color:#5e1f3c;
-      line-height: 1;
     }
 
-    .winbtn:active{
-      border-top: 2px solid var(--sh);
-      border-left: 2px solid var(--sh);
-      border-right: 2px solid var(--hi);
-      border-bottom: 2px solid var(--hi);
-      transform: translate(1px,1px);
-    }
-
-    .window__body{
+    .window__body {
       padding: 26px 28px 22px;
       text-align:center;
     }
 
-    h1{
+    h1 {
       font-size: 2.2rem;
       margin: 6px 0 10px;
       color: var(--accent);
       text-shadow: 1px 1px 0 rgba(255,255,255,.75);
     }
 
-    p{
+    p {
       margin:0 0 18px;
       color: rgba(0,0,0,.65);
       font-size: 0.95rem;
     }
 
     /* -----------------------------
-      BUTTON GRID = Win95 buttons
+      BUTTONS
     ------------------------------*/
-    .options{
+    .options {
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin-top: 14px;
     }
 
-    .option{
-      padding: 12px 12px;
+    .option {
+      padding: 12px;
       background: #ffeef6;
       cursor:pointer;
       font-weight: 800;
-      border-radius: 0; /* <- square */
+      border-radius: 0;
 
       border-top: 3px solid var(--hi);
       border-left: 3px solid var(--hi);
       border-right: 3px solid var(--sh2);
       border-bottom: 3px solid var(--sh2);
 
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
       user-select:none;
     }
 
-    .option:hover{
-      filter: brightness(1.02);
-    }
-
-    .option:active{
+    .option:active {
       border-top: 3px solid var(--sh2);
       border-left: 3px solid var(--sh2);
       border-right: 3px solid var(--hi);
@@ -190,20 +199,19 @@
       transform: translate(1px,1px);
     }
 
-    .back{
+    .back {
       margin-top: 18px;
       display:inline-block;
       color: var(--accent);
       text-decoration:none;
       font-weight: 800;
-      font-family: "Courier New", Courier, monospace;
+      font-family: "Courier New", monospace;
     }
-    .back:hover{ text-decoration: underline; }
 
     /* -----------------------------
-      MODAL = Win95 dialog
+      MODAL
     ------------------------------*/
-    .overlay{
+    .overlay {
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.45);
@@ -213,15 +221,14 @@
       padding: 20px;
       z-index: 999;
     }
-    .overlay.active{ display:flex; }
 
-    .spotify-box{
+    .overlay.active { display:flex; }
+
+    .spotify-box {
       width: min(560px, 95vw);
       background: var(--win);
       border-radius: 0;
       padding: 0;
-      box-shadow: 0 22px 70px rgba(0,0,0,.30);
-      position: relative;
 
       border-top: 3px solid var(--hi);
       border-left: 3px solid var(--hi);
@@ -229,36 +236,23 @@
       border-bottom: 3px solid var(--sh2);
     }
 
-    .spotify-box::before{
-      content:"";
-      position:absolute;
-      inset: 4px;
-      pointer-events:none;
-      border-top: 2px solid var(--hi2);
-      border-left: 2px solid var(--hi2);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-    }
-
-    .spotify-titlebar{
+    .spotify-titlebar {
       display:flex;
       align-items:center;
       justify-content:space-between;
       padding: 8px 10px;
       background: linear-gradient(90deg, var(--title1), var(--title2));
       border-bottom: 2px solid rgba(0,0,0,.12);
-      user-select:none;
     }
 
-    .spotify-titlebar h2{
+    .spotify-titlebar h2 {
       margin:0;
       font-size: 13px;
-      color:#4c0f2a;
       font-weight: 900;
-      font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
+      color:#4c0f2a;
     }
 
-    .close-btn{
+    .close-btn {
       width: 24px;
       height: 18px;
       border-radius: 0;
@@ -269,49 +263,36 @@
       border-bottom: 2px solid var(--sh);
       cursor:pointer;
       font-weight: 900;
-      color:#5e1f3c;
-      display:grid;
-      place-items:center;
-      line-height: 1;
     }
 
-    .close-btn:active{
-      border-top: 2px solid var(--sh);
-      border-left: 2px solid var(--sh);
-      border-right: 2px solid var(--hi);
-      border-bottom: 2px solid var(--hi);
-      transform: translate(1px,1px);
+    .spotify-body {
+      padding: 14px;
     }
 
-    .spotify-body{
-      padding: 14px 14px 16px;
-      text-align:center;
-    }
-
-    .spotify-body iframe{
+    .spotify-body iframe {
       width: 100%;
-      height: 380px;
+      height: 360px;
       border: none;
-      border-radius: 0; /* more retro */
-      background: white;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.10);
     }
 
-    @media (max-width: 520px){
-      .window__body{ padding: 22px 16px 18px; }
-      h1{ font-size: 1.8rem; }
-      .options{ grid-template-columns: 1fr; }
-      .spotify-body iframe{ height: 300px; }
+    @media(max-width:520px){
+      .options { grid-template-columns: 1fr; }
+      h1 { font-size: 1.8rem; }
+      .spotify-body iframe { height: 280px; }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- 🐶 Floating Puppies Background -->
+  <div id="puppy-container"></div>
+
+  <!-- Main Window -->
   <div class="window">
     <div class="titlebar">
       <div class="titlebar__text">💗 WILL YOU BE MY VALENTINE?</div>
-      <div class="win-controls" aria-hidden="true">
+      <div class="win-controls">
         <div class="winbtn">_</div>
         <div class="winbtn">□</div>
         <div class="winbtn">×</div>
@@ -338,7 +319,7 @@
     <div class="spotify-box">
       <div class="spotify-titlebar">
         <h2>Our Song 🎶</h2>
-        <button class="close-btn" id="closeSpotify" aria-label="Close">×</button>
+        <button class="close-btn" id="closeSpotify">×</button>
       </div>
 
       <div class="spotify-body">
@@ -351,22 +332,38 @@
     </div>
   </div>
 
+  <!-- ✅ Scripts -->
   <script>
+    /* Spotify Modal */
     const openBtn = document.getElementById("openSpotify");
     const modal = document.getElementById("spotifyModal");
     const closeBtn = document.getElementById("closeSpotify");
 
-    openBtn.addEventListener("click", () => {
-      modal.classList.add("active");
-    });
-
-    closeBtn.addEventListener("click", () => {
-      modal.classList.remove("active");
-    });
+    openBtn.addEventListener("click", () => modal.classList.add("active"));
+    closeBtn.addEventListener("click", () => modal.classList.remove("active"));
 
     modal.addEventListener("click", (e) => {
       if (e.target === modal) modal.classList.remove("active");
     });
+
+    /* 🐶 Floating Puppy Effect */
+    const puppyContainer = document.getElementById("puppy-container");
+
+    function createPuppy() {
+      const puppy = document.createElement("div");
+      puppy.classList.add("puppy");
+      puppy.innerHTML = "🐶";
+
+      puppy.style.left = Math.random() * 100 + "vw";
+      puppy.style.fontSize = Math.random() * 18 + 18 + "px";
+      puppy.style.animationDuration = Math.random() * 3 + 4 + "s";
+
+      puppyContainer.appendChild(puppy);
+
+      setTimeout(() => puppy.remove(), 7000);
+    }
+
+    setInterval(createPuppy, 600);
   </script>
 
 </body>
