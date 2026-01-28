@@ -24,6 +24,11 @@
     }
 
     *{ box-sizing:border-box; }
+    
+<script src="/assets/player.js"></script>
+<script>
+  LilyPlayer.setTrack("/assets/intro.mp3");
+</script>
 
     body{
       margin:0;
@@ -154,6 +159,22 @@
       margin-top: 20px;
       font-size: .92rem;
       color: rgba(42,31,37,.55);
+
+      .soundBtn{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.75);
+  color: rgba(0,0,0,.55);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(0,0,0,.10);
+}
+.soundBtn:hover{ transform: translateY(-1px); }
+
     }
   </style>
 </head>
@@ -165,6 +186,7 @@
 
   <!-- Main Card -->
   <div class="card">
+    <button class="soundBtn" onclick="LilyPlayer.toggle()">Sound</button>
     <h1>Will you be my Valentine?</h1>
     <p>(You better answer correctly 🙂‍↕️)</p>
 
