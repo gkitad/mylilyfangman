@@ -3,371 +3,227 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>For Lily 💝</title>
+  <title>For Lily 💗</title>
+
+  <!-- Tipografías románticas (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg: #f6f3f0;
-      --card: rgba(255,255,255,.65);
-      --stroke: rgba(255,255,255,.55);
-      --text: #1f1f1f;
-      --muted: rgba(31,31,31,.62);
-      --shadow: 0 18px 50px rgba(0,0,0,.10);
-      --radius: 26px;
+      --pink1:#ffd6e8;
+      --pink2:#fff1f7;
+      --rose:#ff4fa3;
+      --wine:#b3155a;
+      --text:#2a1f25;
+      --muted:rgba(42,31,37,.62);
+      --card:rgba(255,255,255,.55);
+      --stroke:rgba(255,255,255,.65);
+      --shadow: 0 26px 70px rgba(30, 0, 20, .16);
+      --radius: 28px;
     }
 
-    *{ box-sizing: border-box; }
+    *{ box-sizing:border-box; }
     body{
       margin:0;
       min-height:100vh;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(900px 600px at 30% 20%, rgba(255,255,255,.85), transparent 60%),
-        radial-gradient(900px 600px at 70% 75%, rgba(255,255,255,.55), transparent 55%),
-        linear-gradient(180deg, #f2efeb, #f7f4f1);
-      overflow-x:hidden;
+        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.12), transparent 60%),
+        linear-gradient(180deg, var(--pink2), var(--pink1));
+      overflow:hidden;
     }
 
-    /* subtle sparkles */
+    /* dreamy sparkles overlay */
     .sparkles{
-      position: fixed; inset:0; pointer-events:none; z-index:0;
+      position:fixed; inset:0; pointer-events:none; z-index:0;
       background-image:
-        radial-gradient(circle at 10% 20%, rgba(255,255,255,.55) 0 2px, transparent 3px),
-        radial-gradient(circle at 80% 30%, rgba(255,255,255,.45) 0 2px, transparent 3px),
-        radial-gradient(circle at 35% 75%, rgba(255,255,255,.35) 0 2px, transparent 3px),
-        radial-gradient(circle at 65% 60%, rgba(255,255,255,.35) 0 2px, transparent 3px);
-      opacity:.55;
+        radial-gradient(circle at 12% 20%, rgba(255,255,255,.75) 0 2px, transparent 3px),
+        radial-gradient(circle at 28% 78%, rgba(255,255,255,.55) 0 2px, transparent 3px),
+        radial-gradient(circle at 72% 28%, rgba(255,255,255,.55) 0 2px, transparent 3px),
+        radial-gradient(circle at 86% 64%, rgba(255,255,255,.45) 0 2px, transparent 3px),
+        radial-gradient(circle at 55% 42%, rgba(255,255,255,.35) 0 1.5px, transparent 3px);
+      opacity:.8;
       filter: blur(.2px);
       animation: twinkle 6s ease-in-out infinite alternate;
     }
-    @keyframes twinkle { from{ opacity:.35; } to{ opacity:.65; } }
+    @keyframes twinkle { from{opacity:.55} to{opacity:.95} }
+
+    /* floating hearts (super subtle) */
+    .hearts{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      overflow:hidden;
+    }
+    .heart{
+      position:absolute; bottom:-40px;
+      font-size: 18px;
+      opacity:.35;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,.10));
+    }
+    @keyframes floatUp{
+      to { transform: translateY(-120vh) rotate(20deg); opacity:0; }
+    }
 
     .wrap{
-      position: relative;
+      position:relative;
       z-index:1;
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 22px 16px 60px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
       min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding: 22px 16px;
     }
 
     .card{
-      width: min(760px, 100%);
+      width: min(820px, 100%);
       background: var(--card);
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      padding: 22px;
-    }
-
-    .title{
-      font-size: clamp(34px, 6vw, 56px);
-      letter-spacing: -0.8px;
-      line-height: 1.05;
-      margin: 6px 0 10px;
-      font-weight: 750;
-    }
-
-    .sub{
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.4;
-    }
-
-    .center{
+      backdrop-filter: blur(18px);
+      padding: 28px 22px 24px;
       text-align:center;
     }
 
-    .tapHint{
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: .98rem;
+    .title{
+      font-family: "Playfair Display", serif;
+      font-weight:700;
+      font-size: clamp(34px, 6.2vw, 62px);
+      line-height: 1.02;
+      letter-spacing: -0.6px;
+      margin: 6px 0 10px;
+      color: var(--wine);
+      text-shadow: 0 10px 28px rgba(179,21,90,.15);
     }
 
-    .gift{
-      margin: 22px auto 8px;
-      width: min(340px, 75%);
+    .subtitle{
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+
+    .hint{
+      margin-top: 14px;
+      font-size: .95rem;
+      color: rgba(42,31,37,.55);
+    }
+
+    /* Gift area */
+    .giftWrap{
+      margin: 20px auto 10px;
+      width: min(420px, 84%);
+      padding: 18px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.72);
+      background: rgba(255,255,255,.45);
+      box-shadow: 0 20px 50px rgba(179,21,90,.12);
+    }
+
+    .giftBtn{
+      width: 100%;
       aspect-ratio: 1 / 1;
-      border-radius: 30px;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.78);
+      background:
+        radial-gradient(260px 260px at 50% 35%, rgba(255,79,163,.18), transparent 60%),
+        rgba(255,255,255,.62);
       display:grid;
       place-items:center;
-      border: 1px solid rgba(255,255,255,.70);
-      background: rgba(255,255,255,.55);
-      box-shadow: 0 16px 40px rgba(0,0,0,.08);
-      cursor: pointer;
+      cursor:pointer;
       user-select:none;
-      transition: transform .12s ease;
-      position: relative;
+      transition: transform .12s ease, box-shadow .2s ease;
+      box-shadow: 0 18px 40px rgba(0,0,0,.10);
+      position:relative;
       overflow:hidden;
     }
-    .gift:active{ transform: scale(.99); }
+    .giftBtn:hover{ box-shadow: 0 22px 60px rgba(0,0,0,.14); }
+    .giftBtn:active{ transform: scale(.99); }
 
     .giftIcon{
-      font-size: 76px;
-      line-height: 1;
+      font-size: 84px;
+      transform: translateY(-6px);
     }
 
-    .giftLabel{
+    .tapPill{
       position:absolute;
       bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-weight: 650;
-      color: rgba(31,31,31,.65);
-      background: rgba(255,255,255,.55);
-      border: 1px solid rgba(255,255,255,.65);
       padding: 10px 14px;
       border-radius: 999px;
-      backdrop-filter: blur(10px);
+      font-weight: 700;
+      color: rgba(42,31,37,.75);
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(255,255,255,.78);
+      backdrop-filter: blur(12px);
     }
 
-    .row{
-      display:flex;
-      gap: 12px;
-      justify-content:center;
-      flex-wrap: wrap;
-      margin-top: 18px;
+    .miniLine{
+      margin-top: 10px;
+      font-size: .92rem;
+      color: rgba(42,31,37,.58);
     }
 
-    .btn{
-      border:none;
-      padding: 12px 16px;
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.68);
-      border: 1px solid rgba(255,255,255,.70);
-      color: rgba(31,31,31,.85);
-      font-weight: 720;
-      cursor:pointer;
+      border: 1px solid rgba(255,255,255,.75);
+      background: rgba(255,255,255,.52);
+      color: rgba(42,31,37,.72);
+      font-weight: 700;
       box-shadow: 0 14px 30px rgba(0,0,0,.08);
-      backdrop-filter: blur(10px);
-      transition: transform .08s ease;
-      min-width: 160px;
-    }
-    .btn:active{ transform: scale(.99); }
-
-    .btnPrimary{
-      background: rgba(255,255,255,.85);
     }
 
-    /* Screens */
-    .screen{ display:none; }
-    .screen.active{ display:block; }
-
-    /* Menu grid */
-    .grid{
-      margin-top: 18px;
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    @media (max-width: 620px){
-      .grid{ grid-template-columns: 1fr; }
-    }
-
-    .tile{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      padding: 16px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.70);
-      background: rgba(255,255,255,.55);
-      box-shadow: 0 14px 30px rgba(0,0,0,.07);
-      cursor: pointer;
-      user-select:none;
-      transition: transform .12s ease;
-    }
-    .tile:active{ transform: scale(.995); }
-    .emoji{
-      width: 46px; height:46px;
-      display:grid; place-items:center;
-      border-radius: 16px;
-      background: rgba(255,255,255,.65);
-      border: 1px solid rgba(255,255,255,.7);
-      font-size: 22px;
-      flex: 0 0 auto;
-    }
-    .tileTitle{
-      font-weight: 760;
-      margin: 0;
-      letter-spacing: -0.2px;
-    }
-    .tileDesc{
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: .95rem;
-    }
-
-    .topNav{
-      display:flex;
-      justify-content: space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom: 8px;
-    }
-
-    .back{
-      border:none;
-      background: transparent;
-      cursor:pointer;
-      font-weight:700;
-      color: rgba(31,31,31,.70);
-      padding: 10px 12px;
-      border-radius: 999px;
-    }
-    .back:hover{
-      background: rgba(255,255,255,.35);
-    }
+    .badge b{ color: var(--wine); }
   </style>
 </head>
 
 <body>
   <div class="sparkles"></div>
+  <div class="hearts" id="hearts"></div>
 
-  <div class="wrap">
-    <div class="card">
+  <main class="wrap">
+    <section class="card">
+      <div class="badge">💌 For <b>Lily</b></div>
 
-      <!-- SCREEN 1: Gift -->
-      <section id="screen-gift" class="screen active center">
-        <div class="title">Hey my love<br>this is a gift for you</div>
-        <p class="sub">Tap to open 💝</p>
+      <h1 class="title">Hey my love,<br>this is a gift for you</h1>
+      <p class="subtitle">Tap to open 💗</p>
 
-        <div class="gift" id="giftBtn" aria-label="Tap to open">
+      <div class="giftWrap">
+        <div class="giftBtn" id="giftBtn" aria-label="Tap to open">
           <div class="giftIcon">🎁</div>
-          <div class="giftLabel">Tap to open</div>
+          <div class="tapPill">Tap to open</div>
         </div>
+        <div class="miniLine">soft • romantic • made with love</div>
+      </div>
 
-        <p class="tapHint">Minimal • Soft • Just for Lily</p>
-      </section>
-
-      <!-- SCREEN 2: Valentine question -->
-      <section id="screen-valentine" class="screen center">
-        <div class="title">Will you be my Valentine?</div>
-        <p class="sub">Choose carefully… (both are the right answer 😌)</p>
-
-        <div class="row">
-          <button class="btn btnPrimary" id="yesBtn">Yes 💖</button>
-          <button class="btn" id="ofcBtn">Of course 💘</button>
-        </div>
-      </section>
-
-      <!-- SCREEN 3: Menu -->
-      <section id="screen-menu" class="screen">
-        <div class="topNav">
-          <button class="back" id="backToGift">← Back</button>
-          <div style="font-weight:750;color:rgba(31,31,31,.75);">For Lily ✨</div>
-        </div>
-
-        <div class="title" style="font-size: clamp(28px, 4.5vw, 44px); margin-top: 6px;">
-          Pick something to open
-        </div>
-        <p class="sub">Each one is a little surprise. Tap any card.</p>
-
-        <div class="grid">
-          <div class="tile" data-feature="letter">
-            <div class="emoji">💌</div>
-            <div>
-              <p class="tileTitle">A letter</p>
-              <p class="tileDesc">A message from me to you</p>
-            </div>
-          </div>
-
-          <div class="tile" data-feature="photos">
-            <div class="emoji">📸</div>
-            <div>
-              <p class="tileTitle">Photos</p>
-              <p class="tileDesc">Our favorite moments</p>
-            </div>
-          </div>
-
-          <div class="tile" data-feature="playlist">
-            <div class="emoji">🎵</div>
-            <div>
-              <p class="tileTitle">Our song</p>
-              <p class="tileDesc">Play something special</p>
-            </div>
-          </div>
-
-          <div class="tile" data-feature="memes">
-            <div class="emoji">😂</div>
-            <div>
-              <p class="tileTitle">Memes</p>
-              <p class="tileDesc">Because you’re my favorite person</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SCREEN 4: Feature placeholder (we’ll build next) -->
-      <section id="screen-feature" class="screen">
-        <div class="topNav">
-          <button class="back" id="backToMenu">← Back</button>
-          <div style="font-weight:750;color:rgba(31,31,31,.75);" id="featureTitleSmall">✨</div>
-        </div>
-
-        <div class="title" id="featureTitle">Coming soon</div>
-        <p class="sub" id="featureDesc">
-          This is the placeholder screen. Next we will build this part together.
-        </p>
-
-        <div style="margin-top:16px; padding:16px; border-radius:22px; background:rgba(255,255,255,.45); border:1px solid rgba(255,255,255,.65);">
-          <p style="margin:0; color:rgba(31,31,31,.70); font-weight:650;">
-            ✅ Next step: we replace this with real content (Letter / Photos / Memes / Song).
-          </p>
-        </div>
-      </section>
-
-    </div>
-  </div>
+      <p class="hint">When you tap the gift, it will open the next screen.</p>
+    </section>
+  </main>
 
   <script>
-    // --- 1) "Screens" navigation ---
-    function showScreen(name){
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById("screen-" + name).classList.add("active");
-    }
+    // Subtle floating hearts
+    const layer = document.getElementById("hearts");
+    const hearts = ["💗","💖","💕","💘","💞"];
+    setInterval(() => {
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      h.style.left = (Math.random() * 100) + "vw";
+      h.style.fontSize = (14 + Math.random() * 18) + "px";
+      h.style.animationDuration = (7 + Math.random() * 7) + "s";
+      layer.appendChild(h);
+      setTimeout(() => h.remove(), 15000);
+    }, 380);
 
-    // --- 2) Flow: Gift -> Valentine -> Menu ---
+    // For now, just show an alert (next step is real navigation)
     document.getElementById("giftBtn").addEventListener("click", () => {
-      showScreen("valentine");
-    });
-
-    // Both buttons go to same place (Menu)
-    document.getElementById("yesBtn").addEventListener("click", () => showScreen("menu"));
-    document.getElementById("ofcBtn").addEventListener("click", () => showScreen("menu"));
-
-    // Back buttons
-    document.getElementById("backToGift").addEventListener("click", () => showScreen("gift"));
-    document.getElementById("backToMenu").addEventListener("click", () => showScreen("menu"));
-
-    // --- 3) Menu options open feature placeholder ---
-    const titles = {
-      letter: "💌 A letter for you",
-      photos: "📸 Our photos",
-      playlist: "🎵 Our song",
-      memes: "😂 Meme corner"
-    };
-    const descs = {
-      letter: "Here we’ll put your message (like a real letter).",
-      photos: "Here we’ll add a cute photo gallery.",
-      playlist: "Here we’ll add your special song (tap to play).",
-      memes: "Here we’ll add memes you choose."
-    };
-
-    document.querySelectorAll(".tile").forEach(tile => {
-      tile.addEventListener("click", () => {
-        const key = tile.dataset.feature;
-        document.getElementById("featureTitle").textContent = titles[key] || "Surprise";
-        document.getElementById("featureTitleSmall").textContent = "Opened: " + (key || "");
-        document.getElementById("featureDesc").textContent = descs[key] || "We will build this next.";
-        showScreen("feature");
-      });
+      alert("Next: Valentine question screen ✅");
     });
   </script>
 </body>
