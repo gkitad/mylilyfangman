@@ -26,7 +26,6 @@
       text-align:center;
     }
 
-    /* Top tabs */
     .tabs{
       display:flex;
       gap: 10px;
@@ -86,143 +85,43 @@
     }
     .option:hover{ transform: scale(1.05); }
 
-    /* ===== Pretty Player ===== */
     .music-wrap{
       display:grid;
-      justify-items:center;
+      gap: 12px;
+      justify-items: center;
       padding: 6px 4px 2px;
     }
 
-    .player-card{
-      width: min(720px, 100%);
-      background: rgba(255,255,255,.88);
-      border-radius: 26px;
-      padding: 18px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.12);
-      text-align: left;
+    .music-card{
+      width: min(620px, 100%);
+      background: rgba(255,255,255,.85);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+      text-align: center;
     }
 
-    .player-top{
+    .music-card h2{
+      margin: 6px 0 12px;
+      color: #b3155a;
+    }
+
+    .player{
+      width: 100%;
       display:grid;
-      grid-template-columns: 92px 1fr;
-      gap: 14px;
-      align-items:center;
+      gap: 12px;
+      justify-items: center;
     }
 
-    .cover{
-      width: 92px;
-      height: 92px;
-      border-radius: 18px;
-      background: rgba(179,21,90,.10);
-      overflow:hidden;
-      display:grid;
-      place-items:center;
-      box-shadow: 0 10px 25px rgba(0,0,0,.10);
-    }
-    .cover .emoji{
-      font-size: 40px;
-      color: #b3155a;
-      opacity: 0.9;
+    /* Native audio, styled a bit */
+    audio{
+      width: 100%;
+      max-width: 560px;
     }
 
-    .track-meta h2{
-      margin: 0 0 6px;
-      color: #b3155a;
-      font-size: 1.4rem;
-    }
-    .track-meta .sub{
-      margin: 0;
-      color: rgba(0,0,0,.55);
-      font-size: 0.98rem;
-    }
-
-    .controls{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-
-    .big-btn{
-      border: 0;
-      cursor:pointer;
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      background: rgba(179,21,90,.12);
-      box-shadow: 0 10px 25px rgba(0,0,0,.10);
-      display:grid;
-      place-items:center;
-      font-weight: 900;
-      color: #b3155a;
-      transition: transform .15s;
-      flex: 0 0 auto;
-    }
-    .big-btn:hover{ transform: scale(1.05); }
-
-    .small-btn{
-      border: 0;
-      cursor:pointer;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.95);
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-      font-weight: 800;
-      color: #b3155a;
-      transition: transform .15s;
-    }
-    .small-btn:hover{ transform: scale(1.03); }
-
-    .progress-wrap{
-      margin-top: 14px;
-      background: rgba(0,0,0,.06);
-      border-radius: 999px;
-      height: 12px;
-      position: relative;
-      cursor: pointer;
-      overflow:hidden;
-    }
-
-    .progress{
-      height: 100%;
-      width: 0%;
-      background: rgba(179,21,90,.55);
-      border-radius: 999px;
-    }
-
-    .time-row{
-      display:flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      color: rgba(0,0,0,.55);
+    .meta{
       font-size: 0.95rem;
-      gap: 10px;
-    }
-
-    .right-tools{
-      margin-left:auto;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      flex-wrap: wrap;
-    }
-
-    .vol{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      background: rgba(255,255,255,.95);
-      border-radius: 999px;
-      padding: 8px 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-    }
-    .vol input[type="range"]{ width: 120px; }
-
-    .hint{
-      margin-top: 10px;
-      color: rgba(0,0,0,.45);
-      font-size: 0.92rem;
+      color: rgba(0,0,0,.6);
     }
 
     .back{
@@ -236,9 +135,6 @@
     @media (max-width: 520px){
       .options{ grid-template-columns: 1fr; }
       .card{ padding: 20px; }
-      .player-top{ grid-template-columns: 78px 1fr; }
-      .cover{ width:78px; height:78px; border-radius: 16px; }
-      .vol{ display:none; } /* hide volume on small screens */
     }
   </style>
 </head>
@@ -250,16 +146,15 @@
       <button class="tab-btn" id="tab-music" role="tab" aria-controls="panel-music" aria-selected="false">🎵 Our Song</button>
     </div>
 
-    <!-- MENU TAB -->
+    <!-- MENU -->
     <section id="panel-menu" class="tab-panel active" role="tabpanel" aria-labelledby="tab-menu">
       <h1>Pick a surprise 💗</h1>
       <p>Tap any option, more coming soon…</p>
 
       <div class="options">
-        <!-- These match your repo (pages/*.html) -->
         <a class="option" href="letter.html">💌 Letter</a>
         <a class="option" href="photos.html">📸 Photos</a>
-        <a class="option" href="gif.html">😂 Memes</a>
+        <a class="option" href="memes.html">😂 Memes</a>
         <a class="option" href="../index.html">← Back to start</a>
       </div>
     </section>
@@ -267,45 +162,21 @@
     <!-- MUSIC TAB -->
     <section id="panel-music" class="tab-panel" role="tabpanel" aria-labelledby="tab-music">
       <div class="music-wrap">
-        <div class="player-card">
-          <div class="player-top">
-            <div class="cover" aria-hidden="true">
-              <span class="emoji">🎶</span>
-            </div>
+        <div class="music-card">
+          <h2>Our Song 🎶</h2>
 
-            <div class="track-meta">
-              <h2 id="trackTitle">Our Song</h2>
-              <p class="sub" id="trackSub">Tap play to listen 💗</p>
-            </div>
-          </div>
+          <div class="player">
+            <!-- ✅ Put your OWN licensed audio file here -->
+            <audio controls preload="metadata">
+              <source src="assets/audio/our-song.mp3" type="audio/mpeg" />
+              <source src="assets/audio/our-song.ogg" type="audio/ogg" />
+              Your browser does not support the audio element.
+            </audio>
 
-          <div class="controls">
-            <button class="big-btn" id="playPauseBtn" aria-label="Play/Pause">▶</button>
-            <button class="small-btn" id="restartBtn" aria-label="Restart">⟲ Restart</button>
-
-            <div class="right-tools">
-              <button class="small-btn" id="muteBtn" aria-label="Mute">🔊</button>
-
-              <div class="vol" title="Volume">
-                <span style="color:#b3155a;font-weight:900;">Vol</span>
-                <input id="volRange" type="range" min="0" max="1" step="0.01" value="0.9" />
-              </div>
+            <div class="meta">
+              Tip: If it doesn’t play on iPhone, try using .m4a (AAC) or keep .mp3.
             </div>
           </div>
-
-          <div class="progress-wrap" id="progressWrap" aria-label="Seek bar">
-            <div class="progress" id="progressBar"></div>
-          </div>
-
-          <div class="time-row">
-            <span id="currentTime">0:00</span>
-            <span id="duration">0:00</span>
-          </div>
-
-          <div class="hint">On iPhone, autoplay is blocked — the user must press play.</div>
-
-          <!-- Hidden audio element -->
-          <audio id="audio" preload="metadata"></audio>
         </div>
 
         <a class="back" href="../index.html">← Back to start</a>
@@ -314,14 +185,6 @@
   </div>
 
   <script>
-    // ====== AUDIO PATH (IMPORTANT) ======
-    // menu.html is in /pages, mp3 is in /assets, so we go up one level:
-    const AUDIO_SRC = "../assets/our-song.mp3";
-
-    const TITLE = "Our Song";
-    const SUBTITLE = "Tap play to listen 💗";
-
-    // ====== Tabs ======
     const tabMenu = document.getElementById('tab-menu');
     const tabMusic = document.getElementById('tab-music');
     const panelMenu = document.getElementById('panel-menu');
@@ -334,102 +197,9 @@
       panelMenu.classList.toggle('active', isMenu);
       panelMusic.classList.toggle('active', !isMenu);
     }
+
     tabMenu.addEventListener('click', () => activate('menu'));
     tabMusic.addEventListener('click', () => activate('music'));
-
-    // ====== Player ======
-    const audio = document.getElementById("audio");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-    const restartBtn = document.getElementById("restartBtn");
-    const muteBtn = document.getElementById("muteBtn");
-    const volRange = document.getElementById("volRange");
-    const progressWrap = document.getElementById("progressWrap");
-    const progressBar = document.getElementById("progressBar");
-    const currentTimeEl = document.getElementById("currentTime");
-    const durationEl = document.getElementById("duration");
-
-    document.getElementById("trackTitle").textContent = TITLE;
-    document.getElementById("trackSub").textContent = SUBTITLE;
-
-    audio.src = AUDIO_SRC;
-    audio.volume = Number(volRange.value || 0.9);
-
-    function fmtTime(sec){
-      if (!Number.isFinite(sec) || sec < 0) return "0:00";
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return `${m}:${String(s).padStart(2, "0")}`;
-    }
-
-    function setPlayIcon(isPlaying){
-      playPauseBtn.textContent = isPlaying ? "❚❚" : "▶";
-      playPauseBtn.setAttribute("aria-label", isPlaying ? "Pause" : "Play");
-    }
-
-    async function togglePlay(){
-      if (audio.paused) {
-        try {
-          await audio.play(); // required user gesture on mobile
-          setPlayIcon(true);
-        } catch (e) {
-          // If blocked, user needs to tap again or audio not found
-          console.warn(e);
-        }
-      } else {
-        audio.pause();
-        setPlayIcon(false);
-      }
-    }
-
-    playPauseBtn.addEventListener("click", togglePlay);
-
-    restartBtn.addEventListener("click", () => {
-      audio.currentTime = 0;
-      audio.play().then(() => setPlayIcon(true)).catch(()=>{});
-    });
-
-    muteBtn.addEventListener("click", () => {
-      audio.muted = !audio.muted;
-      muteBtn.textContent = audio.muted ? "🔇" : "🔊";
-    });
-
-    volRange.addEventListener("input", () => {
-      audio.volume = Number(volRange.value);
-      if (audio.volume === 0) {
-        audio.muted = true;
-        muteBtn.textContent = "🔇";
-      } else {
-        audio.muted = false;
-        muteBtn.textContent = "🔊";
-      }
-    });
-
-    audio.addEventListener("loadedmetadata", () => {
-      durationEl.textContent = fmtTime(audio.duration);
-    });
-
-    audio.addEventListener("timeupdate", () => {
-      currentTimeEl.textContent = fmtTime(audio.currentTime);
-      const pct = (audio.duration ? (audio.currentTime / audio.duration) : 0) * 100;
-      progressBar.style.width = `${pct}%`;
-    });
-
-    audio.addEventListener("ended", () => {
-      setPlayIcon(false);
-    });
-
-    // Seek by clicking the bar
-    progressWrap.addEventListener("click", (e) => {
-      const rect = progressWrap.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const ratio = Math.min(Math.max(x / rect.width, 0), 1);
-      if (audio.duration) {
-        audio.currentTime = ratio * audio.duration;
-      }
-    });
-
-    // Start with correct icon
-    setPlayIcon(false);
   </script>
 </body>
 </html>
