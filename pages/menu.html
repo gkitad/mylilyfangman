@@ -178,11 +178,6 @@
       color: var(--accent);
     }
 
-    p {
-      margin:0 0 18px;
-      color: rgba(0,0,0,.65);
-    }
-
     .options {
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -200,6 +195,9 @@
       border-left: 3px solid var(--hi);
       border-right: 3px solid var(--sh2);
       border-bottom: 3px solid var(--sh2);
+
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .option:active {
@@ -219,26 +217,26 @@
       font-family: "Courier New", monospace;
     }
 
-    /* ✅ Mobile: 1 column + cleaner titlebar spacing */
+    /* 📱 Mobile: 1 column for the 4 options */
     @media (max-width: 520px){
-      .options{
-        grid-template-columns: 1fr; /* ✅ only change needed */
-      }
+      .options{ grid-template-columns: 1fr; }
+      .window{ width: 95%; }
 
-      .window{
-        width: 95%;
-      }
-
-      /* optional: make titlebar less cramped on phone */
+      /* optional: make titlebar less cramped */
       .win-controls{ display:none; }
       .titlebar{ padding: 6px 8px; }
       .titlebar__text{ font-size: 12px; }
       .playbtn{ height: 18px; padding: 0 8px; font-size: 11px; }
     }
+
+    @media (prefers-reduced-motion: reduce){
+      .heart{ animation: none !important; }
+    }
   </style>
 </head>
 
-<body>
+<!-- ✅ track for the global player -->
+<body data-track="/assets/cancionmenu.mp3">
   <div id="heartLayer"></div>
 
   <div class="window">
@@ -246,6 +244,7 @@
       <div class="titlebar__text">💗 MY VALENTINE 💗</div>
 
       <div class="titlebar__actions">
+        <!-- ✅ Global player button (valentine-player.js will update text) -->
         <button class="playbtn" id="songBtn" type="button">🎶 Song ▶</button>
 
         <div class="win-controls" aria-hidden="true">
@@ -270,8 +269,8 @@
     </div>
   </div>
 
+  <!-- 💗 Hearts script (only hearts here) -->
   <script>
-    /* 💗 Floating Hearts */
     const layer = document.getElementById("heartLayer");
     const hearts = ["♡","♥","❥","❤","💕"];
 
@@ -294,27 +293,10 @@
       setTimeout(()=>h.remove(), 22000);
     }
     setInterval(spawnHeart, 520);
-
-    /* 🎶 Song Button MP3 */
-    const songBtn = document.getElementById("songBtn");
-    const song = new Audio("/assets/cancionmenu.mp3");
-    song.loop = true;
-
-    function setLabel(){
-      songBtn.textContent = song.paused ? "🎶 Song ▶" : "🎶 Song ⏸";
-    }
-
-    songBtn.addEventListener("click", async () => {
-      if(song.paused){
-        await song.play();
-      } else {
-        song.pause();
-      }
-      setLabel();
-    });
-
-    setLabel();
   </script>
+
+  <!-- ✅ Global music player -->
+  <script src="/assets/valentine-player.js"></script>
 
 </body>
 </html>
