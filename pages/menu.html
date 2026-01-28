@@ -100,46 +100,20 @@
       gap: 10px;
     }
 
-    .titlebar__left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width: 0;
-    }
-
     .titlebar__text {
       font-size: 13px;
       font-weight: 800;
       color:#4c0f2a;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .titlebar__actions{
       display:flex;
       align-items:center;
       gap:8px;
-      flex: 0 0 auto;
     }
 
-    .winbtn {
-      width: 22px;
-      height: 18px;
-      background: #ffe3f0;
-      border-radius: 0;
-      border-top: 2px solid var(--hi);
-      border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-      display:grid;
-      place-items:center;
-      font-size: 12px;
-      color:#5e1f3c;
-      padding: 0;
-    }
-
-    /* Buttons in titlebar */
+    /* Song button */
     .playbtn{
       height: 20px;
       padding: 0 10px;
@@ -163,6 +137,7 @@
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
+
     .playbtn:active{
       border-top: 2px solid var(--sh);
       border-left: 2px solid var(--sh);
@@ -176,6 +151,21 @@
       gap:6px;
     }
 
+    .winbtn {
+      width: 22px;
+      height: 18px;
+      background: #ffe3f0;
+      border-radius: 0;
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+      display:grid;
+      place-items:center;
+      font-size: 12px;
+      color:#5e1f3c;
+    }
+
     .window__body {
       padding: 26px 28px 22px;
       text-align:center;
@@ -183,18 +173,14 @@
 
     h1 {
       font-family: "Courier New", Courier, monospace;
-      letter-spacing: 1px;
-      text-transform: uppercase;
       font-size: 2.2rem;
       margin: 6px 0 10px;
       color: var(--accent);
-      text-shadow: 1px 1px 0 rgba(255,255,255,.75);
     }
 
     p {
       margin:0 0 18px;
       color: rgba(0,0,0,.65);
-      font-size: 0.95rem;
     }
 
     .options {
@@ -209,16 +195,11 @@
       background: #ffeef6;
       cursor:pointer;
       font-weight: 800;
-      border-radius: 0;
 
       border-top: 3px solid var(--hi);
       border-left: 3px solid var(--hi);
       border-right: 3px solid var(--sh2);
       border-bottom: 3px solid var(--sh2);
-
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
     }
 
     .option:active {
@@ -237,85 +218,6 @@
       font-weight: 800;
       font-family: "Courier New", monospace;
     }
-
-    /* Modal */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      z-index: 999;
-    }
-    .overlay.active { display:flex; }
-
-    .spotify-box {
-      width: min(720px, 96vw);
-      background: var(--win);
-      border-radius: 0;
-      padding: 0;
-
-      border-top: 3px solid var(--hi);
-      border-left: 3px solid var(--hi);
-      border-right: 3px solid var(--sh2);
-      border-bottom: 3px solid var(--sh2);
-
-      box-shadow: 0 18px 55px rgba(0,0,0,.22);
-    }
-
-    .spotify-titlebar {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 8px 10px;
-      background: linear-gradient(90deg, var(--title1), var(--title2));
-      border-bottom: 2px solid rgba(0,0,0,.12);
-      user-select:none;
-    }
-
-    .spotify-titlebar h2 {
-      margin:0;
-      font-size: 13px;
-      font-weight: 900;
-      color:#4c0f2a;
-    }
-
-    .close-btn {
-      width: 24px;
-      height: 18px;
-      border-radius: 0;
-      background: #ffe3f0;
-      border-top: 2px solid var(--hi);
-      border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-      cursor:pointer;
-      font-weight: 900;
-      color:#5e1f3c;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-
-    .spotify-body { padding: 14px; }
-    .spotify-body iframe {
-      width: 100%;
-      height: 380px;
-      border: none;
-      background: #fff;
-    }
-
-    @media(max-width:520px){
-      .options { grid-template-columns: 1fr; }
-      h1 { font-size: 1.8rem; }
-      .spotify-body iframe { height: 300px; }
-      .playbtn{ padding: 0 8px; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .heart{ animation: none !important; }
-    }
   </style>
 </head>
 
@@ -324,16 +226,11 @@
 
   <div class="window">
     <div class="titlebar">
-      <div class="titlebar__left">
-        <div class="titlebar__text">💗 MY VALENTINE 💗</div>
-      </div>
+      <div class="titlebar__text">💗 WILL YOU BE MY VALENTINE?</div>
 
       <div class="titlebar__actions">
-        <!-- ✅ NEW: MP3 Song button -->
+        <!-- ✅ Only MP3 Song button -->
         <button class="playbtn" id="songBtn" type="button">🎶 Song ▶</button>
-
-        <!-- Spotify playlist modal button -->
-        <button class="playbtn" id="openSpotify" type="button">🎵 Playlist</button>
 
         <div class="win-controls" aria-hidden="true">
           <div class="winbtn">_</div>
@@ -344,8 +241,8 @@
     </div>
 
     <div class="window__body">
-      <h1>Pick a surprise 😚</h1>
-      
+      <h1>Pick a surprise 💗</h1>
+      <p>Tap any option…</p>
 
       <div class="options">
         <div class="option" onclick="location.href='letter.html'">💌 Letter</div>
@@ -358,28 +255,11 @@
     </div>
   </div>
 
-  <!-- ✅ Spotify Modal -->
-  <div class="overlay" id="spotifyModal" role="dialog" aria-modal="true" aria-label="Spotify playlist">
-    <div class="spotify-box">
-      <div class="spotify-titlebar">
-        <h2>Our Playlist 🎶</h2>
-        <button class="close-btn" id="closeSpotify" type="button">×</button>
-      </div>
-
-      <div class="spotify-body">
-        <iframe
-          src="https://open.spotify.com/embed/playlist/7cEhoMx0fj3xahSwyyK2Ps"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy">
-        </iframe>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // 💗 hearts
+    /* 💗 Floating Hearts */
     const layer = document.getElementById("heartLayer");
     const hearts = ["♡","♥","❥","❤","💕"];
+
     function spawnHeart(){
       const h = document.createElement("div");
       h.className = "heart";
@@ -400,62 +280,26 @@
     }
     setInterval(spawnHeart, 520);
 
-    // ✅ MP3 Song button (your file: /assets/our-song.mp3)
+    /* 🎶 Song Button MP3 */
     const songBtn = document.getElementById("songBtn");
     const song = new Audio("/assets/our-song.mp3");
-    song.preload = "auto";
-    song.loop = true; // set to false if you want it to stop after one play
+    song.loop = true;
 
-    function setSongLabel(isPlaying){
-      songBtn.textContent = isPlaying ? "🎶 Song ⏸" : "🎶 Song ▶";
+    function setLabel(){
+      songBtn.textContent = song.paused ? "🎶 Song ▶" : "🎶 Song ⏸";
     }
-    setSongLabel(false);
 
     songBtn.addEventListener("click", async () => {
-      try{
-        if (song.paused){
-          // if another page already started audio, this still works as a user gesture
-          await song.play();
-          setSongLabel(true);
-        } else {
-          song.pause();
-          setSongLabel(false);
-        }
-      } catch (e){
-        // If the browser blocks it, user can click again
-        setSongLabel(!song.paused);
+      if(song.paused){
+        await song.play();
+      } else {
+        song.pause();
       }
+      setLabel();
     });
 
-    // keep button state in sync
-    song.addEventListener("ended", () => setSongLabel(false));
-    song.addEventListener("pause", () => setSongLabel(false));
-    song.addEventListener("play", () => setSongLabel(true));
-
-    // Spotify modal open/close
-    const openBtn = document.getElementById("openSpotify");
-    const modal = document.getElementById("spotifyModal");
-    const closeBtn = document.getElementById("closeSpotify");
-
-    function openModal(){
-      modal.classList.add("active");
-      closeBtn.focus?.();
-    }
-    function closeModal(){
-      modal.classList.remove("active");
-      openBtn.focus?.();
-    }
-
-    openBtn.addEventListener("click", openModal);
-    closeBtn.addEventListener("click", closeModal);
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
-    });
+    setLabel();
   </script>
+
 </body>
 </html>
