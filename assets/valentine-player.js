@@ -1,4 +1,4 @@
-/* assets/valentine-player.js */
+/* assets/valentine-player.js (v4) */
 (() => {
   const STORAGE_KEY = "valentine_player_v1";
 
@@ -12,12 +12,6 @@
   let audio = null;
   let state = null;
   let buttons = [];
-  let resumeBanner = null;
-
-  function isIOS() {
-    const ua = navigator.userAgent || "";
-    return /iPhone|iPad|iPod/i.test(ua);
-  }
 
   function loadState() {
     try {
@@ -28,16 +22,12 @@
     }
   }
 
-  function saveState() {
-    if (!audio || !state) return;
+  function writeState(patch = {}) {
     try {
-      const toSave = {
-        track: state.track,
-        time: audio.currentTime || 0,
-        playing: !audio.paused,
-        volume: audio.volume
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+      const current = loadState();
+      const next = { ...current, ...patch };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      state = next;
     } catch {}
   }
 
@@ -47,25 +37,25 @@
     audio.preload = "auto";
     audio.loop = true;
 
+    audio.addEventListener("play", () => updateButtons());
+    audio.addEventListener("pause", () => updateButtons());
+
     audio.addEventListener("timeupdate", () => {
-      if ((audio.currentTime | 0) % 2 === 0) saveState();
-    });
-
-    audio.addEventListener("play", () => {
-      hideBanner();
-      updateButtons();
-    });
-
-    audio.addEventListener("pause", () => {
-      updateButtons();
+      // guarda tiempo frecuentemente
+      if ((audio.currentTime | 0) % 2 === 0) {
+        writeState({
+          time: audio.currentTime || 0,
+          playing: !audio.paused,
+          volume: audio.volume
+        });
+      }
     });
 
     return audio;
   }
 
   function getTrackFromPage() {
-    const fromBody = document.body?.dataset?.track;
-    return fromBody || null;
+    return document.body?.dataset?.track || null;
   }
 
   function updateButtons() {
@@ -76,35 +66,44 @@
     });
   }
 
-  async function tryPlay() {
+  async function tryAutoResume() {
     const a = ensureAudio();
+    if (!state?.playing) return; // ✅ solo reanuda si venía sonando
+
     try {
       await a.play();
       updateButtons();
-      saveState();
-      hideBanner();
-      return true;
+      writeState({ playing: true, time: a.currentTime || state.time || 0 });
     } catch {
       updateButtons();
-      saveState();
-      // iOS often blocks this after navigation
-      if (isIOS()) showBanner();
-      return false;
     }
   }
 
   async function toggle() {
     const a = ensureAudio();
-    try {
-      if (a.paused) {
-        await a.play();
-        hideBanner();
-      } else {
-        a.pause();
+
+    if (a.paused) {
+      // ✅ Si NO venía sonando (playing=false), empezamos desde 0
+      // Esto arregla tu problema de "primera vez arranca por la mitad".
+      if (!state?.playing) {
+        try { a.currentTime = 0; } catch {}
+        writeState({ time: 0 });
       }
-    } catch {}
+
+      // marca inmediatamente playing=true (para que al navegar intente continuar)
+      writeState({ playing: true });
+
+      try {
+        await a.play();
+      } catch {
+        // iOS puede bloquear autoplay; al próximo tap reintenta
+      }
+    } else {
+      a.pause();
+      writeState({ playing: false, time: a.currentTime || 0 });
+    }
+
     updateButtons();
-    saveState();
   }
 
   function bindButtons() {
@@ -118,82 +117,56 @@
     updateButtons();
   }
 
-  function showBanner() {
-    if (resumeBanner) return;
-
-    resumeBanner = document.createElement("button");
-    resumeBanner.type = "button";
-    resumeBanner.textContent = "Tap Song to continue 💗";
-    resumeBanner.setAttribute("aria-label", "Tap to continue music");
-
-    resumeBanner.style.position = "fixed";
-    resumeBanner.style.left = "50%";
-    resumeBanner.style.top = "14px";
-    resumeBanner.style.transform = "translateX(-50%)";
-    resumeBanner.style.zIndex = "99999";
-    resumeBanner.style.padding = "10px 14px";
-    resumeBanner.style.borderRadius = "999px";
-    resumeBanner.style.border = "2px solid rgba(179,21,90,.25)";
-    resumeBanner.style.background = "rgba(255,255,255,.92)";
-    resumeBanner.style.color = "rgba(179,21,90,.95)";
-    resumeBanner.style.fontWeight = "900";
-    resumeBanner.style.boxShadow = "0 14px 30px rgba(179,21,90,.12)";
-    resumeBanner.style.backdropFilter = "blur(10px)";
-    resumeBanner.style.cursor = "pointer";
-    resumeBanner.style.webkitTapHighlightColor = "transparent";
-
-    resumeBanner.addEventListener("click", (e) => {
-      e.preventDefault();
-      // this click counts as a user gesture -> iOS will allow play
-      tryPlay();
+  function saveOnExit() {
+    if (!audio) return;
+    writeState({
+      time: audio.currentTime || 0,
+      playing: !audio.paused,
+      volume: audio.volume
     });
-
-    document.body.appendChild(resumeBanner);
-  }
-
-  function hideBanner() {
-    if (!resumeBanner) return;
-    resumeBanner.remove();
-    resumeBanner = null;
   }
 
   function init() {
     state = loadState();
     const a = ensureAudio();
 
-    a.volume = state.volume ?? defaultState.volume;
-
     const pageTrack = getTrackFromPage();
     const trackToUse = pageTrack || state.track || defaultState.track;
-    state.track = trackToUse;
+
+    // Si cambió la canción, reset completo
+    if (state.track !== trackToUse) {
+      writeState({ track: trackToUse, time: 0, playing: false });
+    }
 
     a.src = trackToUse;
     a.load();
 
-    const safeTime = Number(state.time || 0);
-    if (Number.isFinite(safeTime) && safeTime > 0) {
-      setTimeout(() => {
-        try { a.currentTime = safeTime; } catch {}
-      }, 0);
+    // ✅ Importante:
+    // Solo restauramos el tiempo si "venía sonando".
+    if (state.playing) {
+      const t = Number(state.time || 0);
+      if (Number.isFinite(t) && t > 0) {
+        setTimeout(() => {
+          try { a.currentTime = t; } catch {}
+        }, 0);
+      }
+    } else {
+      // si no venía sonando, dejamos todo en 0
+      writeState({ time: 0 });
     }
 
     bindButtons();
 
-    if (state.playing) {
-      // try to keep playing across pages; iOS may block -> show banner
-      tryPlay();
-    }
+    // intenta continuar si estaba en play
+    tryAutoResume();
 
-    window.addEventListener("beforeunload", saveState);
+    // iOS-friendly
+    window.addEventListener("pagehide", saveOnExit);
+    window.addEventListener("beforeunload", saveOnExit);
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") saveState();
+      if (document.visibilityState === "hidden") saveOnExit();
     });
   }
-
-  window.ValentinePlayer = {
-    init,
-    toggle
-  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
