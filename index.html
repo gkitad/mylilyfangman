@@ -194,7 +194,7 @@
       white-space: nowrap;
     }
 
-    /* Letter (starts inside envelope) */
+    /* Letter (inside envelope) */
     .paper{
       position:absolute;
       left: 10%;
@@ -220,7 +220,34 @@
       animation: letterFly 1050ms cubic-bezier(.2,.9,.2,1) forwards;
     }
 
-    /* Centered reading mode (now it will be appended to BODY) */
+    @keyframes letterFly{
+      0%   { transform: translateY(52px) scale(.98); opacity: 0; }
+      15%  { opacity: 1; }
+      55%  { transform: translateY(-120px) scale(1.02); }
+      78%  { transform: translateY(-92px) scale(1.02); }
+      100% { transform: translateY(-104px) scale(1.02); opacity: 1; }
+    }
+
+    .open .flap{ transform: rotateX(170deg); }
+    .is-opening{ pointer-events:none; }
+
+    /* Backdrop behind centered letter */
+    .letterBackdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 0, 12, .06);
+      backdrop-filter: blur(2px);
+      z-index: 180;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 260ms ease;
+    }
+    .letterBackdrop.show{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Centered reading mode (applied AFTER we move it to body) */
     .paper.centered{
       position: fixed;
       left: 50%;
@@ -238,8 +265,10 @@
       overflow: hidden;
       cursor: pointer;
       pointer-events: auto;
-    }
 
+      /* important: stop fly animation so it doesn't keep changing transforms */
+      animation: none !important;
+    }
     @media (max-width:520px){
       .paper.centered{
         max-height: 78svh;
@@ -290,18 +319,6 @@
       color: rgba(42,31,37,.62);
     }
 
-    @keyframes letterFly{
-      0%   { transform: translateY(52px) scale(.98); opacity: 0; }
-      15%  { opacity: 1; }
-      55%  { transform: translateY(-120px) scale(1.02); }
-      78%  { transform: translateY(-92px) scale(1.02); }
-      100% { transform: translateY(-104px) scale(1.02); }
-    }
-
-    .open .flap{ transform: rotateX(170deg); }
-
-    .is-opening{ pointer-events:none; }
-
     /* Question card */
     .card{
       width: min(780px, 100%);
@@ -313,7 +330,6 @@
       backdrop-filter: blur(18px);
       margin:auto;
     }
-
     h1{
       font-family:"Playfair Display", serif;
       color: var(--wine);
@@ -325,7 +341,6 @@
       color: var(--muted);
       font-size: 1.05rem;
     }
-
     .btnRow{
       display:flex;
       gap:14px;
@@ -349,21 +364,10 @@
       transform: translateY(-2px);
       box-shadow: 0 18px 40px rgba(0,0,0,.14);
     }
-
     .tiny{
       margin-top:18px;
       font-size:.9rem;
       color: rgba(42,31,37,.55);
-    }
-
-    .reveal{
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 520ms ease, transform 520ms ease;
-    }
-    .reveal.show{
-      opacity: 1;
-      transform: translateY(0);
     }
 
     /* burst hearts */
@@ -390,6 +394,9 @@
 
   <button class="musicBtn posTopLeft" id="musicBtn" type="button">Music for you 💗</button>
 
+  <!-- backdrop for centered letter -->
+  <div class="letterBackdrop" id="letterBackdrop" aria-hidden="true"></div>
+
   <section class="screen" id="screenEnvelope">
     <div class="envelope" id="envelope" aria-label="Open envelope" role="button" tabindex="0">
       <div class="envBack"></div>
@@ -414,7 +421,7 @@
   </section>
 
   <section class="screen hidden" id="screenMain">
-    <div class="card reveal" id="questionCard">
+    <div class="card" id="questionCard">
       <h1>Will you be my Valentine?</h1>
       <p>(You better answer correctly 🙂‍↕️)</p>
 
@@ -468,9 +475,11 @@
     const scrEnv = document.getElementById("screenEnvelope");
     const scrMain = document.getElementById("screenMain");
     const card = document.getElementById("questionCard");
+    const backdrop = document.getElementById("letterBackdrop");
 
     let opened = false;
     let paperCentered = false;
+    let allowTapToContinue = false;
 
     function burstHearts(anchorEl){
       const heartSet = ["💗","💞","💖"];
@@ -502,24 +511,42 @@
       env.classList.add("open");
       burstHearts(env);
 
+      // When fly animation ends, move to body and center it (stable in all browsers)
       setTimeout(() => {
-        // ✅ KEY FIX: move paper to BODY so fixed centers correctly everywhere
+        // Move element to body
         document.body.appendChild(paper);
 
+        // Stop any remaining animation/transform from the fly state
+        paper.style.animation = "none";
+        paper.style.transform = "translate(-50%, -50%)";
+        paper.style.opacity = "1";
+
+        // Show backdrop and center
+        backdrop.classList.add("show");
         paper.classList.add("centered");
+
         paperCentered = true;
         env.classList.remove("is-opening");
-      }, 1050);
+
+        // Prevent accidental instant tap while centering
+        allowTapToContinue = false;
+        setTimeout(() => { allowTapToContinue = true; }, 450);
+      }, 1100);
     }
 
     function goToValentine(){
-      if (!paperCentered) return;
+      if (!paperCentered || !allowTapToContinue) return;
 
-      paper.style.opacity = "0";
+      allowTapToContinue = false;
+
       paper.style.transition = "opacity 220ms ease";
+      paper.style.opacity = "0";
+      backdrop.style.transition = "opacity 220ms ease";
+      backdrop.style.opacity = "0";
 
       setTimeout(() => {
-        paper.remove(); // optional cleanup
+        paper.remove();
+        backdrop.remove();
 
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
@@ -527,9 +554,7 @@
         card.insertBefore(musicBtn, card.firstChild);
         musicBtn.classList.remove("posTopLeft");
         musicBtn.classList.add("posCentered");
-
-        requestAnimationFrame(() => card.classList.add("show"));
-      }, 220);
+      }, 240);
     }
 
     env.addEventListener("click", openEnvelope);
@@ -551,6 +576,9 @@
         goToValentine();
       }
     });
+
+    // Optional: clicking the dim background also continues
+    backdrop.addEventListener("click", goToValentine);
   </script>
 
 </body>
