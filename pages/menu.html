@@ -6,68 +6,207 @@
   <title>Menu ✨</title>
 
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(#fff7fb, #ffd6e8);
+    /* -----------------------------
+      VALENTINE WIN95/98 THEME
+    ------------------------------*/
+    :root{
+      --pink-1:#fff7fb;
+      --pink-2:#ffd6e8;
+      --win-bg:#ffeaf3;          /* window interior */
+      --titlebar:#ffb7d6;        /* title bar */
+      --titlebar-2:#ff8fbe;
+      --accent:#b3155a;
+
+      /* Win95-ish 3D borders */
+      --hi:#ffffff;              /* top/left highlight */
+      --mid:#ffd0e3;
+      --lo:#b86a8c;              /* bottom/right shadow */
+      --deep:#7a3554;
+
+      --text:#2a2a2a;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.75);
-      padding: 40px;
-      border-radius: 30px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-      width: min(650px, 90%);
-      text-align: center;
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: "MS Sans Serif", Tahoma, Verdana, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 50% 20%, #ffffff 0%, var(--pink-1) 45%, var(--pink-2) 100%);
+      color:var(--text);
     }
 
-    h1 {
-      font-size: 2.8rem;
-      color: #b3155a;
-      margin-bottom: 10px;
+    /* A subtle pixel-ish look for headings without importing fonts */
+    h1, .titlebar__text{
+      letter-spacing: 0.5px;
     }
 
-    p {
-      color: rgba(0, 0, 0, 0.55);
-      margin-bottom: 25px;
+    /* -----------------------------
+      WINDOW (replaces card style)
+    ------------------------------*/
+    .window{
+      width: min(720px, 92%);
+      background: var(--win-bg);
+      border-radius: 18px; /* rounded but still "soft win98" */
+      padding: 0;
+      box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      /* 3D frame */
+      border: 2px solid var(--mid);
+      position: relative;
+      overflow: hidden;
     }
 
-    .options {
-      display: grid;
+    /* win95-ish outer bevel */
+    .window::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--lo);
+      border-bottom: 3px solid var(--lo);
+      border-radius: 18px;
+      opacity:.95;
+    }
+
+    .titlebar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, var(--titlebar-2), var(--titlebar));
+      border-bottom: 2px solid var(--mid);
+      position: relative;
+    }
+
+    .titlebar__text{
+      font-weight: 700;
+      font-size: 14px;
+      color: #5a1030;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+
+    .titlebar__dots{
+      display:flex;
+      gap:6px;
+      margin-left:auto;
+    }
+
+    /* faux window buttons */
+    .winbtn{
+      width: 22px;
+      height: 18px;
+      background: #ffe1ee;
+      border-radius: 4px;
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--lo);
+      border-bottom: 2px solid var(--lo);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
+      display:grid;
+      place-items:center;
+      font-size: 12px;
+      color:#6b2242;
+      line-height: 1;
+      user-select:none;
+    }
+
+    .winbtn:active{
+      border-top: 2px solid var(--lo);
+      border-left: 2px solid var(--lo);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+      transform: translateY(1px);
+    }
+
+    .window__body{
+      padding: 34px 34px 26px;
+      text-align:center;
+    }
+
+    h1{
+      font-size: 2.6rem;
+      margin: 0 0 8px;
+      color: var(--accent);
+      text-shadow: 0 2px 0 rgba(255,255,255,.6);
+    }
+
+    p{
+      margin: 0 0 22px;
+      color: rgba(0,0,0,.6);
+      font-size: 0.98rem;
+    }
+
+    /* -----------------------------
+      OPTIONS = Win95 buttons
+    ------------------------------*/
+    .options{
+      display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      gap: 14px;
+      margin-top: 14px;
     }
 
-    .option {
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.85);
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 10px 25px rgba(0, 0, 0,  0.12);
-      transition: transform 0.15s;
+    .option{
+      padding: 14px 14px;
+      background: #ffeef6;
+      cursor:pointer;
+      font-weight: 700;
+      border-radius: 12px;
+
+      /* 3D bevel */
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--lo);
+      border-bottom: 3px solid var(--lo);
+
+      box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,.05),
+        0 8px 18px rgba(0,0,0,.10);
+
+      transition: transform 0.08s ease;
+      user-select:none;
     }
 
-    .option:hover {
-      transform: scale(1.05);
+    .option:hover{
+      transform: translateY(-1px);
     }
 
-    .back {
-      margin-top: 25px;
-      display: inline-block;
-      color: #b3155a;
-      text-decoration: none;
-      font-weight: bold;
+    .option:active{
+      transform: translateY(1px);
+      border-top: 3px solid var(--lo);
+      border-left: 3px solid var(--lo);
+      border-right: 3px solid var(--hi);
+      border-bottom: 3px solid var(--hi);
+      box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,.06),
+        0 6px 14px rgba(0,0,0,.10);
     }
 
-    /* ✅ SPOTIFY MODAL OVERLAY */
-    .overlay {
+    .back{
+      margin-top: 20px;
+      display:inline-block;
+      color: var(--accent);
+      text-decoration:none;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .back:hover{ text-decoration: underline; }
+
+    /* -----------------------------
+      MODAL OVERLAY (Win95 dialog)
+    ------------------------------*/
+    .overlay{
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0,0,0,0.45);
       display: none;
       justify-content: center;
       align-items: center;
@@ -75,103 +214,152 @@
       z-index: 999;
     }
 
-    .overlay.active {
-      display: flex;
-    }
+    .overlay.active{ display:flex; }
 
-    /* ✅ MODAL BOX */
-    .spotify-box {
-      background: white;
-      width: min(500px, 95vw);
-      border-radius: 25px;
-      padding: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    .spotify-box{
+      width: min(560px, 95vw);
+      background: var(--win-bg);
+      border-radius: 16px;
+      padding: 0;
+      box-shadow: 0 22px 70px rgba(0,0,0,.28);
       position: relative;
-      text-align: center;
-      animation: pop 0.25s ease;
+      overflow:hidden;
+      border: 2px solid var(--mid);
+      animation: pop 0.2s ease;
     }
 
-    @keyframes pop {
-      from {
-        transform: scale(0.9);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
+    .spotify-box::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--lo);
+      border-bottom: 3px solid var(--lo);
+      border-radius: 16px;
     }
 
-    .spotify-box h2 {
-      margin: 10px 0 15px;
-      color: #b3155a;
+    @keyframes pop{
+      from{ transform: scale(0.96); opacity: 0; }
+      to{ transform: scale(1); opacity: 1; }
     }
 
-    .spotify-box iframe {
-      width: 100%;
+    /* modal titlebar */
+    .spotify-titlebar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, var(--titlebar-2), var(--titlebar));
+      border-bottom: 2px solid var(--mid);
+    }
+
+    .spotify-titlebar h2{
+      margin:0;
+      font-size: 14px;
+      color:#5a1030;
+      font-weight: 800;
+      user-select:none;
+    }
+
+    .close-btn{
+      /* make it look like a win button */
+      width: 26px;
+      height: 20px;
+      border-radius: 4px;
+      background: #ffe1ee;
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--lo);
+      border-bottom: 2px solid var(--lo);
+      cursor:pointer;
+      font-weight: 900;
+      color:#6b2242;
+      line-height: 1;
+      display:grid;
+      place-items:center;
+    }
+
+    .close-btn:active{
+      border-top: 2px solid var(--lo);
+      border-left: 2px solid var(--lo);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+      transform: translateY(1px);
+    }
+
+    .spotify-body{
+      padding: 16px 16px 18px;
+      text-align:center;
+    }
+
+    .spotify-body iframe{
+      width:100%;
       height: 380px;
       border-radius: 12px;
       border: none;
+      background: #fff;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
     }
 
-    /* ✅ CLOSE BUTTON */
-    .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 18px;
-      font-size: 20px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-weight: bold;
-      color: #b3155a;
-    }
-
-    /* ✅ MOBILE FRIENDLY */
-    @media (max-width: 480px) {
-      .spotify-box iframe {
-        height: 300px;
-      }
-
-      h1 {
-        font-size: 2.2rem;
-      }
+    /* -----------------------------
+      MOBILE
+    ------------------------------*/
+    @media (max-width: 520px){
+      .window__body{ padding: 26px 18px 20px; }
+      h1{ font-size: 2.1rem; }
+      .options{ grid-template-columns: 1fr; }
+      .spotify-body iframe{ height: 300px; }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h1>Pick a surprise 💗</h1>
-    <p>Tap any option, more coming soon…</p>
-
-    <div class="options">
-      <div class="option">💌 Letter</div>
-      <div class="option">📸 Photos</div>
-
-      <!-- ✅ Spotify Option -->
-      <div class="option" id="openSpotify">🎵 Our Song</div>
-
-      <div class="option">😂 Memes</div>
+  <div class="window">
+    <div class="titlebar">
+      <div class="titlebar__text">💗 Valentine Menu.exe</div>
+      <div class="titlebar__dots" aria-hidden="true">
+        <div class="winbtn">_</div>
+        <div class="winbtn">□</div>
+        <div class="winbtn">×</div>
+      </div>
     </div>
 
-    <a class="back" href="../index.html">← Back to start</a>
+    <div class="window__body">
+      <h1>Pick a surprise 💗</h1>
+      <p>Tap any option, more coming soon…</p>
+
+      <div class="options">
+        <div class="option">💌 Letter</div>
+        <div class="option">📸 Photos</div>
+
+        <!-- Spotify Option -->
+        <div class="option" id="openSpotify">🎵 Our Song</div>
+
+        <div class="option">😂 Memes</div>
+      </div>
+
+      <a class="back" href="../index.html">← Back to start</a>
+    </div>
   </div>
 
-  <!-- ✅ Spotify Modal -->
+  <!-- Spotify Modal -->
   <div class="overlay" id="spotifyModal">
     <div class="spotify-box">
-      <button class="close-btn" id="closeSpotify">✕</button>
+      <div class="spotify-titlebar">
+        <h2>Our Song 🎶</h2>
+        <button class="close-btn" id="closeSpotify" aria-label="Close">×</button>
+      </div>
 
-      <h2>Our Song 🎶</h2>
-
-      <!-- ✅ YOUR PLAYLIST EMBED -->
-      <iframe
-        src="https://open.spotify.com/embed/playlist/7cEhoMx0fj3xahSwyyK2Ps"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy">
-      </iframe>
+      <div class="spotify-body">
+        <iframe
+          src="https://open.spotify.com/embed/playlist/7cEhoMx0fj3xahSwyyK2Ps"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
     </div>
   </div>
 
@@ -180,21 +368,16 @@
     const modal = document.getElementById("spotifyModal");
     const closeBtn = document.getElementById("closeSpotify");
 
-    // ✅ Open modal
     openBtn.addEventListener("click", () => {
       modal.classList.add("active");
     });
 
-    // ✅ Close modal with button
     closeBtn.addEventListener("click", () => {
       modal.classList.remove("active");
     });
 
-    // ✅ Close modal by clicking outside
     modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        modal.classList.remove("active");
-      }
+      if (e.target === modal) modal.classList.remove("active");
     });
   </script>
 
