@@ -103,23 +103,78 @@
     }
 
     /* Sound Button */
-    .soundBtn{
-      position:absolute;
-      top:14px;
-      left:14px;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.80);
-      color: rgba(0,0,0,.55);
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:700;
-      cursor:pointer;
-      box-shadow: 0 12px 28px rgba(0,0,0,.10);
-      transition: transform .12s ease;
-    }
-    .soundBtn:hover{
-      transform: translateY(-2px);
-    }
+    /* Floating sound button (premium glass) */
+.soundFab{
+  position: fixed;
+  top: 18px;              /* más arriba */
+  left: 18px;             /* puedes cambiar a right:18px si lo quieres del otro lado */
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 14px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,.65);
+  background: rgba(255,255,255,.35);
+  backdrop-filter: blur(14px);
+
+  box-shadow: 0 16px 40px rgba(0,0,0,.12);
+  cursor: pointer;
+
+  color: rgba(0,0,0,.62);
+  font-weight: 750;
+  letter-spacing: .2px;
+
+  transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.soundFab:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.48);
+  box-shadow: 0 18px 55px rgba(0,0,0,.14);
+}
+
+.soundFab:active{
+  transform: translateY(0px) scale(.98);
+}
+
+.soundIcon{
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.65);
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
+  font-size: 16px;
+}
+
+.soundText{
+  font-size: 14px;
+}
+
+/* Mobile tweaks: más compacto */
+@media (max-width: 520px){
+  .soundFab{
+    top: 12px;
+    left: 12px;
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .soundIcon{
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+  .soundText{
+    font-size: 13px;
+  }
+}
+
 
     /* Title */
     h1{
@@ -168,14 +223,29 @@
       margin-top: 18px;
       font-size: .9rem;
       color: rgba(42,31,37,.55);
+
+      @media (max-width: 520px){
+  .card{ padding: 34px 18px 28px; }
+  button{ width: 100%; min-width: 0; }
+}
+
     }
+
+    
   </style>
 </head>
 
+
+  
 <body>
 
   <!-- Floating Hearts Background -->
   <div id="heartLayer"></div>
+  
+<button class="soundFab" id="soundFab" type="button">
+  <span class="soundIcon" aria-hidden="true">🔊</span>
+  <span class="soundText" id="soundText">Sound</span>
+</button>
 
   <!-- Main Card -->
   <div class="card">
@@ -226,10 +296,29 @@
   </script>
 
   <!-- Music Player -->
-  <script src="/assets/player.js"></script>
-  <script>
-    LilyPlayer.setTrack("/assets/intro.mp3");
-  </script>
+<script src="/assets/player.js"></script>
+<script>
+  LilyPlayer.setTrack("/assets/intro.mp3");
+
+  const fab = document.getElementById("soundFab");
+  const txt = document.getElementById("soundText");
+  const icon = fab.querySelector(".soundIcon");
+
+  function refreshSoundLabel(){
+    const on = localStorage.getItem("lily_audio_on") === "1";
+    txt.textContent = on ? "Sound on" : "Sound off";
+    icon.textContent = on ? "🔊" : "🔇";
+  }
+
+  fab.addEventListener("click", async () => {
+    await LilyPlayer.toggle();
+    // toggle guarda el estado, refrescamos
+    setTimeout(refreshSoundLabel, 80);
+  });
+
+  refreshSoundLabel();
+</script>
+
 
 </body>
 </html>
