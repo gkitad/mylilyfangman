@@ -102,79 +102,90 @@
       backdrop-filter: blur(18px);
     }
 
-    /* Sound Button */
-    /* Floating sound button (premium glass) */
-.soundFab{
-  position: fixed;
-  top: 18px;              /* más arriba */
-  left: 18px;             /* puedes cambiar a right:18px si lo quieres del otro lado */
-  z-index: 5;
+    /* Floating Sound Button */
+    .soundFab{
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 5;
 
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
 
-  padding: 12px 14px;
-  border-radius: 999px;
+      padding: 12px 14px;
+      border-radius: 999px;
 
-  border: 1px solid rgba(255,255,255,.65);
-  background: rgba(255,255,255,.35);
-  backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.65);
+      background: rgba(255,255,255,.35);
+      backdrop-filter: blur(14px);
 
-  box-shadow: 0 16px 40px rgba(0,0,0,.12);
-  cursor: pointer;
+      box-shadow: 0 16px 40px rgba(0,0,0,.12);
+      cursor: pointer;
 
-  color: rgba(0,0,0,.62);
-  font-weight: 750;
-  letter-spacing: .2px;
+      color: rgba(0,0,0,.62);
+      font-weight: 750;
+      letter-spacing: .2px;
+      transition: 0.2s;
+    }
 
-  transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
-}
+    .soundFab:hover{
+      transform: translateY(-2px);
+    }
 
-.soundFab:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.48);
-  box-shadow: 0 18px 55px rgba(0,0,0,.14);
-}
+    .soundIcon{
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      font-size: 16px;
+    }
 
-.soundFab:active{
-  transform: translateY(0px) scale(.98);
-}
+    /* Special Music Button */
+    .musicBtn{
+      margin-bottom: 18px;
+      padding: 14px 28px;
+      border-radius: 999px;
 
-.soundIcon{
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  background: rgba(255,255,255,.55);
-  border: 1px solid rgba(255,255,255,.65);
-  box-shadow: 0 10px 22px rgba(0,0,0,.08);
-  font-size: 16px;
-}
+      font-size: 14px;
+      font-weight: 900;
+      color: #b3155a;
 
-.soundText{
-  font-size: 14px;
-}
+      background: linear-gradient(135deg,
+        rgba(255,255,255,.95),
+        rgba(255,214,232,.75));
 
-/* Mobile tweaks: más compacto */
-@media (max-width: 520px){
-  .soundFab{
-    top: 12px;
-    left: 12px;
-    padding: 10px 12px;
-    gap: 8px;
-  }
-  .soundIcon{
-    width: 30px;
-    height: 30px;
-    font-size: 15px;
-  }
-  .soundText{
-    font-size: 13px;
-  }
-}
+      border: 2px solid rgba(255,79,163,.45);
 
+      box-shadow:
+        0 14px 40px rgba(179,21,90,.15),
+        0 0 22px rgba(255,79,163,.20);
+
+      cursor:pointer;
+      transition: 0.2s;
+      animation: pulseGlow 2.2s infinite ease-in-out;
+      position: relative;
+      overflow:hidden;
+    }
+
+    .musicBtn:hover{
+      transform: translateY(-2px);
+    }
+
+    @keyframes pulseGlow{
+      0%,100%{
+        box-shadow:
+          0 14px 40px rgba(179,21,90,.15),
+          0 0 18px rgba(255,79,163,.15);
+      }
+      50%{
+        box-shadow:
+          0 18px 55px rgba(179,21,90,.20),
+          0 0 26px rgba(255,79,163,.25);
+      }
+    }
 
     /* Title */
     h1{
@@ -183,7 +194,6 @@
       font-weight: 700;
       font-size: clamp(34px, 6vw, 64px);
       color: var(--wine);
-      text-shadow: 0 10px 28px rgba(179,21,90,.14);
     }
 
     p{
@@ -192,7 +202,7 @@
       font-size: 1.05rem;
     }
 
-    /* Buttons */
+    /* Answer Buttons */
     .btnRow{
       display:flex;
       justify-content:center;
@@ -200,213 +210,52 @@
       flex-wrap:wrap;
     }
 
-    button{
+    .btnRow button{
       border: 1px solid rgba(0,0,0,.10);
       padding: 14px 22px;
       border-radius: 999px;
       font-size: 16px;
-      cursor:pointer;
       font-weight:700;
-      min-width: 170px;
       background: rgba(255,255,255,.90);
       color: rgba(0,0,0,.55);
-      box-shadow: 0 14px 30px rgba(0,0,0,.10);
-      transition: transform .10s ease, box-shadow .2s ease;
-    }
-
-    button:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 18px 40px rgba(0,0,0,.14);
+      cursor:pointer;
     }
 
     .tiny{
       margin-top: 18px;
       font-size: .9rem;
       color: rgba(42,31,37,.55);
-
-      @media (max-width: 520px){
-  .card{ padding: 34px 18px 28px; }
-  button{ width: 100%; min-width: 0; }
-
-        /* Special Music Button */
-.musicBtn{
-  margin: 18px auto 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-
-  padding: 14px 26px;
-  border-radius: 999px;
-
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-
-  color: #b3155a;
-  background: rgba(255,255,255,.85);
-
-  border: 2px solid rgba(255,79,163,.35);
-
-  box-shadow:
-    0 0 0 rgba(255,79,163,.0),
-    0 18px 45px rgba(179,21,90,.15);
-
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-/* Hover glow */
-.musicBtn:hover{
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 18px rgba(255,79,163,.35),
-    0 22px 60px rgba(179,21,90,.22);
-}
-
-/* Soft pulsing animation */
-.musicBtn{
-  animation: pulseGlow 2.2s infinite ease-in-out;
-}
-
-@keyframes pulseGlow{
-  0%,100%{
-    box-shadow:
-      0 0 0 rgba(255,79,163,.0),
-      0 18px 45px rgba(179,21,90,.14);
-  }
-  50%{
-    box-shadow:
-      0 0 18px rgba(255,79,163,.28),
-      0 20px 55px rgba(179,21,90,.20);
-  }
-}
-
-}
-
     }
-/* ===== SPECIAL MUSIC BUTTON (override) ===== */
-.musicBtn{
-  /* overrides vs generic button styles */
-  width: auto !important;
-  min-width: 0 !important;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-
-  padding: 14px 28px !important;
-  border-radius: 999px;
-
-  font-size: 14px;
-  font-weight: 900 !important;
-  letter-spacing: .4px;
-
-  color: #b3155a !important;
-
-  /* gradient + glow */
-  background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,214,232,.75)) !important;
-  border: 2px solid rgba(255,79,163,.45) !important;
-
-  box-shadow:
-    0 10px 30px rgba(179,21,90,.12),
-    0 0 0 rgba(255,79,163,0);
-  
-  cursor: pointer;
-  transition: transform .14s ease, box-shadow .22s ease, filter .22s ease;
-  
-  /* make it feel unique */
-  position: relative;
-  overflow: hidden;
-}
-
-/* shiny sweep */
-.musicBtn::before{
-  content:"";
-  position:absolute;
-  top:-40%;
-  left:-60%;
-  width: 60%;
-  height: 180%;
-  transform: rotate(20deg);
-  background: rgba(255,255,255,.65);
-  filter: blur(2px);
-  opacity: .55;
-  animation: sweep 2.8s ease-in-out infinite;
-}
-@keyframes sweep{
-  0%   { left:-70%; opacity:.0; }
-  25%  { opacity:.55; }
-  55%  { left:110%; opacity:.0; }
-  100% { left:110%; opacity:.0; }
-}
-
-.musicBtn:hover{
-  transform: translateY(-2px);
-  box-shadow:
-    0 14px 40px rgba(179,21,90,.18),
-    0 0 22px rgba(255,79,163,.25);
-  filter: saturate(1.05);
-}
-
-.musicBtn:active{
-  transform: translateY(0px) scale(.99);
-}
-
-/* optional pulse */
-.musicBtn{
-  animation: pulseGlow 2.2s ease-in-out infinite;
-}
-@keyframes pulseGlow{
-  0%,100%{
-    box-shadow:
-      0 10px 30px rgba(179,21,90,.12),
-      0 0 0 rgba(255,79,163,0);
-  }
-  50%{
-    box-shadow:
-      0 14px 38px rgba(179,21,90,.16),
-      0 0 22px rgba(255,79,163,.22);
-  }
-}
-
-    
+    /* Mobile Fix */
+    @media (max-width:520px){
+      .card{ padding: 34px 18px; }
+      .btnRow button{ width:100%; }
+    }
   </style>
 </head>
 
-
-  
 <body>
 
-  <!-- Floating Hearts Background -->
   <div id="heartLayer"></div>
-  
-<button class="soundFab" id="soundFab" type="button">
-  <span class="soundIcon" aria-hidden="true">🔊</span>
-  <span class="soundText" id="soundText">Sound</span>
-</button>
+
+  <!-- Floating Sound Toggle -->
+  <button class="soundFab" id="soundFab">
+    <span class="soundIcon">🔇</span>
+    <span id="soundText">Sound off</span>
+  </button>
 
   <!-- Main Card -->
   <div class="card">
-
-    <!-- Sound Button -->
-
-
-<div class="card">
-  <button class="musicBtn" onclick="LilyPlayer.toggle()">Music for you 💗</button>
-
-  <h1>Will you be my Valentine?</h1>
-  ...
-</div>
-
+    <button class="musicBtn" onclick="LilyPlayer.toggle()">
+      Music for you 💗
+    </button>
 
     <h1>Will you be my Valentine?</h1>
     <p>(You better answer correctly 🙂‍↕️)</p>
 
     <div class="btnRow">
       <button onclick="location.href='pages/gift.html'">Yes</button>
-
       <button onclick="location.href='pages/gift.html'">
         Why are you looking for another option?
       </button>
@@ -423,50 +272,48 @@
     function spawnHeart(){
       const h = document.createElement("div");
       h.className = "heart";
-      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
 
-      const x = Math.random() * 100;
-      const s = 0.6 + Math.random() * 1.2;
-      const wiggle = (Math.random() * 40 - 20) + "vw";
+      const x = Math.random()*100;
+      const s = 0.6 + Math.random()*1.2;
+      const wiggle = (Math.random()*40 - 20)+"vw";
 
-      h.style.setProperty("--x", x + "vw");
+      h.style.setProperty("--x", x+"vw");
       h.style.setProperty("--s", s.toFixed(2));
       h.style.setProperty("--wiggle", wiggle);
 
-      h.style.fontSize = (16 + Math.random() * 26) + "px";
-      h.style.animationDuration = (10 + Math.random() * 10) + "s";
+      h.style.fontSize = (16 + Math.random()*26)+"px";
+      h.style.animationDuration = (10 + Math.random()*10)+"s";
 
       layer.appendChild(h);
-      setTimeout(() => h.remove(), 22000);
+      setTimeout(()=>h.remove(), 22000);
     }
 
     setInterval(spawnHeart, 380);
   </script>
 
   <!-- Music Player -->
-<script src="/assets/player.js"></script>
-<script>
-  LilyPlayer.setTrack("/assets/intro.mp3");
+  <script src="/assets/player.js"></script>
+  <script>
+    LilyPlayer.setTrack("/assets/intro.mp3");
 
-  const fab = document.getElementById("soundFab");
-  const txt = document.getElementById("soundText");
-  const icon = fab.querySelector(".soundIcon");
+    const fab = document.getElementById("soundFab");
+    const txt = document.getElementById("soundText");
+    const icon = fab.querySelector(".soundIcon");
 
-  function refreshSoundLabel(){
-    const on = localStorage.getItem("lily_audio_on") === "1";
-    txt.textContent = on ? "Sound on" : "Sound off";
-    icon.textContent = on ? "🔊" : "🔇";
-  }
+    function refreshSoundLabel(){
+      const on = localStorage.getItem("lily_audio_on") === "1";
+      txt.textContent = on ? "Sound on" : "Sound off";
+      icon.textContent = on ? "🔊" : "🔇";
+    }
 
-  fab.addEventListener("click", async () => {
-    await LilyPlayer.toggle();
-    // toggle guarda el estado, refrescamos
-    setTimeout(refreshSoundLabel, 80);
-  });
+    fab.addEventListener("click", async () => {
+      await LilyPlayer.toggle();
+      setTimeout(refreshSoundLabel, 80);
+    });
 
-  refreshSoundLabel();
-</script>
-
+    refreshSoundLabel();
+  </script>
 
 </body>
 </html>
