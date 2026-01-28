@@ -216,68 +216,69 @@
       white-space: nowrap;
     }
 
-    /* The letter stays hidden until open */
-   .paper{
-  position:absolute;
-  left: 10%;
-  width: 80%;
-  height: 78%;
-  bottom: 10%;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,214,232,.55));
-  border: 1px solid rgba(255,79,163,.18);
-  box-shadow: 0 18px 45px rgba(179,21,90,.10);
-  z-index: 1;
-  display:grid;
-  place-items:center;
+    /* ===== THE LETTER (fly-out + center to read) ===== */
+    .paper{
+      position:absolute;
+      left: 10%;
+      width: 80%;
+      height: 78%;
+      bottom: 10%;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,214,232,.55));
+      border: 1px solid rgba(255,79,163,.18);
+      box-shadow: 0 18px 45px rgba(179,21,90,.10);
+      z-index: 1;
+      display:grid;
+      place-items:center;
+      padding: 18px;
 
-  /* inicio: escondida dentro */
-  opacity: 0;
-  transform: translateY(52px) scale(.98);
-  will-change: transform, opacity;
-}
+      /* start hidden */
+      opacity: 0;
+      transform: translateY(52px) scale(.98);
+      will-change: transform, opacity;
+    }
 
-/* Estado 1: carta “vuela” fuera del sobre (bounce suave) */
-.open .paper{
-  opacity: 1;
-  animation: letterFly 1050ms cubic-bezier(.2,.9,.2,1) forwards;
-}
+    /* fly out */
+    .open .paper{
+      opacity: 1;
+      animation: letterFly 1050ms cubic-bezier(.2,.9,.2,1) forwards;
+    }
 
-/* Estado 2: carta ya centrada como “lectura” */
-.paper.centered{
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  bottom: auto;
-  width: min(780px, calc(100vw - 32px));
-  height: auto;
-  padding: 42px 28px 34px;
-  transform: translate(-50%, -50%);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
-}
+    /* centered as reading card */
+    .paper.centered{
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      bottom: auto;
+      width: min(780px, calc(100vw - 32px));
+      height: auto;
+      padding: 42px 28px 34px;
+      transform: translate(-50%, -50%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      z-index: 80;
+      cursor: pointer;
+    }
 
-/* Para que se vea “más carta” cuando está centrada */
-.paper.centered .paperInner{
-  color: var(--text);
-  font-weight: 400;
-  letter-spacing: .2px;
-  max-width: 52ch;
-  line-height: 1.5;
-}
+    .paperInner{
+      font-family: Inter, system-ui, sans-serif;
+      color: rgba(42,31,37,.72);
+      letter-spacing: .2px;
+      max-width: 56ch;
+      line-height: 1.55;
+      text-align: left;
+    }
 
-@keyframes letterFly{
-  0%   { transform: translateY(52px) scale(.98); opacity: 0; }
-  15%  { opacity: 1; }
-  55%  { transform: translateY(-120px) scale(1.02); }
-  78%  { transform: translateY(-92px) scale(1.02); } /* baja un poquito */
-  100% { transform: translateY(-104px) scale(1.02); } /* se estabiliza */
-}
-
+    @keyframes letterFly{
+      0%   { transform: translateY(52px) scale(.98); opacity: 0; }
+      15%  { opacity: 1; }
+      55%  { transform: translateY(-120px) scale(1.02); }
+      78%  { transform: translateY(-92px) scale(1.02); }
+      100% { transform: translateY(-104px) scale(1.02); }
+    }
 
     .open .flap{ transform: rotateX(170deg); }
-    .open .paper{ transform: translateY(-58px); opacity: 1; }
 
     /* block taps while opening/opened */
     .is-opening{ pointer-events:none; }
@@ -346,9 +347,10 @@
         white-space: normal;
         text-align:center;
       }
+      .paperInner{ text-align:left; }
     }
 
-    /* ===== reveal animation for the question content ===== */
+    /* reveal animation for the question content */
     .reveal{
       opacity: 0;
       transform: translateY(10px);
@@ -359,7 +361,7 @@
       transform: translateY(0);
     }
 
-    /* ===== burst hearts on open (clean, short) ===== */
+    /* burst hearts on open (clean, short) */
     .burstHeart{
       position:absolute;
       font-size: 14px;
@@ -380,6 +382,7 @@
     @media (prefers-reduced-motion: reduce){
       .heart, .burstHeart{ animation: none !important; }
       .envelope, .musicBtn, .btnRow button, .reveal{ transition: none !important; }
+      .open .paper{ animation: none !important; opacity: 1; transform: translateY(-104px) scale(1.02); }
     }
   </style>
 </head>
@@ -395,19 +398,29 @@
 
   <!-- Screen 1: Closed envelope only -->
   <section class="screen" id="screenEnvelope">
- <div class="paper" id="paper">
-  <div class="paperInner">
-    <div style="font-family:'Playfair Display',serif; color: var(--wine); font-size: clamp(22px,4.2vw,34px); margin-bottom:10px;">
-      Hi Lily,
-    </div>
-    <div style="font-family: Inter, system-ui, sans-serif; font-size: 1.05rem; color: rgba(42,31,37,.72);">
-      I made this little page because I love you more than I can explain.
-      <br><br>
-      And I have one important question for you…
-    </div>
-  </div>
-</div>
+    <div class="envelope" id="envelope" aria-label="Open envelope" role="button" tabindex="0">
+      <div class="envBack"></div>
 
+      <!-- Letter (flies out, then centers to read) -->
+      <div class="paper" id="paper" aria-label="Open letter">
+        <div class="paperInner">
+          <div style="font-family:'Playfair Display',serif; color: var(--wine); font-size: clamp(22px,4.2vw,34px); margin-bottom:10px;">
+            Hi Lily,
+          </div>
+          <div style="font-family: Inter, system-ui, sans-serif; font-size: 1.05rem; color: rgba(42,31,37,.72);">
+            I made this little page because I love you more than I can explain.
+            <br><br>
+            And I have one important question for you…
+            <br><br>
+            <span style="opacity:.8; font-weight:600;">(tap the letter)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="envFront"></div>
+      <div class="flap"></div>
+      <div class="label">To Lily Fangman</div>
+    </div>
   </section>
 
   <!-- Screen 2: Question -->
@@ -428,7 +441,7 @@
     </div>
   </section>
 
-  <!-- Hearts -->
+  <!-- Floating hearts background -->
   <script>
     const layer = document.getElementById("heartLayer");
     const hearts = ["♡","♥","❥","❤","💕"];
@@ -452,7 +465,6 @@
       setTimeout(()=>h.remove(), 22000);
     }
 
-    // Slightly less spammy but still romantic
     setInterval(spawnHeart, 520);
   </script>
 
@@ -469,19 +481,20 @@
       await LilyPlayer.toggle();
     });
 
-    // ===== envelope open flow =====
+    // ===== envelope + letter flow =====
     const env = document.getElementById("envelope");
+    const paper = document.getElementById("paper");
     const scrEnv = document.getElementById("screenEnvelope");
     const scrMain = document.getElementById("screenMain");
     const card = document.getElementById("questionCard");
 
     let opened = false;
+    let paperCentered = false;
 
     function burstHearts(anchorEl){
       const heartSet = ["💗","💞","💖"];
       const rect = anchorEl.getBoundingClientRect();
 
-      // anchor relative so hearts place nicely
       anchorEl.style.position = "relative";
 
       for (let i = 0; i < 9; i++){
@@ -509,25 +522,15 @@
       env.classList.add("open");
       burstHearts(env);
 
-      // Match your flap+paper timing (you were using 950ms)
+      // After the letter fly animation finishes, center the letter for reading
       setTimeout(() => {
-        // Switch screens
-        scrEnv.classList.add("hidden");
-        scrMain.classList.remove("hidden");
-
-        // Move the same button into the card and center it
-        card.insertBefore(musicBtn, card.firstChild);
-        musicBtn.classList.remove("posTopLeft");
-        musicBtn.classList.add("posCentered");
-
-        // Reveal card content smoothly
-        requestAnimationFrame(() => card.classList.add("show"));
-
+        paper.classList.add("centered");
+        paperCentered = true;
         env.classList.remove("is-opening");
-      }, 950);
+      }, 1050); // matches @keyframes letterFly
     }
 
-    // Click/tap
+    // Click/tap to open envelope
     env.addEventListener("click", openEnvelope);
 
     // Keyboard accessibility (Enter/Space)
@@ -536,6 +539,27 @@
         e.preventDefault();
         openEnvelope();
       }
+    });
+
+    // Tap/click the centered letter to proceed to the question screen
+    paper.addEventListener("click", () => {
+      if (!paperCentered) return;
+
+      paper.style.opacity = "0";
+      paper.style.transition = "opacity 220ms ease";
+
+      setTimeout(() => {
+        // Switch screens
+        scrEnv.classList.add("hidden");
+        scrMain.classList.remove("hidden");
+
+        // Move the same music button into the question card
+        card.insertBefore(musicBtn, card.firstChild);
+        musicBtn.classList.remove("posTopLeft");
+        musicBtn.classList.add("posCentered");
+
+        requestAnimationFrame(() => card.classList.add("show"));
+      }, 220);
     });
   </script>
 
