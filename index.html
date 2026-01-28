@@ -242,19 +242,20 @@
       animation: letterFly 1050ms cubic-bezier(.2,.9,.2,1) forwards;
     }
 
-    /* centered as reading card (fix: always centered and readable on phone) */
+    /* centered as reading card (FIXED: true center, no right shift) */
     .paper.centered{
       position: fixed;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
       bottom: auto;
+      transform: translate(-50%, -50%);
+      margin: 0;
 
-      width: min(780px, calc(100vw - 28px));
-      max-height: min(78vh, 560px);
+      width: min(760px, calc(100vw - 32px));
+      max-height: min(78svh, 560px);
       overflow: auto;
 
-      padding: clamp(18px, 4.5vw, 38px);
+      padding: clamp(18px, 4.8vw, 42px);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
@@ -263,38 +264,57 @@
       cursor: pointer;
       pointer-events: auto;
       -webkit-overflow-scrolling: touch;
+
+      /* remove default scrollbar gutter shifting */
+      scrollbar-gutter: stable both-edges;
     }
 
     /* inner content centered */
     .paperInner{
       width: 100%;
-      max-width: 56ch;
+      max-width: 54ch;
       margin: 0 auto;
       text-align: center;
 
       font-family: Inter, system-ui, sans-serif;
       color: rgba(42,31,37,.72);
       letter-spacing: .2px;
-      line-height: 1.55;
+      line-height: 1.65;
     }
 
+    /* Romantic header */
     .letterTitle{
-      font-family:"Playfair Display", serif;
-      color: var(--wine);
-      font-size: clamp(22px, 5.2vw, 38px);
-      margin: 0 0 10px;
+      font-family: "Great Vibes", cursive;
+      font-weight: 400;
+      color: rgba(179,21,90,.88);
+      font-size: clamp(40px, 8vw, 64px);
+      margin: 0 0 8px;
+      line-height: 1;
+      letter-spacing: .3px;
+      text-shadow: 0 12px 26px rgba(179,21,90,.12);
     }
 
     .letterBody{
-      font-size: clamp(0.98rem, 2.7vw, 1.08rem);
+      font-size: clamp(1rem, 2.9vw, 1.12rem);
       margin: 0;
+      color: rgba(42,31,37,.66);
     }
 
     .tapHint{
       margin-top: 14px;
-      font-weight: 700;
-      opacity: .75;
+      font-weight: 800;
+      opacity: .7;
       font-size: .95rem;
+      color: rgba(42,31,37,.62);
+    }
+
+    /* tiny signature */
+    .sig{
+      margin-top: 18px;
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(26px, 5.6vw, 38px);
+      color: rgba(179,21,90,.72);
+      opacity: .95;
     }
 
     @keyframes letterFly{
@@ -373,6 +393,9 @@
         white-space: normal;
         text-align:center;
       }
+      .paper.centered{
+        max-height: min(78svh, 520px);
+      }
     }
 
     /* reveal animation for the question content */
@@ -429,12 +452,15 @@
       <!-- Letter (flies out, then centers to read) -->
       <div class="paper" id="paper" aria-label="Open letter" role="button" tabindex="0">
         <div class="paperInner">
-          <h2 class="letterTitle">Hi Puppy,</h2>
+          <div class="letterTitle">Hi Puppy,</div>
+
           <p class="letterBody">
             I wanted to ask you in a special way, and I thought of making this little detail just for you.
             <br><br>
-            I hope you like it.
+            I hope you like it. 💗
           </p>
+
+          <div class="sig">— your stinky bf</div>
           <div class="tapHint">(tap the letter)</div>
         </div>
       </div>
