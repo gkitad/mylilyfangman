@@ -227,6 +227,61 @@
       @media (max-width: 520px){
   .card{ padding: 34px 18px 28px; }
   button{ width: 100%; min-width: 0; }
+
+        /* Special Music Button */
+.musicBtn{
+  margin: 18px auto 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 14px 26px;
+  border-radius: 999px;
+
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+
+  color: #b3155a;
+  background: rgba(255,255,255,.85);
+
+  border: 2px solid rgba(255,79,163,.35);
+
+  box-shadow:
+    0 0 0 rgba(255,79,163,.0),
+    0 18px 45px rgba(179,21,90,.15);
+
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+/* Hover glow */
+.musicBtn:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 18px rgba(255,79,163,.35),
+    0 22px 60px rgba(179,21,90,.22);
+}
+
+/* Soft pulsing animation */
+.musicBtn{
+  animation: pulseGlow 2.2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow{
+  0%,100%{
+    box-shadow:
+      0 0 0 rgba(255,79,163,.0),
+      0 18px 45px rgba(179,21,90,.14);
+  }
+  50%{
+    box-shadow:
+      0 0 18px rgba(255,79,163,.28),
+      0 20px 55px rgba(179,21,90,.20);
+  }
+}
+
 }
 
     }
@@ -251,7 +306,11 @@
   <div class="card">
 
     <!-- Sound Button -->
-    <button class="soundBtn" onclick="LilyPlayer.toggle()">Sound</button>
+   <button class="musicBtn" onclick="LilyPlayer.toggle()">
+  Music for you 💗
+</button>
+
+
 
     <h1>Will you be my Valentine?</h1>
     <p>(You better answer correctly 🙂‍↕️)</p>
