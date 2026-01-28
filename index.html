@@ -103,12 +103,14 @@
       50%{ box-shadow:0 0 28px rgba(255,79,163,.25), 0 22px 60px rgba(179,21,90,.16); }
     }
 
+    /* Position A: top-left (before opening envelope) */
     .musicBtn.posTopLeft{
       position: fixed;
       top: 18px;
       left: 18px;
     }
 
+    /* Position B: centered above question (after open) */
     .musicBtn.posCentered{
       position: relative;
       margin: 0 auto 18px;
@@ -189,6 +191,7 @@
       z-index: 3;
     }
 
+    /* Romantic font label */
     .label{
       position:absolute;
       left:50%;
@@ -212,7 +215,7 @@
       white-space: nowrap;
     }
 
-    /* ===== THE LETTER ===== */
+    /* ===== LETTER ===== */
     .paper{
       position:absolute;
       left: 10%;
@@ -238,7 +241,7 @@
       animation: letterFly 1050ms cubic-bezier(.2,.9,.2,1) forwards;
     }
 
-    /* ✅ Fix: no scrollbar on desktop; true center; internal content centered */
+    /* Centered reading card: no scrollbar on desktop */
     .paper.centered{
       position: fixed;
       left: 50%;
@@ -247,7 +250,6 @@
       margin: 0;
 
       width: min(760px, calc(100vw - 32px));
-      /* no scrollbar unless needed on very small screens */
       overflow: hidden;
 
       padding: clamp(18px, 4.8vw, 42px);
@@ -260,7 +262,7 @@
       pointer-events: auto;
     }
 
-    /* On small devices, allow scrolling if it ever overflows */
+    /* On small screens, allow scroll if needed */
     @media (max-width:520px){
       .paper.centered{
         max-height: 78svh;
@@ -281,7 +283,6 @@
       line-height: 1.7;
     }
 
-    /* Romantic header */
     .letterTitle{
       font-family: "Great Vibes", cursive;
       font-weight: 400;
@@ -322,6 +323,8 @@
     }
 
     .open .flap{ transform: rotateX(170deg); }
+
+    /* block taps while opening only */
     .is-opening{ pointer-events:none; }
 
     /* ===== QUESTION CARD ===== */
@@ -371,7 +374,6 @@
       transform: translateY(-2px);
       box-shadow: 0 18px 40px rgba(0,0,0,.14);
     }
-    .btnRow button:active{ transform: translateY(0) scale(.99); }
 
     .tiny{
       margin-top:18px;
@@ -379,7 +381,6 @@
       color: rgba(42,31,37,.55);
     }
 
-    /* reveal animation for the question content */
     .reveal{
       opacity: 0;
       transform: translateY(10px);
@@ -390,12 +391,11 @@
       transform: translateY(0);
     }
 
-    /* burst hearts on open (clean, short) */
+    /* burst hearts */
     .burstHeart{
       position:absolute;
       font-size: 14px;
       opacity: 0;
-      transform: translateY(0);
       animation: floatUp 1200ms ease forwards;
       user-select:none;
       pointer-events:none;
@@ -419,9 +419,7 @@
 
   <div id="heartLayer"></div>
 
-  <button class="musicBtn posTopLeft" id="musicBtn" type="button" aria-label="Toggle music">
-    Music for you 💗
-  </button>
+  <button class="musicBtn posTopLeft" id="musicBtn" type="button">Music for you 💗</button>
 
   <section class="screen" id="screenEnvelope">
     <div class="envelope" id="envelope" aria-label="Open envelope" role="button" tabindex="0">
@@ -430,13 +428,11 @@
       <div class="paper" id="paper" aria-label="Open letter" role="button" tabindex="0">
         <div class="paperInner">
           <div class="letterTitle">Hi Puppy,</div>
-
           <p class="letterBody">
             I wanted to ask you in a special way, and I thought of making this little detail just for you.
             <br><br>
             I hope you like it. 💗
           </p>
-
           <div class="sig">— your stinky bf</div>
           <div class="tapHint">(tap the letter)</div>
         </div>
@@ -455,9 +451,7 @@
 
       <div class="btnRow">
         <button onclick="location.href='pages/menu.html'">Yes</button>
-        <button onclick="location.href='pages/menu.html'">
-          Why are you looking for another option?
-        </button>
+        <button onclick="location.href='pages/menu.html'">Why are you looking for another option?</button>
       </div>
 
       <div class="tiny">Made by your stinky bf</div>
@@ -475,18 +469,17 @@
 
       const x = Math.random()*100;
       const s = 0.6 + Math.random()*1.2;
-      const wiggle = (Math.random()*40 - 20)+"vw";
+      const wiggle = (Math.random()*40 - 20) + "vw";
 
-      h.style.setProperty("--x", x+"vw");
+      h.style.setProperty("--x", x + "vw");
       h.style.setProperty("--s", s.toFixed(2));
       h.style.setProperty("--wiggle", wiggle);
-      h.style.fontSize = (16 + Math.random()*26)+"px";
-      h.style.animationDuration = (10 + Math.random()*10)+"s";
+      h.style.fontSize = (16 + Math.random()*26) + "px";
+      h.style.animationDuration = (10 + Math.random()*10) + "s";
 
       layer.appendChild(h);
       setTimeout(()=>h.remove(), 22000);
     }
-
     setInterval(spawnHeart, 520);
   </script>
 
@@ -514,7 +507,7 @@
       anchorEl.style.position = "relative";
 
       for (let i = 0; i < 9; i++){
-        const h = document ezielement("div");
+        const h = document.createElement("div");
         h.className = "burstHeart";
         h.textContent = heartSet[Math.floor(Math.random()*heartSet.length)];
 
@@ -575,7 +568,6 @@
       e.stopPropagation();
       goToValentine();
     });
-
     paper.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
