@@ -1,1 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Letter for Lily 💌</title>
+
+  <!-- Romantic Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --paper:#fffaf3;
+      --paper2:#fde7f1;
+      --ink:#2a1f25;
+      --muted: rgba(42,31,37,.65);
+      --accent:#b3155a;
+      --shadow: 0 26px 70px rgba(30,0,20,.15);
+      --radius: 28px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding: 24px;
+
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--ink);
+
+      /* ✅ Warm paper background */
+      background:
+        radial-gradient(900px 650px at 30% 20%, rgba(255,255,255,.95), transparent 60%),
+        radial-gradient(900px 650px at 70% 70%, rgba(255,214,232,.35), transparent 60%),
+        linear-gradient(180deg, var(--paper), var(--paper2));
+
+      overflow:hidden;
+    }
+
+    /* -----------------------------
+      🌸 Falling Petals Background
+    ------------------------------*/
+    #petalLayer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+
+    .petal{
+      position:absolute;
+      top:-5vh;
+      opacity:0.25;
+      font-size:22px;
+      animation: fall linear forwards;
+      user-select:none;
+      filter: blur(.2px);
+    }
+
+    @keyframes fall{
+      0%{
+        transform: translateX(var(--x)) translateY(-10vh) rotate(0deg);
+        opacity:0;
+      }
+      15%{ opacity:0.25; }
+
+      100%{
+        transform: translateX(calc(var(--x) + var(--drift)))
+                   translateY(120vh)
+                   rotate(260deg);
+        opacity:0;
+      }
+    }
+
+    /* -----------------------------
+      💌 Letter Card
+    ------------------------------*/
+    .letterCard{
+      width: min(780px, 100%);
+      padding: clamp(22px, 4.5vw, 52px);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.82);
+
+      border: 1px solid rgba(179,21,90,.15);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+
+      text-align:center;
+      position:relative;
+      z-index:5;
+    }
+
+    .title{
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(50px, 8vw, 78px);
+      color: rgba(179,21,90,.92);
+      margin: 0 0 12px;
+      text-shadow: 0 10px 24px rgba(179,21,90,.12);
+    }
+
+    .bodyText{
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.05rem, 2.8vw, 1.25rem);
+      line-height: 1.75;
+      color: var(--muted);
+      margin: 0;
+      max-width: 54ch;
+      margin-inline:auto;
+    }
+
+    .signature{
+      margin-top: 22px;
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(28px, 5vw, 46px);
+      color: rgba(179,21,90,.75);
+    }
+
+    /* -----------------------------
+      Back Button
+    ------------------------------*/
+    .backBtn{
+      margin-top: 26px;
+      display:inline-block;
+      padding: 12px 22px;
+      border-radius: 999px;
+      text-decoration:none;
+
+      border: 2px solid rgba(179,21,90,.35);
+      background: rgba(255,255,255,.90);
+      color: rgba(179,21,90,.95);
+
+      font-weight: 800;
+      transition: transform .15s ease, box-shadow .22s ease;
+      box-shadow: 0 14px 30px rgba(179,21,90,.12);
+    }
+
+    .backBtn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 20px 44px rgba(179,21,90,.16);
+    }
+
+    .backBtn:active{
+      transform: translateY(0) scale(.99);
+    }
+
+    @media(prefers-reduced-motion: reduce){
+      .petal{ animation:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 🌸 Petals Layer -->
+  <div id="petalLayer"></div>
+
+  <!-- 💌 Letter -->
+  <div class="letterCard">
+
+    <h1 class="title">My Letter 💌</h1>
+
+    <p class="bodyText">
+      Hi Puppy,<br><br>
+
+      <!-- ✅ Write your real letter here -->
+      This is where your message will go.
+      You can write something sweet, personal, and romantic,
+      just for her.<br><br>
+
+      Every word here will mean everything.
+    </p>
+
+    <div class="signature">
+      — your stinky bf 💗
+    </div>
+
+    <!-- Back Button -->
+    <a class="backBtn" href="menu.html">← Back to Menu</a>
+
+  </div>
+
+  <!-- 🌸 Falling Petals Script -->
+  <script>
+    const layer = document.getElementById("petalLayer");
+    const petals = ["🌸","🌷","💮","🌺"];
+
+    function spawnPetal(){
+      const p = document.createElement("div");
+      p.className = "petal";
+      p.textContent = petals[Math.floor(Math.random()*petals.length)];
+
+      const x = Math.random() * 100;
+      const drift = (Math.random() * 60 - 30) + "vw";
+      const size = 16 + Math.random() * 18;
+
+      p.style.setProperty("--x", x + "vw");
+      p.style.setProperty("--drift", drift);
+      p.style.fontSize = size + "px";
+
+      p.style.animationDuration = (8 + Math.random() * 6) + "s";
+
+      layer.appendChild(p);
+
+      setTimeout(() => p.remove(), 14000);
+    }
+
+    setInterval(spawnPetal, 700);
+  </script>
+
+</body>
+</html>
 
