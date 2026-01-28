@@ -26,6 +26,7 @@
       --sh2:#7a3554;
     }
 
+    /* ✅ Same romantic background as your index */
     body {
       margin:0;
       min-height:100vh;
@@ -35,13 +36,12 @@
       color:var(--text);
 
       background:
-        radial-gradient(900px 520px at 50% 25%, #ffffff 0%, var(--bg1) 45%, var(--bg2) 100%),
-        repeating-linear-gradient(
-          0deg,
-          rgba(255,255,255,0.10) 0px,
-          rgba(255,255,255,0.10) 2px,
-          rgba(0,0,0,0.02) 3px
-        );
+        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+
+      overflow:hidden;
     }
 
     h1 {
@@ -51,32 +51,27 @@
     }
 
     /* -----------------------------
-      🐶 FLOATING PUPPIES BACKGROUND
+      💗 FLOATING HEARTS BACKGROUND (from index)
     ------------------------------*/
-    #puppy-container {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 0;
+    #heartLayer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      overflow:hidden;
     }
-
-    .puppy {
-      position: absolute;
-      font-size: 28px;
-      opacity: 0.8;
-      animation: floatUp 6s linear forwards;
+    .heart{
+      position:absolute;
+      opacity: .14;
+      animation: drift linear forwards;
+      user-select:none;
+      filter: blur(.1px);
     }
-
-    @keyframes floatUp {
-      from {
-        transform: translateY(0) scale(1);
-        opacity: 0.9;
-      }
-      to {
-        transform: translateY(-120vh) scale(1.4);
-        opacity: 0;
-      }
+    @keyframes drift{
+      0%   { transform: translate(var(--x), 110vh) scale(var(--s)); opacity: 0; }
+      15%  { opacity: .14; }
+      50%  { transform: translate(calc(var(--x) + var(--wiggle)), 45vh) scale(var(--s)); }
+      100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
     }
 
     /* -----------------------------
@@ -280,13 +275,17 @@
       h1 { font-size: 1.8rem; }
       .spotify-body iframe { height: 280px; }
     }
+
+    @media (prefers-reduced-motion: reduce){
+      .heart{ animation: none !important; }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- 🐶 Floating Puppies Background -->
-  <div id="puppy-container"></div>
+  <!-- 💗 Floating Hearts Background -->
+  <div id="heartLayer"></div>
 
   <!-- Main Window -->
   <div class="window">
@@ -346,24 +345,29 @@
       if (e.target === modal) modal.classList.remove("active");
     });
 
-    /* 🐶 Floating Puppy Effect */
-    const puppyContainer = document.getElementById("puppy-container");
+    /* 💗 Floating Hearts Effect (same as index) */
+    const layer = document.getElementById("heartLayer");
+    const hearts = ["♡","♥","❥","❤","💕"];
 
-    function createPuppy() {
-      const puppy = document.createElement("div");
-      puppy.classList.add("puppy");
-      puppy.innerHTML = "🐶";
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
 
-      puppy.style.left = Math.random() * 100 + "vw";
-      puppy.style.fontSize = Math.random() * 18 + 18 + "px";
-      puppy.style.animationDuration = Math.random() * 3 + 4 + "s";
+      const x = Math.random()*100;
+      const s = 0.6 + Math.random()*1.2;
+      const wiggle = (Math.random()*40 - 20) + "vw";
 
-      puppyContainer.appendChild(puppy);
+      h.style.setProperty("--x", x + "vw");
+      h.style.setProperty("--s", s.toFixed(2));
+      h.style.setProperty("--wiggle", wiggle);
+      h.style.fontSize = (16 + Math.random()*26) + "px";
+      h.style.animationDuration = (10 + Math.random()*10) + "s";
 
-      setTimeout(() => puppy.remove(), 7000);
+      layer.appendChild(h);
+      setTimeout(()=>h.remove(), 22000);
     }
-
-    setInterval(createPuppy, 600);
+    setInterval(spawnHeart, 520);
   </script>
 
 </body>
