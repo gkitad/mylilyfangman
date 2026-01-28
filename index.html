@@ -8,7 +8,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -66,39 +66,6 @@
       100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
     }
 
-    /* Sound toggle */
-    .soundFab{
-      position: fixed;
-      top: 18px;
-      left: 18px;
-      z-index: 50;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-
-      padding: 12px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.65);
-      background: rgba(255,255,255,.35);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.12);
-      cursor: pointer;
-
-      color: rgba(0,0,0,.62);
-      font-weight: 750;
-      transition: transform .15s ease;
-    }
-    .soundFab:hover{ transform: translateY(-2px); }
-    .soundIcon{
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 999px;
-      background: rgba(255,255,255,.55);
-      font-size: 16px;
-    }
-
     /* Screens */
     .screen{
       z-index: 2;
@@ -107,6 +74,54 @@
       place-items:center;
     }
     .hidden{ display:none; }
+
+    /* ===== ONE MUSIC BUTTON (moves position) ===== */
+    .musicBtn{
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #b3155a;
+      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,214,232,.75));
+      border: 2px solid rgba(255,79,163,.45);
+      cursor:pointer;
+      animation: pulseGlow 2.2s infinite;
+      box-shadow: 0 18px 45px rgba(179,21,90,.15);
+      transition: transform .14s ease, box-shadow .22s ease;
+      z-index: 60;
+      user-select:none;
+    }
+    .musicBtn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 22px 60px rgba(179,21,90,.20);
+    }
+
+    @keyframes pulseGlow{
+      0%,100%{ box-shadow:0 0 18px rgba(255,79,163,.15), 0 18px 45px rgba(179,21,90,.12); }
+      50%{ box-shadow:0 0 28px rgba(255,79,163,.25), 0 22px 60px rgba(179,21,90,.16); }
+    }
+
+    /* Position A: top-left (before opening envelope) */
+    .musicBtn.posTopLeft{
+      position: fixed;
+      top: 18px;
+      left: 18px;
+    }
+
+    /* Position B: centered above question (after open) */
+    .musicBtn.posCentered{
+      position: relative;
+      margin: 0 auto 18px;
+      display: inline-flex;
+    }
+
+    @media (max-width:520px){
+      .musicBtn.posTopLeft{
+        top: 12px;
+        left: 12px;
+        padding: 12px 20px;
+      }
+    }
 
     /* ===== CLEAN CLOSED ENVELOPE ===== */
     .envelope{
@@ -120,7 +135,6 @@
       transform: translateZ(0);
     }
 
-    /* back body */
     .envBack{
       position:absolute;
       inset:0;
@@ -130,7 +144,6 @@
       overflow:hidden;
     }
 
-    /* FRONT: closed envelope face (covers everything behind) */
     .envFront{
       position:absolute;
       inset:0;
@@ -140,7 +153,6 @@
       overflow:hidden;
     }
 
-    /* front triangles for clean "closed" look */
     .envFront::before{
       content:"";
       position:absolute;
@@ -152,7 +164,6 @@
       opacity: .85;
     }
 
-    /* top flap (closed) */
     .flap{
       position:absolute;
       left:0; right:0; top:0;
@@ -167,7 +178,7 @@
       z-index: 3;
     }
 
-    /* label text */
+    /* Romantic font label */
     .label{
       position:absolute;
       left:50%;
@@ -175,20 +186,23 @@
       transform: translate(-50%,-50%);
       z-index: 4;
 
-      font-family: "Playfair Display", serif;
-      font-weight: 700;
-      font-size: clamp(22px, 4.1vw, 34px);
-      color: rgba(179,21,90,.72);
-      letter-spacing: -.2px;
+      font-family: "Great Vibes", cursive;
+      font-weight: 400;
+      font-size: clamp(32px, 5.2vw, 52px);
+      color: rgba(179,21,90,.82);
+      letter-spacing: .2px;
 
       padding: 10px 18px;
       border-radius: 999px;
-      background: rgba(255,255,255,.55);
+      background: rgba(255,255,255,.50);
       border: 1px solid rgba(255,79,163,.10);
       backdrop-filter: blur(10px);
+
+      text-shadow: 0 10px 26px rgba(179,21,90,.14);
+      white-space: nowrap;
     }
 
-    /* the letter (hidden behind until open) */
+    /* The letter stays hidden until open */
     .paper{
       position:absolute;
       left: 10%;
@@ -209,16 +223,12 @@
     .paperInner{
       font-family: Inter, system-ui, sans-serif;
       font-weight: 700;
-      color: rgba(42,31,37,.55);
+      color: rgba(42,31,37,.45);
       letter-spacing: .2px;
     }
 
-    /* OPEN state */
     .open .flap{ transform: rotateX(170deg); }
-    .open .paper{
-      transform: translateY(-58px);
-      opacity: 1;
-    }
+    .open .paper{ transform: translateY(-58px); opacity: 1; }
     .open{ pointer-events:none; }
 
     /* ===== QUESTION CARD ===== */
@@ -231,23 +241,6 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
       margin:auto;
-    }
-
-    .musicBtn{
-      margin-bottom: 18px;
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 900;
-      color: #b3155a;
-      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,214,232,.75));
-      border: 2px solid rgba(255,79,163,.45);
-      cursor:pointer;
-      animation: pulseGlow 2.2s infinite;
-    }
-    @keyframes pulseGlow{
-      0%,100%{ box-shadow:0 0 18px rgba(255,79,163,.15); }
-      50%{ box-shadow:0 0 28px rgba(255,79,163,.25); }
     }
 
     h1{
@@ -293,7 +286,12 @@
 
     @media(max-width:520px){
       .btnRow button{ width:100%; min-width:0; }
-      .label{ padding: 8px 14px; }
+      .label{
+        font-size: clamp(28px, 7vw, 44px);
+        padding: 8px 14px;
+        white-space: normal;
+        text-align:center;
+      }
     }
   </style>
 </head>
@@ -302,27 +300,16 @@
 
   <div id="heartLayer"></div>
 
-  <!-- Sound Toggle -->
-  <button class="soundFab" id="soundFab" type="button">
-    <span class="soundIcon" aria-hidden="true">🔇</span>
-    <span id="soundText">Sound off</span>
-  </button>
+  <!-- ✅ ONLY ONE MUSIC BUTTON -->
+  <button class="musicBtn posTopLeft" id="musicBtn" type="button">Music for you 💗</button>
 
   <!-- Screen 1: Closed envelope only -->
   <section class="screen" id="screenEnvelope">
     <div class="envelope" id="envelope" aria-label="Open envelope">
       <div class="envBack"></div>
-
-      <!-- The letter is BEHIND -->
-      <div class="paper">
-        <div class="paperInner">💕</div>
-      </div>
-
-      <!-- Closed envelope FRONT -->
+      <div class="paper"><div class="paperInner">💕</div></div>
       <div class="envFront"></div>
       <div class="flap"></div>
-
-      <!-- Only visible text -->
       <div class="label">To Lily Fangman</div>
     </div>
   </section>
@@ -330,8 +317,7 @@
   <!-- Screen 2: Question -->
   <section class="screen hidden" id="screenMain">
     <div class="card">
-      <button class="musicBtn" onclick="LilyPlayer.toggle()">Music for you 💗</button>
-
+      <!-- Music button will be moved here (centered) -->
       <h1>Will you be my Valentine?</h1>
       <p>(You better answer correctly 🙂‍↕️)</p>
 
@@ -375,34 +361,35 @@
   <!-- Music -->
   <script src="/assets/player.js"></script>
   <script>
+    // Track for index (intro)
     LilyPlayer.setTrack("/assets/intro.mp3");
 
-    const fab = document.getElementById("soundFab");
-    const txt = document.getElementById("soundText");
-    const icon = fab.querySelector(".soundIcon");
+    const musicBtn = document.getElementById("musicBtn");
 
-    function refreshSound(){
-      const on = localStorage.getItem("lily_audio_on") === "1";
-      txt.textContent = on ? "Sound on" : "Sound off";
-      icon.textContent = on ? "🔊" : "🔇";
-    }
-
-    fab.addEventListener("click", async () => {
+    // Toggle music on click
+    musicBtn.addEventListener("click", async () => {
       await LilyPlayer.toggle();
-      setTimeout(refreshSound, 80);
     });
-    refreshSound();
 
-    // Open envelope -> show question
+    // When envelope opens, move button into the card centered
     const env = document.getElementById("envelope");
     const scrEnv = document.getElementById("screenEnvelope");
     const scrMain = document.getElementById("screenMain");
 
     env.addEventListener("click", () => {
       env.classList.add("open");
+
       setTimeout(() => {
+        // Switch screens
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
+
+        // Move the same button into the card and center it
+        const card = scrMain.querySelector(".card");
+        card.insertBefore(musicBtn, card.firstChild);
+
+        musicBtn.classList.remove("posTopLeft");
+        musicBtn.classList.add("posCentered");
       }, 950);
     });
   </script>
