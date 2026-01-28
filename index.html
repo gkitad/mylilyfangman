@@ -137,7 +137,6 @@
       transform: translateZ(0);
       -webkit-tap-highlight-color: transparent;
 
-      /* micro */
       transition: transform 260ms ease, filter 260ms ease;
       will-change: transform;
     }
@@ -232,7 +231,6 @@
       place-items:center;
       padding: 18px;
 
-      /* start hidden */
       opacity: 0;
       transform: translateY(52px) scale(.98);
       will-change: transform, opacity;
@@ -259,6 +257,7 @@
       backdrop-filter: blur(18px);
       z-index: 80;
       cursor: pointer;
+      pointer-events: auto;
     }
 
     .paperInner{
@@ -280,9 +279,8 @@
 
     .open .flap{ transform: rotateX(170deg); }
 
-    /* block taps while opening/opened */
+    /* block taps while opening (ONLY during animation) */
     .is-opening{ pointer-events:none; }
-    .open{ pointer-events:none; }
 
     /* ===== QUESTION CARD ===== */
     .card{
@@ -402,7 +400,7 @@
       <div class="envBack"></div>
 
       <!-- Letter (flies out, then centers to read) -->
-      <div class="paper" id="paper" aria-label="Open letter">
+      <div class="paper" id="paper" aria-label="Open letter" role="button" tabindex="0">
         <div class="paperInner">
           <div style="font-family:'Playfair Display',serif; color: var(--wine); font-size: clamp(22px,4.2vw,34px); margin-bottom:10px;">
             Hi Lily,
@@ -426,7 +424,6 @@
   <!-- Screen 2: Question -->
   <section class="screen hidden" id="screenMain">
     <div class="card reveal" id="questionCard">
-      <!-- Music button will be moved here (centered) -->
       <h1>Will you be my Valentine?</h1>
       <p>(You better answer correctly 🙂‍↕️)</p>
 
@@ -476,12 +473,10 @@
 
     const musicBtn = document.getElementById("musicBtn");
 
-    // Toggle music on click
     musicBtn.addEventListener("click", async () => {
       await LilyPlayer.toggle();
     });
 
-    // ===== envelope + letter flow =====
     const env = document.getElementById("envelope");
     const paper = document.getElementById("paper");
     const scrEnv = document.getElementById("screenEnvelope");
@@ -494,7 +489,6 @@
     function burstHearts(anchorEl){
       const heartSet = ["💗","💞","💖"];
       const rect = anchorEl.getBoundingClientRect();
-
       anchorEl.style.position = "relative";
 
       for (let i = 0; i < 9; i++){
@@ -522,34 +516,20 @@
       env.classList.add("open");
       burstHearts(env);
 
-      // After the letter fly animation finishes, center the letter for reading
       setTimeout(() => {
         paper.classList.add("centered");
         paperCentered = true;
         env.classList.remove("is-opening");
-      }, 1050); // matches @keyframes letterFly
+      }, 1050);
     }
 
-    // Click/tap to open envelope
-    env.addEventListener("click", openEnvelope);
-
-    // Keyboard accessibility (Enter/Space)
-    env.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        openEnvelope();
-      }
-    });
-
-    // Tap/click the centered letter to proceed to the question screen
-    paper.addEventListener("click", () => {
+    function goToValentine(){
       if (!paperCentered) return;
 
       paper.style.opacity = "0";
       paper.style.transition = "opacity 220ms ease";
 
       setTimeout(() => {
-        // Switch screens
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
 
@@ -560,6 +540,32 @@
 
         requestAnimationFrame(() => card.classList.add("show"));
       }, 220);
+    }
+
+    // Click/tap to open envelope
+    env.addEventListener("click", openEnvelope);
+
+    // Keyboard accessibility for envelope
+    env.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openEnvelope();
+      }
+    });
+
+    // Tap/click the centered letter to proceed
+    paper.addEventListener("click", (e) => {
+      e.stopPropagation();
+      goToValentine();
+    });
+
+    // Keyboard accessibility for letter
+    paper.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.stopPropagation();
+        goToValentine();
+      }
     });
   </script>
 
