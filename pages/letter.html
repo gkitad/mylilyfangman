@@ -140,4 +140,308 @@
       box-shadow:
         0 26px 80px rgba(0,0,0,.16),
         inset 0 0 0 1px rgba(255,255,255,.35),
-        inset 0 20px 46px rgba
+        inset 0 20px 46px rgba(80,40,18,.10);
+
+      border: 1px solid rgba(80,40,18,.20);
+      overflow:hidden;
+      padding: clamp(18px, 3.5vw, 48px);
+    }
+
+    /* paper fibers + vignette edges */
+    .paper::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.26;
+      background:
+        repeating-linear-gradient(0deg,
+          rgba(60,30,10,.06) 0px,
+          rgba(60,30,10,.06) 1px,
+          transparent 2px,
+          transparent 6px
+        ),
+        repeating-linear-gradient(90deg,
+          rgba(60,30,10,.04) 0px,
+          rgba(60,30,10,.04) 1px,
+          transparent 2px,
+          transparent 7px
+        );
+      mix-blend-mode: multiply;
+      filter: blur(.25px);
+    }
+    .paper::after{
+      content:"";
+      position:absolute;
+      inset:-30px;
+      pointer-events:none;
+      background: radial-gradient(closest-side at 50% 40%, transparent 62%, rgba(60,30,10,.22) 120%);
+      opacity:.75;
+    }
+
+    /* layout inside paper: mimic screenshot spacing */
+    .paperInner{
+      position:relative;
+      z-index:1;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .title{
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(44px, 6.4vw, 78px);
+      color: rgba(70, 34, 40, .85);
+      margin: 16px 0 14px;
+      text-shadow: 0 2px 0 rgba(255,255,255,.35);
+      text-align:center;
+    }
+
+    .body{
+      width: min(640px, 92%);
+      margin-top: 12px;
+
+      /* “typewriter-ish” */
+      font-family: "Special Elite", ui-monospace, monospace;
+      font-size: clamp(16px, 2.2vw, 20px);
+      line-height: 1.75;
+      color: rgba(63,42,34,.85);
+
+      /* keep line breaks */
+      white-space: pre-wrap;
+
+      /* if letter is long, scroll inside paper */
+      overflow:auto;
+      padding: 6px 4px 0;
+      flex: 1;
+    }
+
+    .signature{
+      width: min(640px, 92%);
+      padding-top: 10px;
+      padding-bottom: 6px;
+      text-align:right;
+
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(26px, 3.6vw, 44px);
+      color: rgba(80, 42, 50, .70);
+    }
+
+    /* Cursor */
+    .cursor{
+      display:inline-block;
+      width: 10px;
+      margin-left: 3px;
+      transform: translateY(2px);
+      opacity:.85;
+      animation: blink .9s steps(2,end) infinite;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    /* Bottom pills */
+    .actions{
+      position:absolute;
+      left: 0;
+      right: 0;
+      bottom: 22px;
+      z-index: 4;
+
+      display:flex;
+      justify-content:center;
+      gap: 26px;
+      padding: 0 18px;
+    }
+
+    .pill{
+      height: 74px;
+      min-width: 320px;
+      padding: 0 28px;
+      border-radius: 999px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 12px;
+
+      background: var(--pillBg);
+      border: 1px solid var(--pillBd);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--pillSh);
+
+      color: rgba(120, 55, 80, .95);
+      font-weight: 600;
+      font-size: 28px;
+      text-decoration:none;
+
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .pill:active{ transform: translateY(1px); }
+
+    /* Mobile */
+    @media (max-width: 560px){
+      .songBtn{
+        height: 46px;
+        padding: 0 16px;
+        font-size: 18px;
+        top: 12px;
+        left: 12px;
+      }
+
+      .paperWrap{
+        height: min(980px, 72vh);
+      }
+
+      .actions{
+        flex-direction:column;
+        bottom: 12px;
+        gap: 12px;
+      }
+      .pill{
+        width: min(92vw, 420px);
+        min-width: 0;
+        height: 62px;
+        font-size: 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .petal, .cursor{ animation:none !important; }
+    }
+  </style>
+</head>
+
+<body data-track="../assets/cancionmenu.mp3">
+  <div class="stage">
+    <div id="petalLayer"></div>
+
+    <!-- keep this id for your global player -->
+    <button class="songBtn" id="songBtn" type="button">
+      <span class="icon">🎵</span>
+      <span>Song</span>
+      <span class="play">▶</span>
+    </button>
+
+    <div class="paperWrap">
+      <div class="paper">
+        <div class="paperInner">
+          <!-- You can change this title if you want -->
+          <div class="title" id="letterTitle">My Dearest Lily ✉️</div>
+
+          <!-- Typewriter writes here -->
+          <div class="body"><span id="typedText"></span><span class="cursor" id="cursor">|</span></div>
+
+          <div class="signature" id="signature">— your stinky bf 💗</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="pill" href="./menu.html">← Back to Menu</a>
+      <button class="pill" id="downloadBtn" type="button">📜 Download Letter</button>
+    </div>
+  </div>
+
+  <!-- Petals -->
+  <script>
+    const layer = document.getElementById("petalLayer");
+    const petals = ["🌸","🌷","💮","🌺","🌸","🌸"];
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const MAX = 26;
+
+    function spawnPetal(){
+      if (layer.childElementCount >= MAX) return;
+      const p = document.createElement("div");
+      p.className = "petal";
+      p.textContent = petals[Math.floor(Math.random()*petals.length)];
+
+      const x = Math.random() * 100;
+      const drift = (Math.random() * 50 - 25) + "vw";
+      const size = 18 + Math.random() * 18;
+
+      p.style.setProperty("--x", x + "vw");
+      p.style.setProperty("--drift", drift);
+      p.style.fontSize = size + "px";
+      p.style.animationDuration = (9 + Math.random() * 7) + "s";
+
+      layer.appendChild(p);
+      setTimeout(() => p.remove(), 17000);
+    }
+
+    if (!reduceMotion) setInterval(spawnPetal, 850);
+  </script>
+
+  <!-- Typewriter (ONLY EDIT const letter) -->
+  <script>
+    const typedEl = document.getElementById("typedText");
+    const cursorEl = document.getElementById("cursor");
+    const reduceMotion2 = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ✅ ONLY CHANGE THIS:
+    // If you ever need a backtick ` inside, write it like \`
+    const letter = `Hi Puppy,
+
+This is where your message will go.
+You can write something sweet, personal,
+and romantic, just for her...
+
+Every word here will mean everything.`;
+
+    function showAll(){
+      typedEl.textContent = letter;
+    }
+
+    function typeWriter(text){
+      let i = 0;
+      function tick(){
+        i++;
+        typedEl.textContent = text.slice(0, i);
+
+        if (i < text.length){
+          const ch = text[i - 1];
+          let delay = 22;
+          if (ch === "." || ch === "!" || ch === "?") delay += 180;
+          if (ch === ",") delay += 90;
+          setTimeout(tick, delay);
+        } else {
+          // Optional: remove cursor when finished
+          // cursorEl.remove();
+        }
+      }
+      tick();
+    }
+
+    if (reduceMotion2) showAll();
+    else typeWriter(letter);
+  </script>
+
+  <!-- Download as .txt -->
+  <script>
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const title = (document.getElementById("letterTitle").textContent || "Letter").trim();
+      const sig = (document.getElementById("signature").textContent || "").trim();
+      const body = (document.getElementById("typedText").textContent || "").trim();
+
+      const text = `${title}\n\n${body}\n\n${sig}\n`;
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "letter.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    });
+  </script>
+
+  <!-- Global music player -->
+  <script src="../assets/valentine-player.js?v=5"></script>
+</body>
+</html>
