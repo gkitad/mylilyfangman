@@ -285,6 +285,91 @@
 }
 
     }
+/* ===== SPECIAL MUSIC BUTTON (override) ===== */
+.musicBtn{
+  /* overrides vs generic button styles */
+  width: auto !important;
+  min-width: 0 !important;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 14px 28px !important;
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: 900 !important;
+  letter-spacing: .4px;
+
+  color: #b3155a !important;
+
+  /* gradient + glow */
+  background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,214,232,.75)) !important;
+  border: 2px solid rgba(255,79,163,.45) !important;
+
+  box-shadow:
+    0 10px 30px rgba(179,21,90,.12),
+    0 0 0 rgba(255,79,163,0);
+  
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .22s ease, filter .22s ease;
+  
+  /* make it feel unique */
+  position: relative;
+  overflow: hidden;
+}
+
+/* shiny sweep */
+.musicBtn::before{
+  content:"";
+  position:absolute;
+  top:-40%;
+  left:-60%;
+  width: 60%;
+  height: 180%;
+  transform: rotate(20deg);
+  background: rgba(255,255,255,.65);
+  filter: blur(2px);
+  opacity: .55;
+  animation: sweep 2.8s ease-in-out infinite;
+}
+@keyframes sweep{
+  0%   { left:-70%; opacity:.0; }
+  25%  { opacity:.55; }
+  55%  { left:110%; opacity:.0; }
+  100% { left:110%; opacity:.0; }
+}
+
+.musicBtn:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 40px rgba(179,21,90,.18),
+    0 0 22px rgba(255,79,163,.25);
+  filter: saturate(1.05);
+}
+
+.musicBtn:active{
+  transform: translateY(0px) scale(.99);
+}
+
+/* optional pulse */
+.musicBtn{
+  animation: pulseGlow 2.2s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%,100%{
+    box-shadow:
+      0 10px 30px rgba(179,21,90,.12),
+      0 0 0 rgba(255,79,163,0);
+  }
+  50%{
+    box-shadow:
+      0 14px 38px rgba(179,21,90,.16),
+      0 0 22px rgba(255,79,163,.22);
+  }
+}
 
     
   </style>
@@ -310,6 +395,12 @@
   Music for you 💗
 </button>
 
+<div class="card">
+  <button class="musicBtn" onclick="LilyPlayer.toggle()">Music for you 💗</button>
+
+  <h1>Will you be my Valentine?</h1>
+  ...
+</div>
 
 
     <h1>Will you be my Valentine?</h1>
