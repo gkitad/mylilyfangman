@@ -6,66 +6,142 @@
   <title>Menu ✨</title>
 
   <style>
-    body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
       font-family: Arial, sans-serif;
       background: linear-gradient(#fff7fb, #ffd6e8);
     }
 
-    .card{
-      background: rgba(255,255,255,.75);
+    .card {
+      background: rgba(255, 255, 255, 0.75);
       padding: 40px;
       border-radius: 30px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.15);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
       width: min(650px, 90%);
-      text-align:center;
+      text-align: center;
     }
 
-    h1{
+    h1 {
       font-size: 2.8rem;
       color: #b3155a;
       margin-bottom: 10px;
     }
 
-    p{
-      color: rgba(0,0,0,.55);
+    p {
+      color: rgba(0, 0, 0, 0.55);
       margin-bottom: 25px;
     }
 
-    .options{
-      display:grid;
+    .options {
+      display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 15px;
     }
 
-    .option{
+    .option {
       padding: 18px;
       border-radius: 20px;
-      background: rgba(255,255,255,.85);
-      cursor:pointer;
+      background: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
       font-weight: bold;
-      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+      box-shadow: 0 10px 25px rgba(0, 0, 0,  0.12);
       transition: transform 0.15s;
     }
 
-    .option:hover{
+    .option:hover {
       transform: scale(1.05);
     }
 
-    .back{
+    .back {
       margin-top: 25px;
-      display:inline-block;
-      color:#b3155a;
-      text-decoration:none;
-      font-weight:bold;
+      display: inline-block;
+      color: #b3155a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* ✅ SPOTIFY MODAL OVERLAY */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 999;
+    }
+
+    .overlay.active {
+      display: flex;
+    }
+
+    /* ✅ MODAL BOX */
+    .spotify-box {
+      background: white;
+      width: min(500px, 95vw);
+      border-radius: 25px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      position: relative;
+      text-align: center;
+      animation: pop 0.25s ease;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .spotify-box h2 {
+      margin: 10px 0 15px;
+      color: #b3155a;
+    }
+
+    .spotify-box iframe {
+      width: 100%;
+      height: 380px;
+      border-radius: 12px;
+      border: none;
+    }
+
+    /* ✅ CLOSE BUTTON */
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-weight: bold;
+      color: #b3155a;
+    }
+
+    /* ✅ MOBILE FRIENDLY */
+    @media (max-width: 480px) {
+      .spotify-box iframe {
+        height: 300px;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
 
 <body>
+
   <div class="card">
     <h1>Pick a surprise 💗</h1>
     <p>Tap any option, more coming soon…</p>
@@ -73,12 +149,54 @@
     <div class="options">
       <div class="option">💌 Letter</div>
       <div class="option">📸 Photos</div>
-      <div class="option">🎵 Our Song</div>
+
+      <!-- ✅ Spotify Option -->
+      <div class="option" id="openSpotify">🎵 Our Song</div>
+
       <div class="option">😂 Memes</div>
     </div>
 
     <a class="back" href="../index.html">← Back to start</a>
   </div>
+
+  <!-- ✅ Spotify Modal -->
+  <div class="overlay" id="spotifyModal">
+    <div class="spotify-box">
+      <button class="close-btn" id="closeSpotify">✕</button>
+
+      <h2>Our Song 🎶</h2>
+
+      <!-- ✅ YOUR PLAYLIST EMBED -->
+      <iframe
+        src="https://open.spotify.com/embed/playlist/7cEhoMx0fj3xahSwyyK2Ps"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+
+  <script>
+    const openBtn = document.getElementById("openSpotify");
+    const modal = document.getElementById("spotifyModal");
+    const closeBtn = document.getElementById("closeSpotify");
+
+    // ✅ Open modal
+    openBtn.addEventListener("click", () => {
+      modal.classList.add("active");
+    });
+
+    // ✅ Close modal with button
+    closeBtn.addEventListener("click", () => {
+      modal.classList.remove("active");
+    });
+
+    // ✅ Close modal by clicking outside
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.remove("active");
+      }
+    });
+  </script>
+
 </body>
 </html>
-
