@@ -25,6 +25,8 @@
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
@@ -279,21 +281,29 @@
       white-space: nowrap;
     }
 
-    /* Photo display area */
+    /* ============================================
+       PHOTO DISPLAY - ENFOQUE COMPLETAMENTE NUEVO
+       ============================================ */
     .photo-display {
       background: linear-gradient(180deg, #fff5f9, #fff0f7);
+      min-height: 500px;
+      position: relative;
+      /* Texto centrado como fallback */
+      text-align: center;
+    }
+
+    .photo-wrapper {
+      /* Este wrapper ocupa todo el ancho */
+      width: 100%;
       padding: 20px;
       padding-bottom: 70px;
-      min-height: 500px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+      /* Texto centrado */
+      text-align: center;
     }
 
     .photo-container {
-      max-width: 100%;
-      max-height: 500px;
+      /* CLAVE: display inline-block + text-align center en padre = centrado */
+      display: inline-block;
       position: relative;
       box-shadow: 
         0 10px 30px rgba(0, 0, 0, 0.2),
@@ -301,45 +311,42 @@
         inset 0 0 0 9px rgba(0, 0, 0, 0.1);
       background: #fefefe;
       padding: 8px;
+      max-width: 90%;
     }
 
     .main-photo {
+      display: block;
       max-width: 100%;
       max-height: 480px;
-      display: block;
       background: linear-gradient(135deg, #ffd6e8, #ffc8e0, #ffacd0);
       object-fit: contain;
-      width: auto;
-      height: auto;
     }
 
     .main-photo.placeholder {
       width: 700px;
       height: 480px;
       max-width: 100%;
-      display: grid;
-      place-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-size: 120px;
       color: rgba(255, 255, 255, 0.7);
     }
 
     .photo-caption {
-      position: absolute;
-      bottom: -50px;
-      left: 50%;
-      transform: translateX(-50%);
+      /* Caption debajo, centrado */
+      display: block;
+      margin-top: 15px;
       font-size: 15px;
       font-weight: 700;
       color: rgba(42, 31, 37, 0.8);
       text-align: center;
-      white-space: nowrap;
-      max-width: 90%;
-      overflow: hidden;
-      text-overflow: ellipsis;
       padding: 8px 12px;
       background: rgba(255, 255, 255, 0.9);
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(179, 21, 90, 0.1);
+      /* Centrar el caption */
+      display: inline-block;
     }
 
     /* Thumbnails strip */
@@ -407,8 +414,9 @@
     }
 
     .thumb-img.placeholder {
-      display: grid;
-      place-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-size: 32px;
       color: rgba(255, 255, 255, 0.7);
     }
@@ -481,7 +489,9 @@
       transform: translate(1px, 1px);
     }
 
-    /* Mobile adjustments */
+    /* ============================================
+       MOBILE - ESTILOS SIMPLIFICADOS
+       ============================================ */
     @media (max-width: 768px) {
       .container {
         width: 98%;
@@ -498,44 +508,29 @@
       }
 
       .photo-display {
-        padding: 15px;
-        padding-bottom: 70px;
         min-height: auto;
-        /* Clave: asegurar que ocupe todo el ancho */
-        width: 100%;
+      }
+
+      .photo-wrapper {
+        padding: 15px;
+        padding-bottom: 20px;
       }
 
       .photo-container {
-        /* Forzar centrado con margen auto en ambos lados */
-        margin-left: auto !important;
-        margin-right: auto !important;
-        /* Ancho fijo que quepa bien */
-        width: fit-content;
-        max-width: 85%;
-      }
-
-      .main-photo {
-        display: block;
-        max-width: 100%;
-        height: auto;
+        max-width: 80%;
+        padding: 6px;
       }
 
       .main-photo.placeholder {
-        /* Tamaño fijo para el placeholder */
-        width: 260px;
-        height: 195px;
-        max-width: 100%;
+        width: 240px;
+        height: 180px;
         font-size: 50px;
       }
 
       .photo-caption {
+        margin-top: 12px;
         font-size: 13px;
-        bottom: -45px;
-        /* Centrar caption relativo al contenedor padre */
-        left: 50%;
-        transform: translateX(-50%);
-        width: max-content;
-        max-width: 95%;
+        padding: 6px 10px;
       }
 
       .thumb {
@@ -560,22 +555,21 @@
       }
     }
 
-    /* Extra small screens */
     @media (max-width: 400px) {
-      .photo-display {
+      .photo-wrapper {
         padding: 10px;
-        padding-bottom: 60px;
+        padding-bottom: 15px;
       }
 
       .photo-container {
-        max-width: 90%;
+        max-width: 85%;
         padding: 5px;
       }
 
       .main-photo.placeholder {
-        width: 220px;
-        height: 165px;
-        font-size: 45px;
+        width: 200px;
+        height: 150px;
+        font-size: 40px;
       }
 
       .thumb {
@@ -585,8 +579,6 @@
 
       .photo-caption {
         font-size: 12px;
-        padding: 6px 10px;
-        bottom: -40px;
       }
     }
 
@@ -638,9 +630,12 @@
         </div>
       </div>
 
+      <!-- ESTRUCTURA CAMBIADA -->
       <div class="photo-display">
-        <div class="photo-container">
-          <img class="main-photo placeholder" id="mainPhoto" src="" alt="">
+        <div class="photo-wrapper">
+          <div class="photo-container">
+            <div class="main-photo placeholder" id="mainPhoto">📷</div>
+          </div>
           <div class="photo-caption" id="photoCaption">Our first date 💗</div>
         </div>
       </div>
@@ -742,12 +737,20 @@
 
       // Update main photo
       if (photo.src) {
-        mainPhoto.src = photo.src;
+        // Si hay imagen real, crear un elemento img
+        mainPhoto.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = photo.src;
+        img.style.cssText = 'display: block; max-width: 100%; max-height: 480px; object-fit: contain;';
+        mainPhoto.appendChild(img);
         mainPhoto.classList.remove("placeholder");
+        mainPhoto.style.width = 'auto';
+        mainPhoto.style.height = 'auto';
       } else {
-        mainPhoto.src = "";
+        mainPhoto.innerHTML = '📷';
         mainPhoto.classList.add("placeholder");
-        mainPhoto.textContent = "📷";
+        mainPhoto.style.width = '';
+        mainPhoto.style.height = '';
       }
 
       // Update caption
