@@ -265,6 +265,15 @@
     .letterBackdrop.show{
       opacity: 1;
     }
+    
+    /* ✅ Blur completo para transición */
+    .letterBackdrop.blur-transition{
+      background: rgba(255, 245, 250, 0.95);
+      backdrop-filter: blur(30px);
+      transition: all 600ms ease;
+      opacity: 1;
+      z-index: 250;
+    }
 
     /* Centered reading mode */
     .paper.centered{
@@ -406,6 +415,33 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
       margin:auto;
+      
+      /* ✅ Animación ultra smooth con blur */
+      opacity: 0;
+      transform: scale(0.88) translateY(40px);
+      filter: blur(15px);
+      animation: cardBlurIn 1200ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+    
+    @keyframes cardBlurIn{
+      0% {
+        opacity: 0;
+        transform: scale(0.88) translateY(40px);
+        filter: blur(15px);
+      }
+      40% {
+        opacity: 0.5;
+        filter: blur(8px);
+      }
+      70% {
+        opacity: 0.9;
+        filter: blur(2px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+      }
     }
     h1{
       font-family:"Playfair Display", serif;
@@ -502,8 +538,6 @@
           <div class="continueWrap" id="continueWrap">
             <button class="continueBtn" id="continueBtn" type="button">Continue 💗</button>
           </div>
-
-          <div class="tapHint">(tap the button)</div>
         </div>
       </div>
 
@@ -675,14 +709,20 @@
       // ✅ play subtle continue sound
       playSfx(sfxContinue, 0.18);
 
-      paper.style.transition = "opacity 220ms ease";
+      // ✅ FASE 1: Carta se desenfoca y desaparece (700ms)
+      paper.style.transition = "opacity 700ms ease, transform 700ms ease, filter 700ms ease";
       paper.style.opacity = "0";
-      backdrop.style.transition = "opacity 220ms ease";
-      backdrop.style.opacity = "0";
+      paper.style.transform = "translate(-50%, -50%) scale(0.92)";
+      paper.style.filter = "blur(20px)";
+      
+      // ✅ FASE 2: Activar blur completo en backdrop (empieza a 400ms)
+      setTimeout(() => {
+        backdrop.classList.add("blur-transition");
+      }, 400);
 
+      // ✅ FASE 3: Después de 1000ms, remover carta y mostrar pregunta
       setTimeout(() => {
         paper.remove();
-        backdrop.remove();
 
         scrEnv.classList.add("hidden");
         scrMain.classList.remove("hidden");
@@ -691,7 +731,20 @@
         card.insertBefore(musicBtn, card.firstChild);
         musicBtn.classList.remove("posTopLeft");
         musicBtn.classList.add("posCentered");
-      }, 240);
+        
+        // ✅ FASE 4: Quitar blur después de que aparece la pregunta (400ms)
+        setTimeout(() => {
+          backdrop.style.transition = "opacity 800ms ease, background 800ms ease, backdrop-filter 800ms ease";
+          backdrop.style.opacity = "0";
+          backdrop.classList.remove("blur-transition");
+          backdrop.classList.remove("show");
+          
+          setTimeout(() => {
+            backdrop.remove();
+          }, 800);
+        }, 200);
+        
+      }, 1000);
     }
 
     // Open with pointerdown (prevents mobile delayed click issues)
