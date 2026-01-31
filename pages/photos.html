@@ -44,7 +44,7 @@
         radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
 
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     /* 💗 Floating hearts */
@@ -76,6 +76,7 @@
       position: relative;
       z-index: 2;
       width: min(950px, 95%);
+      max-width: 100%;
       animation: windowAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
@@ -103,6 +104,9 @@
       border-left: 3px solid var(--hi);
       border-right: 3px solid var(--sh2);
       border-bottom: 3px solid var(--sh2);
+      
+      /* Prevenir desbordamiento */
+      overflow: hidden;
     }
 
     .window::before {
@@ -134,12 +138,15 @@
       color: #4c0f2a;
       white-space: nowrap;
       text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .titlebar__actions {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink: 0;
     }
 
     .playbtn {
@@ -282,29 +289,23 @@
     }
 
     /* ============================================
-       PHOTO DISPLAY - ENFOQUE COMPLETAMENTE NUEVO
+       PHOTO DISPLAY
        ============================================ */
     .photo-display {
       background: linear-gradient(180deg, #fff5f9, #fff0f7);
-      min-height: 500px;
-      position: relative;
-      /* Texto centrado como fallback */
-      text-align: center;
+      min-height: 400px;
+      width: 100%;
+      overflow: hidden;
     }
 
     .photo-wrapper {
-      /* Este wrapper ocupa todo el ancho */
       width: 100%;
       padding: 20px;
-      padding-bottom: 70px;
-      /* Texto centrado */
       text-align: center;
     }
 
     .photo-container {
-      /* CLAVE: display inline-block + text-align center en padre = centrado */
       display: inline-block;
-      position: relative;
       box-shadow: 
         0 10px 30px rgba(0, 0, 0, 0.2),
         inset 0 0 0 8px #fefefe,
@@ -333,20 +334,25 @@
       color: rgba(255, 255, 255, 0.7);
     }
 
+    /* Caption centrado debajo */
+    .caption-wrapper {
+      width: 100%;
+      padding: 15px 20px 20px;
+      text-align: center;
+    }
+
     .photo-caption {
-      /* Caption debajo, centrado */
-      display: block;
-      margin-top: 15px;
+      display: inline-block;
       font-size: 15px;
       font-weight: 700;
       color: rgba(42, 31, 37, 0.8);
       text-align: center;
-      padding: 8px 12px;
+      padding: 8px 16px;
       background: rgba(255, 255, 255, 0.9);
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(179, 21, 90, 0.1);
-      /* Centrar el caption */
-      display: inline-block;
+      max-width: 90%;
+      word-wrap: break-word;
     }
 
     /* Thumbnails strip */
@@ -357,10 +363,10 @@
       overflow-x: auto;
       overflow-y: hidden;
       display: flex;
-      justify-content: center;
       gap: 8px;
       scrollbar-width: thin;
       scrollbar-color: var(--title1) rgba(255, 214, 232, 0.3);
+      -webkit-overflow-scrolling: touch;
     }
 
     .thumbnails::-webkit-scrollbar {
@@ -490,11 +496,19 @@
     }
 
     /* ============================================
-       MOBILE - ESTILOS SIMPLIFICADOS
+       MOBILE
        ============================================ */
     @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
       .container {
-        width: 98%;
+        width: 100%;
+      }
+
+      .titlebar__text {
+        font-size: 11px;
       }
 
       .toolbar {
@@ -503,8 +517,12 @@
 
       .nav-btn {
         height: 28px;
-        padding: 0 12px;
-        font-size: 12px;
+        padding: 0 10px;
+        font-size: 11px;
+      }
+
+      .photo-counter {
+        font-size: 11px;
       }
 
       .photo-display {
@@ -512,35 +530,38 @@
       }
 
       .photo-wrapper {
-        padding: 15px;
-        padding-bottom: 20px;
+        padding: 15px 10px;
       }
 
       .photo-container {
-        max-width: 80%;
+        max-width: 85%;
         padding: 6px;
       }
 
       .main-photo.placeholder {
-        width: 240px;
-        height: 180px;
-        font-size: 50px;
+        width: 220px;
+        height: 165px;
+        font-size: 45px;
+      }
+
+      .caption-wrapper {
+        padding: 10px 15px 15px;
       }
 
       .photo-caption {
-        margin-top: 12px;
         font-size: 13px;
-        padding: 6px 10px;
+        padding: 6px 12px;
+        max-width: 95%;
       }
 
       .thumb {
-        width: 60px;
-        height: 60px;
+        width: 55px;
+        height: 55px;
       }
 
       .thumbnails {
-        justify-content: flex-start;
-        padding: 10px;
+        padding: 8px;
+        gap: 6px;
       }
 
       .win-controls {
@@ -553,32 +574,41 @@
         padding: 6px 12px;
         font-size: 12px;
       }
+
+      .statusbar {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
     }
 
     @media (max-width: 400px) {
       .photo-wrapper {
-        padding: 10px;
-        padding-bottom: 15px;
+        padding: 10px 8px;
       }
 
       .photo-container {
-        max-width: 85%;
+        max-width: 90%;
         padding: 5px;
       }
 
       .main-photo.placeholder {
-        width: 200px;
-        height: 150px;
-        font-size: 40px;
+        width: 180px;
+        height: 135px;
+        font-size: 35px;
       }
 
       .thumb {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
       }
 
       .photo-caption {
         font-size: 12px;
+      }
+
+      .nav-btn {
+        padding: 0 8px;
+        font-size: 10px;
       }
     }
 
@@ -618,7 +648,7 @@
       <div class="toolbar">
         <div class="nav-buttons">
           <button class="nav-btn" id="prevBtn" type="button">
-            ◄ Previous
+            ◄ Prev
           </button>
           <button class="nav-btn" id="nextBtn" type="button">
             Next ►
@@ -626,23 +656,22 @@
         </div>
         
         <div class="photo-counter" id="photoCounter">
-          Photo 1 of 8
+          1 / 8
         </div>
       </div>
 
-      <!-- ESTRUCTURA CAMBIADA -->
       <div class="photo-display">
         <div class="photo-wrapper">
           <div class="photo-container">
             <div class="main-photo placeholder" id="mainPhoto">📷</div>
           </div>
+        </div>
+        <div class="caption-wrapper">
           <div class="photo-caption" id="photoCaption">Our first date 💗</div>
         </div>
       </div>
 
-      <div class="thumbnails" id="thumbnails">
-        <!-- Thumbnails will be generated here -->
-      </div>
+      <div class="thumbnails" id="thumbnails"></div>
 
       <div class="statusbar">
         <div class="statusbar-item">
@@ -702,7 +731,6 @@
       { src: "", caption: "Together forever ✨" },
       { src: "", caption: "My favorite person" },
       { src: "", caption: "Love you always 💗" },
-      // Add more photos here...
     ];
 
     let currentIndex = 0;
@@ -735,9 +763,7 @@
       currentIndex = index;
       const photo = photos[index];
 
-      // Update main photo
       if (photo.src) {
-        // Si hay imagen real, crear un elemento img
         mainPhoto.innerHTML = '';
         const img = document.createElement('img');
         img.src = photo.src;
@@ -753,21 +779,14 @@
         mainPhoto.style.height = '';
       }
 
-      // Update caption
       photoCaption.textContent = photo.caption;
-
-      // Update counter
-      photoCounter.textContent = `Photo ${index + 1} of ${photos.length}`;
-
-      // Update status
+      photoCounter.textContent = `${index + 1} / ${photos.length}`;
       statusText.textContent = `Viewing: ${photo.caption}`;
 
-      // Update thumbnails
       document.querySelectorAll(".thumb").forEach((thumb, i) => {
         thumb.classList.toggle("active", i === index);
       });
 
-      // Update buttons
       prevBtn.disabled = index === 0;
       nextBtn.disabled = index === photos.length - 1;
     }
@@ -784,17 +803,14 @@
       }
     }
 
-    // Event listeners
     prevBtn.addEventListener("click", prevPhoto);
     nextBtn.addEventListener("click", nextPhoto);
 
-    // Keyboard navigation
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowRight") nextPhoto();
       if (e.key === "ArrowLeft") prevPhoto();
     });
 
-    // Initialize
     showPhoto(0);
   </script>
 
