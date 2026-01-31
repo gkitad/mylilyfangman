@@ -101,6 +101,7 @@
       background: var(--win);
       border-radius: 0;
       position: relative;
+      width: 100%;
       box-shadow: 
         0 20px 60px rgba(0, 0, 0, 0.25),
         0 8px 18px rgba(179, 21, 90, 0.15);
@@ -443,12 +444,29 @@
       font-size: 12px;
       color: rgba(42, 31, 37, 0.7);
       gap: 10px;
+      overflow: hidden;
     }
 
     .statusbar-item {
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 0;
+    }
+
+    .statusbar-item:first-child {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .statusbar-item:first-child span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .statusbar-item:last-child {
+      flex-shrink: 0;
     }
 
     .status-icon {
@@ -457,6 +475,7 @@
       border: 1px solid rgba(0, 0, 0, 0.2);
       background: linear-gradient(135deg, #ffc8e0, #ffacd0);
       border-radius: 2px;
+      flex-shrink: 0;
     }
 
     /* Back button */
@@ -598,6 +617,10 @@
       .statusbar {
         font-size: 10px;
         padding: 3px 8px;
+      }
+
+      .statusbar-item:last-child {
+        display: none;
       }
 
       .status-icon {
