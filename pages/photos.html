@@ -282,10 +282,12 @@
     /* Photo display area */
     .photo-display {
       background: linear-gradient(180deg, #fff5f9, #fff0f7);
-      padding: 20px 20px 70px;
+      padding: 20px;
+      padding-bottom: 70px;
       min-height: 500px;
-      display: grid;
-      place-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: relative;
     }
 
@@ -299,6 +301,7 @@
         inset 0 0 0 9px rgba(0, 0, 0, 0.1);
       background: #fefefe;
       padding: 8px;
+      margin: 0 auto;
     }
 
     .main-photo {
@@ -348,6 +351,7 @@
       overflow-x: auto;
       overflow-y: hidden;
       display: flex;
+      justify-content: center;
       gap: 8px;
       scrollbar-width: thin;
       scrollbar-color: var(--title1) rgba(255, 214, 232, 0.3);
@@ -495,40 +499,56 @@
       }
 
       .photo-display {
-        padding: 20px 15px 70px;
+        padding: 15px;
+        padding-bottom: 70px;
         min-height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .photo-container {
-        width: 90%;
-        max-width: 90%;
+        width: auto;
+        max-width: calc(100% - 20px);
         max-height: none;
         margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       .main-photo {
-        width: 100%;
+        width: auto;
+        max-width: 100%;
         height: auto;
-        max-height: none;
-        aspect-ratio: 4/3;
+        max-height: 350px;
+        display: block;
       }
 
       .main-photo.placeholder {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 4/3;
-        max-height: none;
+        width: 280px;
+        height: 200px;
+        max-width: 100%;
         font-size: 60px;
       }
 
       .photo-caption {
         font-size: 13px;
-        bottom: -50px;
+        bottom: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: 90%;
       }
 
       .thumb {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
+      }
+
+      .thumbnails {
+        justify-content: flex-start;
+        padding: 10px;
       }
 
       .win-controls {
@@ -540,6 +560,35 @@
         right: 15px;
         padding: 6px 12px;
         font-size: 12px;
+      }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 400px) {
+      .photo-display {
+        padding: 10px;
+        padding-bottom: 60px;
+      }
+
+      .photo-container {
+        padding: 5px;
+      }
+
+      .main-photo.placeholder {
+        width: 240px;
+        height: 180px;
+        font-size: 50px;
+      }
+
+      .thumb {
+        width: 50px;
+        height: 50px;
+      }
+
+      .photo-caption {
+        font-size: 12px;
+        padding: 6px 10px;
+        bottom: -40px;
       }
     }
 
