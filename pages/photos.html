@@ -284,7 +284,7 @@
       background: linear-gradient(180deg, #fff5f9, #fff0f7);
       padding: 20px;
       padding-bottom: 70px;
-      min-height: 500px;
+      min-height: 400px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -292,8 +292,6 @@
     }
 
     .photo-container {
-      max-width: 100%;
-      max-height: 500px;
       position: relative;
       box-shadow: 
         0 10px 30px rgba(0, 0, 0, 0.2),
@@ -302,26 +300,29 @@
       background: #fefefe;
       padding: 8px;
       margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .main-photo {
       max-width: 100%;
-      max-height: 480px;
+      max-height: 400px;
       display: block;
-      background: linear-gradient(135deg, #ffd6e8, #ffc8e0, #ffacd0);
       object-fit: contain;
       width: auto;
       height: auto;
     }
 
     .main-photo.placeholder {
-      width: 700px;
-      height: 480px;
+      width: 600px;
+      height: 400px;
       max-width: 100%;
       display: grid;
       place-items: center;
-      font-size: 120px;
+      font-size: 100px;
       color: rgba(255, 255, 255, 0.7);
+      background: linear-gradient(135deg, #ffd6e8, #ffc8e0, #ffacd0);
     }
 
     .photo-caption {
@@ -351,7 +352,7 @@
       overflow-x: auto;
       overflow-y: hidden;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 8px;
       scrollbar-width: thin;
       scrollbar-color: var(--title1) rgba(255, 214, 232, 0.3);
@@ -384,6 +385,7 @@
       border-bottom: 2px solid var(--sh);
       
       transition: all 0.15s ease;
+      overflow: hidden;
     }
 
     .thumb:hover {
@@ -404,7 +406,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      background: linear-gradient(135deg, #ffd6e8, #ffc8e0);
     }
 
     .thumb-img.placeholder {
@@ -412,6 +413,7 @@
       place-items: center;
       font-size: 32px;
       color: rgba(255, 255, 255, 0.7);
+      background: linear-gradient(135deg, #ffd6e8, #ffc8e0);
     }
 
     /* Status bar */
@@ -484,8 +486,26 @@
 
     /* Mobile adjustments */
     @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
       .container {
-        width: 98%;
+        width: 100%;
+      }
+
+      .titlebar {
+        padding: 6px 8px;
+      }
+
+      .titlebar__text {
+        font-size: 11px;
+      }
+
+      .playbtn {
+        font-size: 10px;
+        padding: 0 8px;
+        height: 18px;
       }
 
       .toolbar {
@@ -495,50 +515,38 @@
       .nav-btn {
         height: 28px;
         padding: 0 12px;
-        font-size: 12px;
+        font-size: 11px;
+      }
+
+      .photo-counter {
+        font-size: 11px;
       }
 
       .photo-display {
-        padding: 15px;
-        padding-bottom: 70px;
-        min-height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 10px;
+        padding-bottom: 60px;
+        min-height: 300px;
       }
 
       .photo-container {
-        width: auto;
-        max-width: calc(100% - 20px);
-        max-height: none;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        width: 100%;
+        padding: 6px;
       }
 
       .main-photo {
-        width: auto;
-        max-width: 100%;
-        height: auto;
-        max-height: 350px;
-        display: block;
+        max-height: 300px;
       }
 
       .main-photo.placeholder {
-        width: 280px;
-        height: 200px;
-        max-width: 100%;
+        width: 100%;
+        height: 250px;
         font-size: 60px;
       }
 
       .photo-caption {
-        font-size: 13px;
+        font-size: 12px;
         bottom: -45px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: max-content;
-        max-width: 90%;
+        padding: 6px 10px;
       }
 
       .thumb {
@@ -546,37 +554,54 @@
         height: 60px;
       }
 
+      .thumb-img.placeholder {
+        font-size: 24px;
+      }
+
       .thumbnails {
-        justify-content: flex-start;
-        padding: 10px;
+        padding: 8px;
       }
 
       .win-controls {
         display: none;
       }
 
+      .statusbar {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+
+      .status-icon {
+        width: 12px;
+        height: 12px;
+      }
+
       .back-btn {
         bottom: 15px;
         right: 15px;
         padding: 6px 12px;
-        font-size: 12px;
+        font-size: 11px;
       }
     }
 
     /* Extra small screens */
     @media (max-width: 400px) {
       .photo-display {
-        padding: 10px;
-        padding-bottom: 60px;
+        padding: 8px;
+        padding-bottom: 55px;
+        min-height: 250px;
       }
 
       .photo-container {
-        padding: 5px;
+        padding: 4px;
+      }
+
+      .main-photo {
+        max-height: 250px;
       }
 
       .main-photo.placeholder {
-        width: 240px;
-        height: 180px;
+        height: 200px;
         font-size: 50px;
       }
 
@@ -585,10 +610,19 @@
         height: 50px;
       }
 
+      .thumb-img.placeholder {
+        font-size: 20px;
+      }
+
       .photo-caption {
-        font-size: 12px;
-        padding: 6px 10px;
+        font-size: 11px;
+        padding: 5px 8px;
         bottom: -40px;
+      }
+
+      .thumbnails {
+        padding: 6px;
+        gap: 6px;
       }
     }
 
@@ -604,7 +638,7 @@
   </style>
 </head>
 
-<body data-track="../assets/cancionmenu.mp3">
+<body>
   <div id="heartLayer"></div>
 
   <a class="back-btn" href="./menu.html">← Menu</a>
@@ -615,7 +649,7 @@
         <div class="titlebar__text">📸 PHOTO VIEWER - Our Memories</div>
 
         <div class="titlebar__actions">
-          <button class="playbtn" id="songBtn" type="button">🎶 Song ▶</button>
+          <button class="playbtn" id="songBtn" type="button">🎶 Song</button>
 
           <div class="win-controls" aria-hidden="true">
             <div class="winbtn">_</div>
@@ -628,7 +662,7 @@
       <div class="toolbar">
         <div class="nav-buttons">
           <button class="nav-btn" id="prevBtn" type="button">
-            ◄ Previous
+            ◄ Prev
           </button>
           <button class="nav-btn" id="nextBtn" type="button">
             Next ►
@@ -642,7 +676,7 @@
 
       <div class="photo-display">
         <div class="photo-container">
-          <img class="main-photo placeholder" id="mainPhoto" src="" alt="">
+          <img class="main-photo placeholder" id="mainPhoto" src="" alt="Photo">
           <div class="photo-caption" id="photoCaption">Our first date 💗</div>
         </div>
       </div>
@@ -700,16 +734,16 @@
     const statusText = document.getElementById("statusText");
 
     // ✅ EDIT YOUR PHOTOS HERE
+    // Replace empty strings with your photo URLs
     const photos = [
-      { src: "", caption: "Our first date 💗" },
-      { src: "", caption: "Summer vibes ☀️" },
-      { src: "", caption: "Best day ever!" },
-      { src: "", caption: "You & me 💕" },
-      { src: "", caption: "Making memories" },
-      { src: "", caption: "Together forever ✨" },
-      { src: "", caption: "My favorite person" },
-      { src: "", caption: "Love you always 💗" },
-      // Add more photos here...
+      { src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800", caption: "Our first date 💗" },
+      { src: "https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=800", caption: "Summer vibes ☀️" },
+      { src: "https://images.unsplash.com/photo-1518549945468-9ab72f3fc4df?w=800", caption: "Best day ever!" },
+      { src: "https://images.unsplash.com/photo-1522673607204-00c3b0f187f8?w=800", caption: "You & me 💕" },
+      { src: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800", caption: "Making memories" },
+      { src: "https://images.unsplash.com/photo-1512101394278-5df711a5c6e0?w=800", caption: "Together forever ✨" },
+      { src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800", caption: "My favorite person" },
+      { src: "https://images.unsplash.com/photo-1521770255994-f0ba0d9ff1a7?w=800", caption: "Love you always 💗" },
     ];
 
     let currentIndex = 0;
@@ -720,13 +754,12 @@
       thumb.className = "thumb";
       if (index === 0) thumb.classList.add("active");
 
-      const thumbImg = document.createElement("div");
+      const thumbImg = document.createElement("img");
       thumbImg.className = "thumb-img";
       
       if (photo.src) {
-        thumbImg.style.backgroundImage = `url(${photo.src})`;
-        thumbImg.style.backgroundSize = "cover";
-        thumbImg.style.backgroundPosition = "center";
+        thumbImg.src = photo.src;
+        thumbImg.alt = photo.caption;
       } else {
         thumbImg.classList.add("placeholder");
         thumbImg.textContent = "📷";
@@ -745,6 +778,7 @@
       // Update main photo
       if (photo.src) {
         mainPhoto.src = photo.src;
+        mainPhoto.alt = photo.caption;
         mainPhoto.classList.remove("placeholder");
       } else {
         mainPhoto.src = "";
@@ -769,6 +803,12 @@
       // Update buttons
       prevBtn.disabled = index === 0;
       nextBtn.disabled = index === photos.length - 1;
+
+      // Scroll thumbnail into view
+      const activeThumb = document.querySelectorAll(".thumb")[index];
+      if (activeThumb) {
+        activeThumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      }
     }
 
     function nextPhoto() {
@@ -793,11 +833,35 @@
       if (e.key === "ArrowLeft") prevPhoto();
     });
 
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    mainPhoto.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    mainPhoto.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) nextPhoto();
+      if (touchEndX > touchStartX + 50) prevPhoto();
+    }
+
     // Initialize
     showPhoto(0);
-  </script>
 
-  <!-- Global music player -->
-  <script src="../assets/valentine-player.js?v=5"></script>
+    // Simple music toggle (optional)
+    const songBtn = document.getElementById("songBtn");
+    let isPlaying = false;
+    
+    songBtn.addEventListener("click", () => {
+      isPlaying = !isPlaying;
+      songBtn.textContent = isPlaying ? "🎶 Song ⏸" : "🎶 Song ▶";
+    });
+  </script>
 </body>
 </html>
