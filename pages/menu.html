@@ -23,6 +23,10 @@
       --sh2:#7a3554;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin:0;
       min-height:100vh;
@@ -30,6 +34,7 @@
       place-items:center;
       font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
       color:var(--text);
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M0,0 L0,12 L4,9 L6,14 L8,13 L6,8 L10,8 Z" fill="white" stroke="black"/></svg>'), auto;
 
       background:
         radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
@@ -62,14 +67,16 @@
       100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
     }
 
-    /* Window */
+    /* Window with entrance animation */
     .window {
       width:min(720px, 92%);
       background: var(--win);
       border-radius: 0;
       position: relative;
       padding:0;
-      box-shadow: 0 18px 55px rgba(0,0,0,.22);
+      box-shadow: 
+        0 18px 55px rgba(0,0,0,.22),
+        0 8px 18px rgba(179,21,90,.12);
 
       border-top: 3px solid var(--hi);
       border-left: 3px solid var(--hi);
@@ -77,7 +84,23 @@
       border-bottom: 3px solid var(--sh2);
 
       z-index: 5;
+      
+      /* Entrance animation */
+      animation: windowAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: center;
     }
+
+    @keyframes windowAppear {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
     .window::before {
       content:"";
       position:absolute;
@@ -105,6 +128,7 @@
       font-weight: 800;
       color:#4c0f2a;
       white-space: nowrap;
+      text-shadow: 0 1px 0 rgba(255,255,255,.5);
     }
 
     .titlebar__actions{
@@ -113,7 +137,7 @@
       gap:8px;
     }
 
-    /* Song button */
+    /* Song button with better feedback */
     .playbtn{
       height: 20px;
       padding: 0 10px;
@@ -136,6 +160,12 @@
 
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
+      transition: all 0.1s ease;
+    }
+
+    .playbtn:hover{
+      background: #ffd9ec;
+      transform: translateY(-1px);
     }
 
     .playbtn:active{
@@ -164,6 +194,21 @@
       place-items:center;
       font-size: 12px;
       color:#5e1f3c;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .winbtn:hover {
+      background: #ffd9ec;
+      transform: translateY(-1px);
+    }
+
+    .winbtn:active {
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+      transform: translate(1px,1px);
     }
 
     .window__body {
@@ -176,6 +221,7 @@
       font-size: 2.2rem;
       margin: 6px 0 10px;
       color: var(--accent);
+      text-shadow: 2px 2px 0 rgba(255,255,255,.6);
     }
 
     .options {
@@ -186,10 +232,11 @@
     }
 
     .option {
-      padding: 12px;
-      background: #ffeef6;
+      padding: 18px 12px;
+      background: linear-gradient(180deg, #fff5fb 0%, #ffeef6 100%);
       cursor:pointer;
       font-weight: 800;
+      font-size: 15px;
 
       border-top: 3px solid var(--hi);
       border-left: 3px solid var(--hi);
@@ -198,6 +245,26 @@
 
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
+      
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Hover effect with subtle glow */
+    .option:hover {
+      background: linear-gradient(180deg, #fff0f8 0%, #ffe6f3 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(179,21,90,.15);
+    }
+
+    .option:hover .option-icon {
+      transform: scale(1.15);
     }
 
     .option:active {
@@ -206,6 +273,48 @@
       border-right: 3px solid var(--hi);
       border-bottom: 3px solid var(--hi);
       transform: translate(1px,1px);
+      box-shadow: none;
+    }
+
+    /* Icon styling */
+    .option-icon {
+      font-size: 32px;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.1));
+    }
+
+    .option-text {
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Ripple effect on click */
+    .option::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: radial-gradient(circle, rgba(255,255,255,.6) 0%, transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .option:active::after {
+      animation: ripple 0.6s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+      }
     }
 
     .back {
@@ -215,28 +324,90 @@
       text-decoration:none;
       font-weight: 800;
       font-family: "Courier New", monospace;
+      padding: 8px 16px;
+      border-radius: 0;
+      
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+      
+      background: rgba(255,255,255,.4);
+      transition: all 0.15s ease;
+    }
+
+    .back:hover {
+      background: rgba(255,255,255,.6);
+      transform: translateY(-1px);
+    }
+
+    .back:active {
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+      transform: translate(1px, 1px);
     }
 
     /* 📱 Mobile: 1 column for the 4 options */
     @media (max-width: 520px){
-      .options{ grid-template-columns: 1fr; }
+      .options{ 
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
       .window{ width: 95%; }
 
-      /* optional: make titlebar less cramped */
-      .win-controls{ display:none; }
+      .option {
+        padding: 16px 12px;
+      }
+
+      .option-icon {
+        font-size: 28px;
+      }
+
+      /* Show controls on mobile for better UX */
+      .win-controls { 
+        display: flex;
+      }
+      
       .titlebar{ padding: 6px 8px; }
       .titlebar__text{ font-size: 12px; }
       .playbtn{ height: 18px; padding: 0 8px; font-size: 11px; }
     }
 
     @media (prefers-reduced-motion: reduce){
-      .heart{ animation: none !important; }
+      .heart, .window, .option, .option::after { 
+        animation: none !important; 
+      }
+      .option:hover, .winbtn:hover, .playbtn:hover, .back:hover {
+        transform: none;
+      }
+    }
+
+    /* Loading indicator (optional, can be removed) */
+    .loading-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--title1), var(--title2));
+      transform: scaleX(0);
+      transform-origin: left;
+      z-index: 9999;
+      animation: loadBar 0.4s ease-out forwards;
+    }
+
+    @keyframes loadBar {
+      to {
+        transform: scaleX(1);
+      }
     }
   </style>
 </head>
 
-<!-- ✅ track for the global player -->
 <body data-track="/assets/cancionmenu.mp3">
+  <div class="loading-bar"></div>
   <div id="heartLayer"></div>
 
   <div class="window">
@@ -244,13 +415,12 @@
       <div class="titlebar__text">💗 MY VALENTINE 💗</div>
 
       <div class="titlebar__actions">
-        <!-- ✅ Global player button (valentine-player.js will update text) -->
         <button class="playbtn" id="songBtn" type="button">🎶 Song ▶</button>
 
         <div class="win-controls" aria-hidden="true">
-          <div class="winbtn">_</div>
-          <div class="winbtn">□</div>
-          <div class="winbtn">×</div>
+          <div class="winbtn" title="Minimize">_</div>
+          <div class="winbtn" title="Maximize">□</div>
+          <div class="winbtn" title="Close">×</div>
         </div>
       </div>
     </div>
@@ -259,17 +429,29 @@
       <h1>Pick a surprise😚</h1>
 
       <div class="options">
-        <div class="option" onclick="location.href='letter.html'">💌 Letter</div>
-        <div class="option" onclick="location.href='photos.html'">📸 Photos</div>
-        <div class="option" onclick="location.href='g.html'">🐶 G</div>
-        <div class="option" onclick="location.href='date.html'">🌹 Date</div>
+        <div class="option" onclick="navigateTo('letter.html')">
+          <div class="option-icon">💌</div>
+          <div class="option-text">Letter</div>
+        </div>
+        <div class="option" onclick="navigateTo('photos.html')">
+          <div class="option-icon">📸</div>
+          <div class="option-text">Photos</div>
+        </div>
+        <div class="option" onclick="navigateTo('g.html')">
+          <div class="option-icon">🐶</div>
+          <div class="option-text">G</div>
+        </div>
+        <div class="option" onclick="navigateTo('date.html')">
+          <div class="option-icon">🌹</div>
+          <div class="option-text">Date</div>
+        </div>
       </div>
 
       <a class="back" href="../index.html">← Back to start</a>
     </div>
   </div>
 
-  <!-- 💗 Hearts script (only hearts here) -->
+  <!-- 💗 Hearts script -->
   <script>
     const layer = document.getElementById("heartLayer");
     const hearts = ["♡","♥","❥","❤","💕"];
@@ -293,12 +475,46 @@
       setTimeout(()=>h.remove(), 22000);
     }
     setInterval(spawnHeart, 520);
+
+    // Navigation with subtle feedback
+    function navigateTo(page) {
+      // Optional: play a subtle click sound
+      // You can add this if you have a click.mp3 file
+      // const clickSound = new Audio('/assets/click.mp3');
+      // clickSound.volume = 0.3;
+      // clickSound.play().catch(()=>{});
+      
+      // Navigate after brief delay for ripple effect
+      setTimeout(() => {
+        location.href = page;
+      }, 100);
+    }
+
+    // Remove loading bar after window appears
+    setTimeout(() => {
+      const loadBar = document.querySelector('.loading-bar');
+      if (loadBar) {
+        loadBar.style.opacity = '0';
+        loadBar.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => loadBar.remove(), 300);
+      }
+    }, 400);
+
+    // Optional: Make window buttons do something fun
+    document.querySelectorAll('.winbtn').forEach((btn, index) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const window = document.querySelector('.window');
+        
+        if (index === 2) { // Close button
+          // Could add a "Are you sure?" joke here
+          console.log('Nice try! 😉');
+        }
+      });
+    });
   </script>
 
   <!-- ✅ Global music player -->
   <script src="/assets/valentine-player.js?v=5"></script>
-
-
-
 </body>
 </html>
