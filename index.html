@@ -221,17 +221,31 @@
       touch-action: manipulation;
     }
 
+    /* ✅ OPCIÓN 2: Gentle Rise with Fade - sube con fade-in y rotación sutil */
     .open .paper{
       opacity: 1;
-      animation: letterFly 1050ms cubic-bezier(.2,.9,.2,1) forwards;
+      animation: letterFly 2200ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
 
     @keyframes letterFly{
-      0%   { transform: translateY(52px) scale(.98); opacity: 0; }
-      15%  { opacity: 1; }
-      55%  { transform: translateY(-120px) scale(1.02); }
-      78%  { transform: translateY(-92px) scale(1.02); }
-      100% { transform: translateY(-104px) scale(1.02); opacity: 1; }
+      0%   { 
+        transform: translateY(52px) scale(.98) rotate(-1deg); 
+        opacity: 0;
+        filter: blur(2px);
+      }
+      30%  { 
+        opacity: 0.3;
+        filter: blur(1px);
+      }
+      60%  { 
+        opacity: 0.7;
+        filter: blur(0px);
+      }
+      100% { 
+        transform: translateY(-110px) scale(1.02) rotate(0deg); 
+        opacity: 1;
+        filter: blur(0px);
+      }
     }
 
     .open .flap{ transform: rotateX(170deg); }
@@ -270,8 +284,27 @@
       overflow: hidden;
       cursor: default;
 
-      animation: none !important;
+      /* ✅ OPCIÓN B: Floating Down - flotación suave sin rebote */
+      animation: floatDown 1800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
     }
+
+    @keyframes floatDown{
+      0% {
+        transform: translate(-50%, -120%);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.3;
+      }
+      40% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+      }
+    }
+
     @media (max-width:520px){
       .paper.centered{
         max-height: 78svh;
@@ -280,7 +313,7 @@
       }
     }
 
-    /* ✅ Levitate subtle (only when centered) */
+    /* ✅ Levitate subtle (only when centered and AFTER float animation) */
     .paper.centered.levitate{
       animation: levitate 3.6s ease-in-out infinite !important;
     }
@@ -521,14 +554,12 @@
   </script>
 
   <!-- Music -->
-  <script src="/assets/player.js"></script>
+  <script src="/assets/valentine-player.js?v=5"></script>
   <script>
-    // Intro track for index
-    LilyPlayer.setTrack("/assets/intro.mp3");
-
     const musicBtn = document.getElementById("musicBtn");
-    musicBtn.addEventListener("click", async () => {
-      await LilyPlayer.toggle();
+    musicBtn.addEventListener("click", () => {
+      const btn = document.getElementById("songBtn");
+      if (btn) btn.click();
     });
 
     const env = document.getElementById("envelope");
@@ -607,7 +638,11 @@
         // Show backdrop + center
         backdrop.classList.add("show");
         paper.classList.add("centered");
-        paper.classList.add("levitate");
+        
+        // ✅ Add levitate AFTER float animation finishes (1800ms)
+        setTimeout(() => {
+          paper.classList.add("levitate");
+        }, 1800);
 
         paperCentered = true;
 
@@ -626,7 +661,8 @@
         }, 900);
 
         env.classList.remove("is-opening");
-      }, 1100);
+      }, 2300); // ✅ Ajustado a 2300ms (2200ms de animación + 100ms buffer)
+
     }
 
     function goToValentine(e){
