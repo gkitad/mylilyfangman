@@ -29,22 +29,24 @@
       padding: 0;
     }
 
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
     body {
-      margin: 0;
       min-height: 100vh;
       display: grid;
       place-items: center;
       font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
       color: var(--text);
-      padding: 20px;
+      padding: 15px;
 
       background:
         radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
         radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.55), transparent 60%),
         radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
-
-      overflow-x: hidden;
     }
 
     /* 💗 Floating hearts */
@@ -75,8 +77,8 @@
     .container {
       position: relative;
       z-index: 2;
-      width: min(950px, 95%);
-      max-width: 100%;
+      width: 100%;
+      max-width: 950px;
       animation: windowAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
@@ -105,8 +107,8 @@
       border-right: 3px solid var(--sh2);
       border-bottom: 3px solid var(--sh2);
       
-      /* Prevenir desbordamiento */
       overflow: hidden;
+      width: 100%;
     }
 
     .window::before {
@@ -125,32 +127,93 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 10px;
+      padding: 6px 8px;
       background: linear-gradient(90deg, var(--title1), var(--title2));
       border-bottom: 2px solid rgba(0, 0, 0, .12);
       user-select: none;
-      gap: 10px;
+      gap: 8px;
+      width: 100%;
     }
 
     .titlebar__text {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       color: #4c0f2a;
-      white-space: nowrap;
       text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 0;
+      flex: 1;
     }
 
     .titlebar__actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-shrink: 0;
     }
 
     .playbtn {
-      height: 20px;
+      height: 18px;
+      padding: 0 8px;
+      background: #ffe3f0;
+      border-radius: 0;
+
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+
+      font-size: 10px;
+      font-weight: 900;
+      color: #5e1f3c;
+      cursor: pointer;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      transition: all 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .playbtn:hover {
+      background: #ffd9ec;
+    }
+
+    .playbtn:active {
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+    }
+
+    .win-controls {
+      display: none;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      background: linear-gradient(180deg, #ffeef6, #ffe8f3);
+      border-bottom: 2px solid rgba(0, 0, 0, .08);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .nav-btn {
+      height: 28px;
       padding: 0 10px;
       background: #ffe3f0;
       border-radius: 0;
@@ -160,104 +223,13 @@
       border-right: 2px solid var(--sh);
       border-bottom: 2px solid var(--sh);
 
-      font-size: 12px;
-      font-weight: 900;
-      color: #5e1f3c;
-      cursor: pointer;
-
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-      transition: all 0.1s ease;
-    }
-
-    .playbtn:hover {
-      background: #ffd9ec;
-      transform: translateY(-1px);
-    }
-
-    .playbtn:active {
-      border-top: 2px solid var(--sh);
-      border-left: 2px solid var(--sh);
-      border-right: 2px solid var(--hi);
-      border-bottom: 2px solid var(--hi);
-      transform: translate(1px, 1px);
-    }
-
-    .win-controls {
-      display: flex;
-      gap: 6px;
-    }
-
-    .winbtn {
-      width: 22px;
-      height: 18px;
-      background: #ffe3f0;
-      border-radius: 0;
-      border-top: 2px solid var(--hi);
-      border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-      display: grid;
-      place-items: center;
-      font-size: 12px;
-      color: #5e1f3c;
-      cursor: pointer;
-      transition: all 0.1s ease;
-    }
-
-    .winbtn:hover {
-      background: #ffd9ec;
-      transform: translateY(-1px);
-    }
-
-    .winbtn:active {
-      border-top: 2px solid var(--sh);
-      border-left: 2px solid var(--sh);
-      border-right: 2px solid var(--hi);
-      border-bottom: 2px solid var(--hi);
-      transform: translate(1px, 1px);
-    }
-
-    /* Toolbar */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px;
-      background: linear-gradient(180deg, #ffeef6, #ffe8f3);
-      border-bottom: 2px solid rgba(0, 0, 0, .08);
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 8px;
-    }
-
-    .nav-btn {
-      height: 32px;
-      padding: 0 16px;
-      background: #ffe3f0;
-      border-radius: 0;
-
-      border-top: 2px solid var(--hi);
-      border-left: 2px solid var(--hi);
-      border-right: 2px solid var(--sh);
-      border-bottom: 2px solid var(--sh);
-
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
       color: #5e1f3c;
       cursor: pointer;
 
       display: inline-flex;
       align-items: center;
-      gap: 6px;
 
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
@@ -273,7 +245,6 @@
       border-left: 2px solid var(--sh);
       border-right: 2px solid var(--hi);
       border-bottom: 2px solid var(--hi);
-      transform: translate(1px, 1px);
     }
 
     .nav-btn:disabled {
@@ -282,10 +253,11 @@
     }
 
     .photo-counter {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
       color: #5e1f3c;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* ============================================
@@ -293,14 +265,13 @@
        ============================================ */
     .photo-display {
       background: linear-gradient(180deg, #fff5f9, #fff0f7);
-      min-height: 400px;
       width: 100%;
       overflow: hidden;
     }
 
     .photo-wrapper {
       width: 100%;
-      padding: 20px;
+      padding: 15px;
       text-align: center;
     }
 
@@ -308,46 +279,46 @@
       display: inline-block;
       box-shadow: 
         0 10px 30px rgba(0, 0, 0, 0.2),
-        inset 0 0 0 8px #fefefe,
-        inset 0 0 0 9px rgba(0, 0, 0, 0.1);
+        inset 0 0 0 6px #fefefe,
+        inset 0 0 0 7px rgba(0, 0, 0, 0.1);
       background: #fefefe;
-      padding: 8px;
-      max-width: 90%;
+      padding: 6px;
+      max-width: 85%;
     }
 
     .main-photo {
       display: block;
       max-width: 100%;
-      max-height: 480px;
+      max-height: 400px;
       background: linear-gradient(135deg, #ffd6e8, #ffc8e0, #ffacd0);
       object-fit: contain;
     }
 
     .main-photo.placeholder {
-      width: 700px;
-      height: 480px;
+      width: 600px;
+      height: 400px;
       max-width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 120px;
+      font-size: 80px;
       color: rgba(255, 255, 255, 0.7);
     }
 
-    /* Caption centrado debajo */
+    /* Caption */
     .caption-wrapper {
       width: 100%;
-      padding: 15px 20px 20px;
+      padding: 12px 15px 15px;
       text-align: center;
     }
 
     .photo-caption {
       display: inline-block;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: rgba(42, 31, 37, 0.8);
       text-align: center;
-      padding: 8px 16px;
+      padding: 6px 14px;
       background: rgba(255, 255, 255, 0.9);
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(179, 21, 90, 0.1);
@@ -355,22 +326,23 @@
       word-wrap: break-word;
     }
 
-    /* Thumbnails strip */
+    /* Thumbnails */
     .thumbnails {
       background: linear-gradient(180deg, #ffe8f3, #ffeef6);
       border-top: 2px solid rgba(0, 0, 0, .08);
-      padding: 12px;
+      padding: 10px;
       overflow-x: auto;
       overflow-y: hidden;
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      width: 100%;
       scrollbar-width: thin;
       scrollbar-color: var(--title1) rgba(255, 214, 232, 0.3);
       -webkit-overflow-scrolling: touch;
     }
 
     .thumbnails::-webkit-scrollbar {
-      height: 8px;
+      height: 6px;
     }
 
     .thumbnails::-webkit-scrollbar-track {
@@ -384,8 +356,8 @@
 
     .thumb {
       flex-shrink: 0;
-      width: 80px;
-      height: 80px;
+      width: 50px;
+      height: 50px;
       cursor: pointer;
       position: relative;
       background: #fefefe;
@@ -395,11 +367,10 @@
       border-right: 2px solid var(--sh);
       border-bottom: 2px solid var(--sh);
       
-      transition: all 0.15s ease;
+      transition: all 0.1s ease;
     }
 
     .thumb:hover {
-      transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(179, 21, 90, 0.2);
     }
 
@@ -408,7 +379,6 @@
       border-left: 2px solid var(--sh2);
       border-right: 2px solid var(--hi);
       border-bottom: 2px solid var(--hi);
-      transform: translate(1px, 1px);
       box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.15);
     }
 
@@ -423,7 +393,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 32px;
+      font-size: 22px;
       color: rgba(255, 255, 255, 0.7);
     }
 
@@ -432,23 +402,42 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 4px 12px;
+      padding: 4px 8px;
       background: #ffe8f3;
       border-top: 2px solid rgba(0, 0, 0, .08);
-      font-size: 12px;
+      font-size: 10px;
       color: rgba(42, 31, 37, 0.7);
-      gap: 10px;
+      gap: 8px;
+      width: 100%;
     }
 
     .statusbar-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .statusbar-item:first-child {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .statusbar-item:first-child span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .statusbar-item:last-child {
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .status-icon {
-      width: 16px;
-      height: 16px;
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
       border: 1px solid rgba(0, 0, 0, 0.2);
       background: linear-gradient(135deg, #ffc8e0, #ffacd0);
       border-radius: 2px;
@@ -457,11 +446,11 @@
     /* Back button */
     .back-btn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 15px;
+      right: 15px;
       z-index: 100;
       
-      padding: 8px 16px;
+      padding: 6px 12px;
       border-radius: 0;
       
       border-top: 2px solid var(--hi);
@@ -475,7 +464,7 @@
       color: var(--accent);
       text-decoration: none;
       font-weight: 800;
-      font-size: 13px;
+      font-size: 12px;
       
       transition: all 0.15s ease;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -483,8 +472,6 @@
 
     .back-btn:hover {
       background: rgba(255, 255, 255, 1);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
     .back-btn:active {
@@ -492,123 +479,160 @@
       border-left: 2px solid var(--sh);
       border-right: 2px solid var(--hi);
       border-bottom: 2px solid var(--hi);
-      transform: translate(1px, 1px);
     }
 
     /* ============================================
-       MOBILE
+       DESKTOP
        ============================================ */
-    @media (max-width: 768px) {
+    @media (min-width: 769px) {
       body {
-        padding: 10px;
+        padding: 20px;
       }
 
-      .container {
-        width: 100%;
+      .titlebar {
+        padding: 8px 10px;
       }
 
       .titlebar__text {
-        font-size: 11px;
-      }
-
-      .toolbar {
-        padding: 6px 8px;
-      }
-
-      .nav-btn {
-        height: 28px;
-        padding: 0 10px;
-        font-size: 11px;
-      }
-
-      .photo-counter {
-        font-size: 11px;
-      }
-
-      .photo-display {
-        min-height: auto;
-      }
-
-      .photo-wrapper {
-        padding: 15px 10px;
-      }
-
-      .photo-container {
-        max-width: 85%;
-        padding: 6px;
-      }
-
-      .main-photo.placeholder {
-        width: 220px;
-        height: 165px;
-        font-size: 45px;
-      }
-
-      .caption-wrapper {
-        padding: 10px 15px 15px;
-      }
-
-      .photo-caption {
         font-size: 13px;
-        padding: 6px 12px;
-        max-width: 95%;
       }
 
-      .thumb {
-        width: 55px;
-        height: 55px;
-      }
-
-      .thumbnails {
-        padding: 8px;
-        gap: 6px;
+      .playbtn {
+        height: 20px;
+        padding: 0 10px;
+        font-size: 12px;
       }
 
       .win-controls {
-        display: none;
+        display: flex;
+        gap: 6px;
       }
 
-      .back-btn {
-        bottom: 15px;
-        right: 15px;
-        padding: 6px 12px;
+      .winbtn {
+        width: 22px;
+        height: 18px;
+        background: #ffe3f0;
+        border-radius: 0;
+        border-top: 2px solid var(--hi);
+        border-left: 2px solid var(--hi);
+        border-right: 2px solid var(--sh);
+        border-bottom: 2px solid var(--sh);
+        display: grid;
+        place-items: center;
         font-size: 12px;
+        color: #5e1f3c;
+        cursor: pointer;
       }
 
-      .statusbar {
-        font-size: 10px;
-        padding: 3px 8px;
+      .toolbar {
+        padding: 8px 12px;
       }
-    }
 
-    @media (max-width: 400px) {
+      .nav-btn {
+        height: 32px;
+        padding: 0 16px;
+        font-size: 13px;
+      }
+
+      .photo-counter {
+        font-size: 13px;
+      }
+
       .photo-wrapper {
-        padding: 10px 8px;
+        padding: 20px;
       }
 
       .photo-container {
-        max-width: 90%;
-        padding: 5px;
+        padding: 8px;
       }
 
       .main-photo.placeholder {
-        width: 180px;
-        height: 135px;
-        font-size: 35px;
+        width: 700px;
+        height: 480px;
+        font-size: 120px;
       }
 
-      .thumb {
-        width: 48px;
-        height: 48px;
+      .caption-wrapper {
+        padding: 15px 20px 20px;
       }
 
       .photo-caption {
+        font-size: 15px;
+        padding: 8px 16px;
+      }
+
+      .thumbnails {
+        padding: 12px;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      .thumb {
+        width: 80px;
+        height: 80px;
+      }
+
+      .thumb-img.placeholder {
+        font-size: 32px;
+      }
+
+      .statusbar {
+        padding: 4px 12px;
         font-size: 12px;
+      }
+
+      .status-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    /* ============================================
+       SMALL MOBILE
+       ============================================ */
+    @media (max-width: 380px) {
+      body {
+        padding: 8px;
+      }
+
+      .titlebar__text {
+        font-size: 10px;
+      }
+
+      .playbtn {
+        font-size: 9px;
+        padding: 0 6px;
+        height: 16px;
       }
 
       .nav-btn {
         padding: 0 8px;
         font-size: 10px;
+        height: 26px;
+      }
+
+      .photo-wrapper {
+        padding: 10px;
+      }
+
+      .main-photo.placeholder {
+        width: 200px;
+        height: 150px;
+        font-size: 50px;
+      }
+
+      .photo-caption {
+        font-size: 12px;
+        padding: 5px 10px;
+      }
+
+      .thumb {
+        width: 45px;
+        height: 45px;
+      }
+
+      .thumb-img.placeholder {
+        font-size: 18px;
       }
     }
 
@@ -632,10 +656,10 @@
   <div class="container">
     <div class="window">
       <div class="titlebar">
-        <div class="titlebar__text">📸 PHOTO VIEWER - Our Memories</div>
+        <div class="titlebar__text">📸 Our Memories</div>
 
         <div class="titlebar__actions">
-          <button class="playbtn" id="songBtn" type="button">🎶 Song ▶</button>
+          <button class="playbtn" id="songBtn" type="button">🎶 Play</button>
 
           <div class="win-controls" aria-hidden="true">
             <div class="winbtn">_</div>
@@ -647,17 +671,11 @@
 
       <div class="toolbar">
         <div class="nav-buttons">
-          <button class="nav-btn" id="prevBtn" type="button">
-            ◄ Prev
-          </button>
-          <button class="nav-btn" id="nextBtn" type="button">
-            Next ►
-          </button>
+          <button class="nav-btn" id="prevBtn" type="button">◄</button>
+          <button class="nav-btn" id="nextBtn" type="button">►</button>
         </div>
         
-        <div class="photo-counter" id="photoCounter">
-          1 / 8
-        </div>
+        <div class="photo-counter" id="photoCounter">1 / 8</div>
       </div>
 
       <div class="photo-display">
@@ -679,7 +697,7 @@
           <span id="statusText">Ready</span>
         </div>
         <div class="statusbar-item">
-          <span>💗 Made with love</span>
+          <span>💗 With love</span>
         </div>
       </div>
     </div>
@@ -721,7 +739,6 @@
     const thumbnailsContainer = document.getElementById("thumbnails");
     const statusText = document.getElementById("statusText");
 
-    // ✅ EDIT YOUR PHOTOS HERE
     const photos = [
       { src: "", caption: "Our first date 💗" },
       { src: "", caption: "Summer vibes ☀️" },
@@ -735,7 +752,6 @@
 
     let currentIndex = 0;
 
-    // Create thumbnails
     photos.forEach((photo, index) => {
       const thumb = document.createElement("div");
       thumb.className = "thumb";
@@ -767,7 +783,7 @@
         mainPhoto.innerHTML = '';
         const img = document.createElement('img');
         img.src = photo.src;
-        img.style.cssText = 'display: block; max-width: 100%; max-height: 480px; object-fit: contain;';
+        img.style.cssText = 'display: block; max-width: 100%; max-height: 400px; object-fit: contain;';
         mainPhoto.appendChild(img);
         mainPhoto.classList.remove("placeholder");
         mainPhoto.style.width = 'auto';
@@ -781,7 +797,7 @@
 
       photoCaption.textContent = photo.caption;
       photoCounter.textContent = `${index + 1} / ${photos.length}`;
-      statusText.textContent = `Viewing: ${photo.caption}`;
+      statusText.textContent = photo.caption;
 
       document.querySelectorAll(".thumb").forEach((thumb, i) => {
         thumb.classList.toggle("active", i === index);
@@ -792,15 +808,11 @@
     }
 
     function nextPhoto() {
-      if (currentIndex < photos.length - 1) {
-        showPhoto(currentIndex + 1);
-      }
+      if (currentIndex < photos.length - 1) showPhoto(currentIndex + 1);
     }
 
     function prevPhoto() {
-      if (currentIndex > 0) {
-        showPhoto(currentIndex - 1);
-      }
+      if (currentIndex > 0) showPhoto(currentIndex - 1);
     }
 
     prevBtn.addEventListener("click", prevPhoto);
@@ -814,7 +826,6 @@
     showPhoto(0);
   </script>
 
-  <!-- Global music player -->
   <script src="../assets/valentine-player.js?v=5"></script>
 </body>
 </html>
