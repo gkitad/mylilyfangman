@@ -496,10 +496,19 @@
         min-height: 400px;
       }
 
+      .photo-container {
+        max-height: 400px;
+      }
+
+      .main-photo {
+        max-height: 380px;
+      }
+
       .main-photo.placeholder {
         width: 100%;
-        height: 350px;
-        font-size: 80px;
+        height: 300px;
+        max-height: 380px;
+        font-size: 60px;
       }
 
       .photo-caption {
@@ -520,6 +529,38 @@
         bottom: 15px;
         right: 15px;
         padding: 6px 12px;
+        font-size: 12px;
+      }
+    }
+
+    /* Extra ajustes para móviles muy pequeños */
+    @media (max-width: 480px) {
+      .photo-display {
+        padding: 12px 12px 60px;
+        min-height: 350px;
+      }
+
+      .photo-container {
+        max-height: 350px;
+      }
+
+      .main-photo {
+        max-height: 330px;
+      }
+
+      .main-photo.placeholder {
+        width: 100%;
+        height: 280px;
+        max-height: 330px;
+        font-size: 50px;
+      }
+
+      .toolbar {
+        padding: 6px 8px;
+        gap: 8px;
+      }
+
+      .photo-counter {
         font-size: 12px;
       }
     }
