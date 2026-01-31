@@ -8,411 +8,765 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,500&family=Special+Elite&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Patrick+Hand&family=Shadows+Into+Light&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --pink1:#ffd6e6;
-      --pink2:#f8bcd2;
+    :root {
+      --bg1:#fff4fa;
+      --bg2:#ffd1e6;
 
-      --pillBg: rgba(255,255,255,.45);
-      --pillBd: rgba(255,255,255,.55);
+      --note1: #ffe4f0;
+      --note2: #ffd6e8;
+      --note3: #ffc8e0;
+      --note4: #ffbad8;
+      --note5: #ffacd0;
 
-      --inkTitle: rgba(70, 34, 40, .88);
-      --inkType: rgba(54, 35, 30, .86);
-      --inkSoft: rgba(95, 50, 70, .70);
+      --text:#2a2a2a;
+      --accent:#b3155a;
+      --handwriting: rgba(42, 31, 37, 0.88);
+      
+      --glow-pink: rgba(255, 127, 185, 0.4);
+      --glow-light: rgba(255, 179, 214, 0.3);
     }
 
-    *{ box-sizing:border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    body{
-      margin:0;
-      min-height:100vh;
-      overflow:hidden;
-      font-family: "Playfair Display", serif;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "Patrick Hand", cursive;
+      color: var(--text);
+      padding: 20px;
 
       background:
-        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.78), transparent 60%),
-        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.42), transparent 60%),
+        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.55), transparent 60%),
         radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
-        linear-gradient(180deg, var(--pink1), var(--pink2));
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+
+      overflow-x: hidden;
     }
 
-    .stage{
-      position:relative;
-      width:100%;
-      height:100vh;
-      display:grid;
-      place-items:center;
-      padding: 26px;
+    /* 💗 Floating hearts */
+    #heartLayer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
     }
 
-    /* 🌸 Floating petals */
-    #petalLayer{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      overflow:hidden;
-      z-index:0;
+    .heart {
+      position: absolute;
+      opacity: .14;
+      animation: drift linear forwards;
+      user-select: none;
+      filter: blur(.1px);
     }
 
-    .petal{
-      position:absolute;
-      top:-10vh;
-      opacity:.18;
-      user-select:none;
-      filter: blur(.25px);
-      animation: fall linear forwards;
+    @keyframes drift {
+      0%   { transform: translate(var(--x), 110vh) scale(var(--s)); opacity: 0; }
+      15%  { opacity: .14; }
+      50%  { transform: translate(calc(var(--x) + var(--wiggle)), 45vh) scale(var(--s)); }
+      100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
     }
 
-    @keyframes fall{
-      0%{
-        transform: translateX(var(--x)) translateY(-10vh) rotate(0deg);
-        opacity:0;
+    /* ✨ Magic particles layer */
+    #magicLayer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .magic-particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 1), rgba(255, 127, 185, 0.7));
+      border-radius: 50%;
+      opacity: 0;
+      animation: magicFloat linear forwards;
+      box-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.8),
+        0 0 15px var(--glow-pink);
+      filter: blur(0.5px);
+    }
+
+    @keyframes magicFloat {
+      0% {
+        transform: translate(var(--mx), 110vh) scale(0) rotate(0deg);
+        opacity: 0;
       }
-      20%{ opacity:.18; }
-      100%{
-        transform: translateX(calc(var(--x) + var(--drift)))
-                   translateY(120vh)
-                   rotate(260deg);
-        opacity:0;
+      5% {
+        opacity: 1;
+      }
+      50% {
+        transform: translate(calc(var(--mx) + var(--mwiggle)), 50vh) scale(1) rotate(180deg);
+        opacity: 1;
+      }
+      95% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(calc(var(--mx) - var(--mwiggle)), -10vh) scale(0.5) rotate(360deg);
+        opacity: 0;
       }
     }
 
-    /* 🎵 Song button */
-    .songBtn{
-      position:absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 5;
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(900px, 95%);
+      max-height: 85vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 20px 10px 80px;
+      
+      /* Custom scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 127, 185, 0.5) rgba(255, 214, 232, 0.2);
+    }
 
-      height: 48px;
-      padding: 0 18px;
-      border-radius: 999px;
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
 
-      display:flex;
-      align-items:center;
-      gap: 12px;
+    .container::-webkit-scrollbar-track {
+      background: rgba(255, 214, 232, 0.2);
+      border-radius: 10px;
+    }
 
-      background: var(--pillBg);
-      border: 1px solid var(--pillBd);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 14px 34px rgba(0,0,0,.10);
+    .container::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ff7fb9, #ffb3d6);
+      border-radius: 10px;
+      box-shadow: 0 0 5px var(--glow-pink);
+    }
 
-      color: rgba(125, 60, 85, .95);
+    /* Header note - special title note */
+    .header-note {
+      width: min(450px, 90%);
+      margin: 0 auto 30px;
+      padding: 25px 30px;
+      background: linear-gradient(135deg, #ffacd0, #ffc8e0);
+      border-radius: 3px;
+      box-shadow: 
+        0 10px 30px rgba(179, 21, 90, 0.25),
+        0 0 20px var(--glow-light),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+      
+      transform: rotate(-1deg);
+      position: relative;
+      
+      animation: headerDrop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+                 headerFloat 5s ease-in-out infinite 0.8s;
+    }
+
+    @keyframes headerDrop {
+      0% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(-5deg) scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotate(-1deg) scale(1);
+      }
+    }
+
+    /* Subtle floating for header */
+    @keyframes headerFloat {
+      0%, 100% { 
+        transform: translateY(0) rotate(-1deg); 
+      }
+      50% { 
+        transform: translateY(-6px) rotate(-0.5deg); 
+      }
+    }
+
+    /* Tape effect on header */
+    .header-note::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 25px;
+      background: rgba(255, 255, 255, 0.4);
+      border-left: 1px dashed rgba(255, 255, 255, 0.6);
+      border-right: 1px dashed rgba(255, 255, 255, 0.6);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-title {
+      font-family: "Caveat", cursive;
+      font-size: clamp(42px, 6vw, 58px);
       font-weight: 700;
-      font-size: 20px;
+      color: var(--accent);
+      margin: 0;
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 
+        2px 2px 0 rgba(255, 255, 255, 0.6),
+        0 0 15px var(--glow-pink);
+    }
 
-      cursor:pointer;
-      user-select:none;
+    .header-subtitle {
+      font-size: 16px;
+      text-align: center;
+      margin: 8px 0 0;
+      color: rgba(42, 31, 37, 0.75);
+      font-weight: 600;
+    }
+
+    /* Notes board/wall */
+    .notes-board {
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      padding: 0 10px;
+    }
+
+    /* Individual sticky note with subtle magic */
+    .sticky-note {
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto 25px;
+      padding: 28px 32px;
+      background: var(--note-color);
+      border-radius: 2px;
+      
+      /* Paper texture */
+      background-image: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 28px,
+          rgba(0, 0, 0, 0.02) 28px,
+          rgba(0, 0, 0, 0.02) 29px
+        );
+      
+      box-shadow: 
+        0 8px 25px rgba(179, 21, 90, 0.15),
+        0 0 15px var(--glow-light),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.05),
+        0 2px 5px rgba(0, 0, 0, 0.1);
+      
+      transform: rotate(var(--rotation));
+      transform-origin: center;
+      
+      opacity: 0;
+      animation: notePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                 noteFloat 6s ease-in-out infinite;
+      animation-delay: calc(var(--note-index) * 0.15s + 0.8s),
+                       calc(var(--note-index) * 0.15s + 1.4s);
+    }
+
+    @keyframes notePop {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px) rotate(var(--rotation)) scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--rotation)) scale(1);
+      }
+    }
+
+    /* Subtle floating for each note */
+    @keyframes noteFloat {
+      0%, 100% { 
+        transform: translateY(0) rotate(var(--rotation)); 
+      }
+      50% { 
+        transform: translateY(-8px) rotate(calc(var(--rotation) + var(--float-rotation))); 
+      }
+    }
+
+    /* Shine effect passing through notes */
+    .sticky-note::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 40%,
+        rgba(255, 255, 255, 0.5) 50%,
+        transparent 60%,
+        transparent 100%
+      );
+      animation: noteShine 4s ease-in-out infinite;
+      animation-delay: calc(var(--note-index) * 0.8s + 2s);
+      pointer-events: none;
+      border-radius: 2px;
+    }
+
+    @keyframes noteShine {
+      0% {
+        transform: translateX(-150%);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(150%);
+        opacity: 0;
+      }
+    }
+
+    /* Tape on notes */
+    .sticky-note::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: var(--tape-position);
+      width: 60px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.35);
+      border-left: 1px dashed rgba(255, 255, 255, 0.5);
+      border-right: 1px dashed rgba(255, 255, 255, 0.5);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transform: rotate(var(--tape-rotation));
+      z-index: 10;
+    }
+
+    /* Note content */
+    .note-content {
+      font-family: "Patrick Hand", cursive;
+      font-size: clamp(17px, 2.5vw, 19px);
+      line-height: 1.8;
+      color: var(--handwriting);
+      white-space: pre-wrap;
+      position: relative;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+      z-index: 1;
+    }
+
+    /* Typewriter cursor for active note */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: var(--accent);
+      margin-left: 2px;
+      animation: blink 0.9s steps(2) infinite;
+      transform: translateY(3px);
+      box-shadow: 0 0 5px var(--glow-pink);
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* Small doodles on some notes */
+    .note-doodle {
+      position: absolute;
+      font-size: 22px;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 1;
+      animation: doodleTwinkle 3s ease-in-out infinite;
+      animation-delay: calc(var(--note-index) * 0.5s + 2s);
+    }
+
+    @keyframes doodleTwinkle {
+      0%, 100% { 
+        opacity: 0.25; 
+        transform: scale(1) rotate(0deg);
+      }
+      50% { 
+        opacity: 0.4; 
+        transform: scale(1.1) rotate(10deg);
+      }
+    }
+
+    .note-doodle.top-right { top: 15px; right: 15px; }
+    .note-doodle.bottom-left { bottom: 15px; left: 15px; }
+    .note-doodle.bottom-right { bottom: 15px; right: 15px; }
+
+    /* Special signature note */
+    .signature-note {
+      width: min(380px, 85%);
+      padding: 20px 28px;
+      background: linear-gradient(135deg, #ff9ec4, #ffbad8);
+      transform: rotate(2deg);
+      margin: 30px auto 0;
+      box-shadow: 
+        0 10px 35px rgba(179, 21, 90, 0.3),
+        0 0 20px var(--glow-pink),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .signature-note::before {
+      left: 60%;
+      --tape-rotation: -3deg;
+    }
+
+    .signature-text {
+      font-family: "Shadows Into Light", cursive;
+      font-size: clamp(28px, 5vw, 40px);
+      color: var(--accent);
+      text-align: right;
+      margin: 0;
+      text-shadow: 
+        1px 1px 0 rgba(255, 255, 255, 0.6),
+        0 0 10px var(--glow-pink);
+    }
+
+    /* Music button */
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      
+      padding: 12px 20px;
+      border-radius: 12px;
+      
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 127, 185, 0.3);
+      
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 14px;
+      font-family: "Patrick Hand", cursive;
+      
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 
+        0 4px 15px rgba(179, 21, 90, 0.15),
+        0 0 10px var(--glow-light),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+      
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
 
-    .songBtn:active{
-      transform: translateY(1px);
+    .music-btn:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: translateY(-2px) rotate(-2deg);
+      box-shadow: 
+        0 6px 20px rgba(179, 21, 90, 0.2),
+        0 0 15px var(--glow-pink),
+        0 2px 5px rgba(0, 0, 0, 0.15);
     }
 
-    /* 📜 Paper wrapper (smaller + centered for iPhone) */
-    .paperWrap{
-      position:relative;
-      z-index: 2;
-
-      width: min(820px, 92vw);
-      height: auto;
-      max-height: 72svh;
-
-      display:flex;
-      justify-content:center;
-      align-items:center;
+    .music-btn:active {
+      transform: translateY(0) rotate(-2deg);
     }
 
-    /* ✅ REAL parchment (shrink naturally) */
-    .paper{
-      position:relative;
-      width:100%;
-      height:auto;
-      min-height: 520px;
-      max-height: 72svh;
-
-      border-radius: 22px;
-      overflow:hidden;
-
-      background:
-        radial-gradient(circle at 30% 20%, rgba(255,255,255,.55), transparent 60%),
-        radial-gradient(circle at 70% 15%, rgba(255,255,255,.35), transparent 62%),
-        radial-gradient(circle at 18% 60%, rgba(120,70,35,.12), transparent 55%),
-        radial-gradient(circle at 85% 65%, rgba(120,70,35,.10), transparent 58%),
-        radial-gradient(circle at 52% 92%, rgba(120,70,35,.14), transparent 65%),
-        linear-gradient(180deg, #fff5dc 0%, #f2d7ad 55%, #deb980 100%);
-
-      box-shadow:
-        0 30px 90px rgba(0,0,0,.18),
-        inset 0 0 0 1px rgba(255,255,255,.30),
-        inset 0 25px 55px rgba(80,40,15,.18);
-
-      border: 1px solid rgba(80,40,18,.18);
-      padding: clamp(18px, 3.5vw, 50px);
+    /* Back button */
+    .back-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      
+      padding: 12px 20px;
+      border-radius: 12px;
+      
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 127, 185, 0.3);
+      
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+      font-family: "Patrick Hand", cursive;
+      
+      transition: all 0.2s ease;
+      box-shadow: 
+        0 4px 15px rgba(179, 21, 90, 0.15),
+        0 0 10px var(--glow-light),
+        0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    /* Organic dirty vignette edges */
-    .paper::before{
-      content:"";
-      position:absolute;
-      inset:-50px;
-      pointer-events:none;
-
-      background:
-        radial-gradient(circle at 10% 10%, rgba(60,30,10,.35), transparent 55%),
-        radial-gradient(circle at 90% 15%, rgba(60,30,10,.25), transparent 58%),
-        radial-gradient(circle at 15% 90%, rgba(60,30,10,.28), transparent 60%),
-        radial-gradient(circle at 85% 95%, rgba(60,30,10,.33), transparent 62%),
-        radial-gradient(circle at 50% 50%, transparent 65%, rgba(60,30,10,.22) 120%);
-
-      opacity:.75;
-      filter: blur(10px);
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: translateY(-2px) rotate(2deg);
+      box-shadow: 
+        0 6px 20px rgba(179, 21, 90, 0.2),
+        0 0 15px var(--glow-pink),
+        0 2px 5px rgba(0, 0, 0, 0.15);
     }
 
-    /* Tiny paper grain */
-    .paper::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 40% 40%, rgba(255,255,255,.10), transparent 55%),
-        radial-gradient(circle at 70% 80%, rgba(0,0,0,.04), transparent 60%);
-      opacity:.20;
-      mix-blend-mode: multiply;
+    .back-btn:active {
+      transform: translateY(0) rotate(2deg);
     }
 
-    .paperInner{
-      position:relative;
-      z-index: 1;
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-    }
-
-    /* Title */
-    .titleRow{
-      width: min(720px, 94%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .title{
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(44px, 6.4vw, 78px);
-      color: var(--inkTitle);
-      margin: 0;
-      text-align:center;
-    }
-
-    .envelope{
-      font-size: clamp(28px, 3.4vw, 44px);
-      opacity: .85;
-      transform: translateY(6px);
-    }
-
-    /* Body typewriter font */
-    .body{
-      width: min(640px, 92%);
-      margin-top: 24px;
-      padding: 6px 4px 0;
-      flex: 1;
-      overflow:auto;
-
-      font-family: "Special Elite", monospace;
-      font-size: clamp(16px, 2.2vw, 20px);
-      line-height: 1.75;
-      color: var(--inkType);
-      white-space: pre-wrap;
-    }
-
-    .signature{
-      width: min(640px, 92%);
-      padding: 10px 0 6px;
-      text-align:right;
-
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(26px, 3.6vw, 44px);
-      color: var(--inkSoft);
-    }
-
-    /* Cursor */
-    .cursor{
-      display:inline-block;
-      width: 10px;
-      margin-left: 3px;
-      transform: translateY(2px);
-      opacity:.85;
-      animation: blink .9s steps(2,end) infinite;
-    }
-
-    @keyframes blink{
-      50%{ opacity:0; }
-    }
-
-    /* Back small */
-    .backMini{
-      position:absolute;
-      right: 18px;
-      bottom: 16px;
-      z-index: 6;
-
-      font-family: Inter, system-ui, sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      color: rgba(120,55,80,.75);
-
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.35);
-      background: rgba(255,255,255,.20);
-      backdrop-filter: blur(8px);
-
-      text-decoration:none;
-      box-shadow: 0 10px 26px rgba(0,0,0,.08);
-    }
-
-    .backMini:hover{
-      background: rgba(255,255,255,.28);
-      color: rgba(120,55,80,.88);
-    }
-
-    /* iPhone tweaks */
-    @media (max-width: 480px){
-      .stage{ padding: 18px; }
-
-      .paperWrap{
-        width: 92vw;
-        max-height: 68svh;
+    /* Mobile adjustments */
+    @media (max-width: 520px) {
+      .container {
+        width: 98%;
+        padding: 15px 5px 70px;
       }
 
-      .paper{
-        padding: 22px;
-        border-radius: 18px;
-        min-height: 480px;
-        max-height: 68svh;
+      .header-note {
+        padding: 20px 22px;
       }
 
-      .title{
-        font-size: 52px;
+      .header-title {
+        font-size: 38px;
       }
 
-      .body{
-        font-size: 15px;
-        line-height: 1.65;
-        margin-top: 18px;
+      .sticky-note {
+        padding: 22px 25px;
+        margin-bottom: 20px;
       }
 
-      .signature{
-        font-size: 32px;
+      .note-content {
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .signature-note {
+        padding: 18px 22px;
+      }
+
+      .signature-text {
+        font-size: 28px;
+      }
+
+      .music-btn,
+      .back-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+
+      .music-btn {
+        top: 15px;
+        left: 15px;
+      }
+
+      .back-btn {
+        bottom: 15px;
+        right: 15px;
+      }
+
+      .note-doodle {
+        font-size: 18px;
       }
     }
 
-    @media (prefers-reduced-motion: reduce){
-      .petal, .cursor{ animation:none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .heart, .magic-particle, .header-note, .sticky-note, 
+      .sticky-note::after, .note-doodle {
+        animation: none !important;
+      }
+      .header-note {
+        opacity: 1;
+        transform: rotate(-1deg) scale(1);
+      }
+      .sticky-note {
+        opacity: 1;
+        transform: rotate(var(--rotation)) scale(1);
+      }
+      .cursor {
+        animation: blink 0.9s steps(2) infinite;
+      }
     }
   </style>
 </head>
 
 <body data-track="../assets/cancionmenu.mp3">
-  <div class="stage">
-    <div id="petalLayer"></div>
+  <div id="heartLayer"></div>
+  <div id="magicLayer"></div>
 
-    <button class="songBtn" id="songBtn" type="button">
-      🎵 Song ▶
-    </button>
+  <button class="music-btn" id="songBtn" type="button">🎶 Song ▶</button>
+  <a class="back-btn" href="./menu.html">← Menu</a>
 
-    <div class="paperWrap">
-      <div class="paper">
-        <div class="paperInner">
-          <div class="titleRow">
-            <h1 class="title">My Dearest Lily</h1>
-            <div class="envelope">✉️</div>
-          </div>
-
-          <div class="body">
-            <span id="typedText"></span><span class="cursor" id="cursor">|</span>
-          </div>
-
-          <div class="signature">— your stinky bf 💗</div>
-        </div>
-      </div>
+  <div class="container">
+    <!-- Header note -->
+    <div class="header-note">
+      <h1 class="header-title">For My Lily 💗</h1>
+      <p class="header-subtitle">Little notes from my heart to yours</p>
     </div>
 
-    <a class="backMini" href="./menu.html">← Back to Menu</a>
+    <!-- Notes board -->
+    <div class="notes-board" id="notesBoard">
+      <!-- Notes will be generated here by JavaScript -->
+    </div>
   </div>
 
-  <!-- 🌸 Petals (respect reduced motion + pause when tab hidden) -->
+  <!-- 💗 Hearts -->
   <script>
-    const layer = document.getElementById("petalLayer");
-    const petals = ["🌸","🌷","💮","🌺"];
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const layer = document.getElementById("heartLayer");
+    const hearts = ["♡", "♥", "❥", "❤", "💕"];
 
-    function spawnPetal(){
-      if (reduceMotion) return;
-      if (document.hidden) return;
-      if (layer.childElementCount > 20) return;
-
-      const p = document.createElement("div");
-      p.className = "petal";
-      p.textContent = petals[Math.floor(Math.random()*petals.length)];
+    function spawnHeart() {
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
 
       const x = Math.random() * 100;
-      const drift = (Math.random() * 40 - 20) + "vw";
-      const size = 18 + Math.random() * 16;
+      const s = 0.6 + Math.random() * 1.2;
+      const wiggle = (Math.random() * 40 - 20) + "vw";
 
-      p.style.setProperty("--x", x + "vw");
-      p.style.setProperty("--drift", drift);
-      p.style.fontSize = size + "px";
-      p.style.animationDuration = (10 + Math.random() * 7) + "s";
+      h.style.setProperty("--x", x + "vw");
+      h.style.setProperty("--s", s.toFixed(2));
+      h.style.setProperty("--wiggle", wiggle);
+      h.style.fontSize = (16 + Math.random() * 26) + "px";
+      h.style.animationDuration = (10 + Math.random() * 10) + "s";
 
-      layer.appendChild(p);
-      setTimeout(() => p.remove(), 18000);
+      layer.appendChild(h);
+      setTimeout(() => h.remove(), 22000);
     }
-
-    setInterval(spawnPetal, 900);
+    setInterval(spawnHeart, 520);
   </script>
 
-  <!-- ✅ Typewriter (ONLY EDIT THIS MESSAGE) + reduced motion support -->
+  <!-- ✨ Magic particles -->
   <script>
-    const typedEl = document.getElementById("typedText");
-    const reduceMotion2 = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const magicLayer = document.getElementById("magicLayer");
 
-    // ✅ ONLY CHANGE THIS MESSAGE:
-    // Tip: if you ever need a backtick ` inside, write it as \`
-    const letter = `Hi Puppy,
+    function spawnMagicParticle() {
+      if (document.hidden) return;
+      if (magicLayer.childElementCount > 20) return;
 
-This is where your real letter goes.
-Write something sweet, personal,
-and romantic, just for her...
+      const m = document.createElement("div");
+      m.className = "magic-particle";
 
-Every word here will mean everything.`;
+      const mx = Math.random() * 100;
+      const mwiggle = (Math.random() * 50 - 25) + "vw";
 
-    if (reduceMotion2) {
-      typedEl.textContent = letter;
+      m.style.setProperty("--mx", mx + "vw");
+      m.style.setProperty("--mwiggle", mwiggle);
+      m.style.animationDuration = (8 + Math.random() * 5) + "s";
+
+      magicLayer.appendChild(m);
+      setTimeout(() => m.remove(), 14000);
+    }
+    setInterval(spawnMagicParticle, 600);
+  </script>
+
+  <!-- Notes generation and typewriter -->
+  <script>
+    const board = document.getElementById("notesBoard");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ✅ EDIT YOUR LETTER HERE - Each string becomes a sticky note
+    const notes = [
+      "Hi Puppy,\n\nI wanted to write you something special, something that shows you how much you mean to me.",
+      
+      "From the moment we met, my life became brighter, fuller, and so much more beautiful. You bring joy to every day.",
+      
+      "I can't imagine my life without you in it. Every moment with you is a treasure.",
+      
+      "I'm so grateful for all the memories we've created together. You make me laugh, you make me smile, and most importantly, you make me feel loved.",
+      
+      "I hope this little surprise makes you smile as much as you make me smile every single day.\n\nI love you so much 💗"
+    ];
+
+    const noteColors = ["#ffe4f0", "#ffd6e8", "#ffc8e0", "#ffbad8", "#ffacd0"];
+    const rotations = ["-2deg", "1.5deg", "-1deg", "2deg", "-1.5deg"];
+    const floatRotations = ["0.3deg", "-0.4deg", "0.2deg", "-0.3deg", "0.4deg"];
+    const tapePositions = ["25%", "60%", "35%", "70%", "40%"];
+    const tapeRotations = ["-5deg", "3deg", "-2deg", "4deg", "-3deg"];
+    const doodles = ["💕", "✨", "💗", "🌸", "💫"];
+    const doodlePositions = ["top-right", "bottom-left", "bottom-right", "top-right", "bottom-left"];
+
+    // Create sticky notes
+    notes.forEach((text, index) => {
+      const note = document.createElement("div");
+      note.className = "sticky-note";
+      note.style.setProperty("--note-index", index);
+      note.style.setProperty("--rotation", rotations[index % rotations.length]);
+      note.style.setProperty("--float-rotation", floatRotations[index % floatRotations.length]);
+      note.style.setProperty("--note-color", noteColors[index % noteColors.length]);
+      note.style.setProperty("--tape-position", tapePositions[index % tapePositions.length]);
+      note.style.setProperty("--tape-rotation", tapeRotations[index % tapeRotations.length]);
+      
+      const content = document.createElement("div");
+      content.className = "note-content";
+      content.id = `note-${index}`;
+      
+      const doodle = document.createElement("div");
+      doodle.className = `note-doodle ${doodlePositions[index % doodlePositions.length]}`;
+      doodle.textContent = doodles[index % doodles.length];
+      doodle.style.setProperty("--note-index", index);
+      
+      note.appendChild(content);
+      note.appendChild(doodle);
+      board.appendChild(note);
+    });
+
+    // Add signature note
+    const sigNote = document.createElement("div");
+    sigNote.className = "sticky-note signature-note";
+    sigNote.style.setProperty("--note-index", notes.length);
+    sigNote.style.setProperty("--rotation", "2deg");
+    sigNote.style.setProperty("--float-rotation", "-0.3deg");
+    sigNote.innerHTML = '<p class="signature-text">— your stinky bf 💗</p>';
+    board.appendChild(sigNote);
+
+    // Typewriter effect
+    if (reduceMotion) {
+      // No animation, show all text immediately
+      notes.forEach((text, index) => {
+        document.getElementById(`note-${index}`).textContent = text;
+      });
     } else {
-      let i = 0;
-      function tick(){
-        i++;
-        typedEl.textContent = letter.slice(0, i);
+      let currentNote = 0;
+      let currentChar = 0;
+      let isTyping = false;
 
-        if(i < letter.length){
-          const ch = letter[i - 1];
-          let delay = 22;
-          if (ch === "." || ch === "!" || ch === "?") delay += 180;
-          if (ch === ",") delay += 90;
-          setTimeout(tick, delay);
+      function startTyping() {
+        if (currentNote >= notes.length) return;
+        
+        isTyping = true;
+        const textEl = document.getElementById(`note-${currentNote}`);
+        const fullText = notes[currentNote];
+        
+        // Add cursor
+        const cursor = document.createElement("span");
+        cursor.className = "cursor";
+        textEl.appendChild(cursor);
+        
+        function type() {
+          if (currentChar < fullText.length) {
+            textEl.textContent = fullText.slice(0, currentChar + 1);
+            textEl.appendChild(cursor);
+            currentChar++;
+            
+            const ch = fullText[currentChar - 1];
+            let delay = 25; // Typing speed
+            if (ch === "." || ch === "!" || ch === "?") delay += 180;
+            if (ch === ",") delay += 90;
+            if (ch === "\n") delay += 120;
+            
+            setTimeout(type, delay);
+          } else {
+            // Remove cursor and move to next note
+            cursor.remove();
+            currentChar = 0;
+            currentNote++;
+            isTyping = false;
+            
+            // Delay before next note
+            setTimeout(() => {
+              startTyping();
+            }, 400);
+          }
         }
+        
+        type();
       }
-      tick();
+
+      // Start typing when first note appears (after header animation)
+      const firstNoteDelay = 800 + (0 * 150); // header delay + first note animation delay
+      setTimeout(() => {
+        startTyping();
+      }, firstNoteDelay + 300);
     }
   </script>
 
