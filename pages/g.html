@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Griffin 🐕</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Model Viewer de Google - Compatible con CSP -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0a0a0a;
+            color: #f5f5f5;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(201, 162, 39, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 127, 185, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 50%, #1a1a1a 100%);
+            z-index: -1;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.95) 0%, transparent 100%);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #c9a227 0%, #e8c547 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8c547 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff7fb9, #ffb3d6);
+            border: none;
+            border-radius: 20px;
+            color: #4c0f2a;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 127, 185, 0.3);
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 127, 185, 0.4);
+        }
+        
+        .main-container {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .viewer-wrapper {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+        
+        model-viewer {
+            width: 100%;
+            height: 70vh;
+            min-height: 400px;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 0 100px rgba(201, 162, 39, 0.03);
+            --poster-color: transparent;
+        }
+        
+        model-viewer::part(default-progress-bar) {
+            background: linear-gradient(90deg, #c9a227, #ff7fb9);
+            height: 4px;
+        }
+        
+        .info-section {
+            width: 100%;
+            max-width: 900px;
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .info-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #e8c547;
+        }
+        
+        .info-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #888;
+        }
+        
+        .info-card .highlight {
+            color: #ff7fb9;
+            font-weight: 600;
+        }
+        
+        .controls-info {
+            list-style: none;
+        }
+        
+        .controls-info li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 13px;
+            color: #888;
+        }
+        
+        .controls-info .icon {
+            font-size: 16px;
+        }
+        
+        .note {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .note a {
+            color: #c9a227;
+            text-decoration: none;
+        }
+        
+        /* Loading animation */
+        .loading-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a0a;
+            border-radius: 20px;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-paw {
+            font-size: 50px;
+            animation: pawBounce 1s ease-in-out infinite;
+        }
+        
+        @keyframes pawBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #f5f5f5;
+        }
+        
+        @media (max-width: 768px) {
+            .header { padding: 16px 20px; }
+            .logo-text { font-size: 22px; }
+            .main-container { padding-top: 80px; }
+            
+            model-viewer {
+                height: 50vh;
+                min-height: 300px;
+                border-radius: 16px;
+            }
+            
+            .info-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🐕</div>
+            <span class="logo-text">GRIFFIN</span>
+        </div>
+        <a href="menu.html" class="back-btn">← Back to Menu</a>
+    </header>
+    
+    <main class="main-container">
+        <div class="viewer-wrapper">
+            <div style="position: relative;">
+                <model-viewer
+                    id="griffinModel"
+                    src="Labrador.glb"
+                    alt="Griffin - Labrador 3D Model"
+                    auto-rotate
+                    camera-controls
+                    touch-action="pan-y"
+                    rotation-per-second="30deg"
+                    camera-orbit="45deg 75deg 3m"
+                    min-camera-orbit="auto auto 1.5m"
+                    max-camera-orbit="auto auto 6m"
+                    shadow-intensity="1"
+                    shadow-softness="0.5"
+                    exposure="1"
+                    environment-image="neutral"
+                    loading="eager"
+                >
+                    <div class="loading-overlay" id="loadingOverlay">
+                        <div class="loading-paw">🐾</div>
+                        <div class="loading-text">Cargando a Griffin...</div>
+                    </div>
+                </model-viewer>
+            </div>
+        </div>
+        
+        <section class="info-section">
+            <div class="info-card">
+                <h3>🐕 Sobre Griffin</h3>
+                <p>
+                    Griffin es un hermoso <span class="highlight">Labrador</span>, 
+                    leal compañero y el mejor amigo de la familia. 
+                    Siempre está listo para jugar y dar amor incondicional. 💕
+                </p>
+            </div>
+            
+            <div class="info-card">
+                <h3>🎮 Controles</h3>
+                <ul class="controls-info">
+                    <li><span class="icon">🖱️</span> Arrastra para rotar</li>
+                    <li><span class="icon">🔍</span> Scroll para zoom</li>
+                    <li><span class="icon">👆</span> Dos dedos para mover</li>
+                    <li><span class="icon">🔄</span> Rotación automática</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="note">
+            <p>Modelo 3D por <a href="https://sketchfab.com/kenchoo" target="_blank">kenchoo</a> (CC Attribution)</p>
+        </div>
+    </main>
+    
+    <script>
+        // Ocultar loading cuando el modelo cargue
+        var modelViewer = document.getElementById('griffinModel');
+        var loadingOverlay = document.getElementById('loadingOverlay');
+        
+        modelViewer.addEventListener('load', function() {
+            loadingOverlay.classList.add('hidden');
+        });
+        
+        // Fallback por si tarda mucho
+        setTimeout(function() {
+            loadingOverlay.classList.add('hidden');
+        }, 10000);
+    </script>
+</body>
+</html>
