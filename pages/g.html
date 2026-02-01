@@ -1,302 +1,81 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Griffin 🐕</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: #0a0a0a;
-            color: #f5f5f5;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        .bg-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 20%, rgba(201, 162, 39, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(255, 127, 185, 0.05) 0%, transparent 50%),
-                linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 50%, #1a1a1a 100%);
-            z-index: -1;
-        }
-        
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            background: linear-gradient(180deg, rgba(10, 10, 10, 0.95) 0%, transparent 100%);
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #c9a227 0%, #e8c547 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .logo-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8c547 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .back-btn {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #ff7fb9, #ffb3d6);
-            border: none;
-            border-radius: 20px;
-            color: #4c0f2a;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 127, 185, 0.3);
-        }
-        
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 127, 185, 0.4);
-        }
-        
-        .main-content {
-            padding-top: 100px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .viewer-container {
-            width: 100%;
-            max-width: 1200px;
-            padding: 0 20px;
-        }
-        
-        .sketchfab-embed-wrapper {
-            width: 100%;
-            aspect-ratio: 16/9;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.05);
-        }
-        
-        .sketchfab-embed-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        .info-section {
-            width: 100%;
-            max-width: 1200px;
-            padding: 40px 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-        
-        .info-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 24px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .info-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            margin-bottom: 12px;
-            color: #e8c547;
-        }
-        
-        .info-card p {
-            font-size: 14px;
-            line-height: 1.7;
-            color: #888;
-        }
-        
-        .info-card .highlight {
-            color: #ff7fb9;
-            font-weight: 600;
-        }
-        
-        .stats {
-            display: flex;
-            gap: 24px;
-            margin-top: 16px;
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #f5f5f5;
-        }
-        
-        .stat-label {
-            font-size: 11px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-        
-        .instructions-list {
-            list-style: none;
-            margin-top: 8px;
-        }
-        
-        .instructions-list li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-size: 14px;
-            color: #888;
-        }
-        
-        .instructions-list .icon {
-            font-size: 18px;
-        }
-        
-        .note {
-            margin-top: 40px;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: rgba(201, 162, 39, 0.1);
-            border: 1px solid rgba(201, 162, 39, 0.2);
-            border-radius: 12px;
-            text-align: center;
-            max-width: 600px;
-        }
-        
-        .note p {
-            font-size: 13px;
-            color: #c9a227;
-        }
-        
-        @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
-            
-            .logo-text {
-                font-size: 22px;
-            }
-            
-            .main-content {
-                padding-top: 80px;
-            }
-            
-            .sketchfab-embed-wrapper {
-                aspect-ratio: 4/3;
-                border-radius: 12px;
-            }
-            
-            .info-section {
-                padding: 24px 16px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="bg-gradient"></div>
-    
-    <header class="header">
-        <div class="logo">
-            <div class="logo-icon">🐕</div>
-            <span class="logo-text">GRIFFIN</span>
-        </div>
-        <a href="menu.html" class="back-btn">← Back to Menu</a>
-    </header>
-    
-    <main class="main-content">
-        <div class="viewer-container">
-            <div class="sketchfab-embed-wrapper">
-                <iframe 
-                    title="Labrador Dog - Griffin"
-                    allow="autoplay; fullscreen; xr-spatial-tracking" 
-                    src="https://sketchfab.com/models/1f56cfbab07e4fe49b5d9e521c82073a/embed?autostart=1&ui_theme=dark&dnt=1">
-                </iframe>
-            </div>
-        </div>
-        
-        <section class="info-section">
-            <div class="info-card">
-                <h3>🐕 Sobre Griffin</h3>
-                <p>
-                    Griffin es un hermoso <span class="highlight">Labrador</span>, 
-                    leal compañero y el mejor amigo de la familia. 
-                    Siempre está listo para jugar y dar amor incondicional.
-                </p>
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-value">52.8k</div>
-                        <div class="stat-label">Triángulos</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">26.9k</div>
-                        <div class="stat-label">Vértices</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="info-card">
-                <h3>🎮 Controles</h3>
-                <ul class="instructions-list">
-                    <li><span class="icon">🖱️</span> Arrastra para rotar el modelo</li>
-                    <li><span class="icon">🔍</span> Scroll para hacer zoom</li>
-                    <li><span class="icon">⌨️</span> Click derecho para mover</li>
-                    <li><span class="icon">📱</span> En móvil: usa dos dedos</li>
-                </ul>
-            </div>
-        </section>
-        
-        <div class="note">
-            <p>💡 Modelo 3D cortesía de <strong>kenchoo</strong> en Sketchfab (CC Attribution)</p>
-        </div>
-    </main>
-</body>
-</html>
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/pages/g.html b/pages/g.html
+index ff228b300376c621628f7c47580d50e23fe73753..efd35ceedd4f7af68702fb5350cff5568722c0d8 100644
+--- a/pages/g.html
++++ b/pages/g.html
+@@ -243,60 +243,60 @@
+ </head>
+ <body>
+     <div class="bg-gradient"></div>
+     
+     <header class="header">
+         <div class="logo">
+             <div class="logo-icon">🐕</div>
+             <span class="logo-text">GRIFFIN</span>
+         </div>
+         <a href="menu.html" class="back-btn">← Back to Menu</a>
+     </header>
+     
+     <main class="main-content">
+         <div class="viewer-container">
+             <div class="sketchfab-embed-wrapper">
+                 <iframe 
+                     title="Labrador Dog - Griffin"
+                     allow="autoplay; fullscreen; xr-spatial-tracking" 
+                     src="https://sketchfab.com/models/1f56cfbab07e4fe49b5d9e521c82073a/embed?autostart=1&ui_theme=dark&dnt=1">
+                 </iframe>
+             </div>
+         </div>
+         
+         <section class="info-section">
+             <div class="info-card">
+-                <h3>🐕 Sobre Griffin</h3>
++                <h3>🐕 About Griffin</h3>
+                 <p>
+-                    Griffin es un hermoso <span class="highlight">Labrador</span>, 
+-                    leal compañero y el mejor amigo de la familia. 
+-                    Siempre está listo para jugar y dar amor incondicional.
++                    Griffin is a beautiful <span class="highlight">Labrador</span>, 
++                    a loyal companion and the family's best friend.
++                    He is always ready to play and give unconditional love.
+                 </p>
+                 <div class="stats">
+                     <div class="stat">
+                         <div class="stat-value">52.8k</div>
+-                        <div class="stat-label">Triángulos</div>
++                        <div class="stat-label">Triangles</div>
+                     </div>
+                     <div class="stat">
+                         <div class="stat-value">26.9k</div>
+-                        <div class="stat-label">Vértices</div>
++                        <div class="stat-label">Vertices</div>
+                     </div>
+                 </div>
+             </div>
+             
+             <div class="info-card">
+-                <h3>🎮 Controles</h3>
++                <h3>🎮 Controls</h3>
+                 <ul class="instructions-list">
+-                    <li><span class="icon">🖱️</span> Arrastra para rotar el modelo</li>
+-                    <li><span class="icon">🔍</span> Scroll para hacer zoom</li>
+-                    <li><span class="icon">⌨️</span> Click derecho para mover</li>
+-                    <li><span class="icon">📱</span> En móvil: usa dos dedos</li>
++                    <li><span class="icon">🖱️</span> Drag to rotate the model</li>
++                    <li><span class="icon">🔍</span> Scroll to zoom</li>
++                    <li><span class="icon">⌨️</span> Right-click to pan</li>
++                    <li><span class="icon">📱</span> On mobile: use two fingers</li>
+                 </ul>
+             </div>
+         </section>
+         
+         <div class="note">
+-            <p>💡 Modelo 3D cortesía de <strong>kenchoo</strong> en Sketchfab (CC Attribution)</p>
++            <p>💡 3D model courtesy of <strong>kenchoo</strong> on Sketchfab (CC Attribution)</p>
+         </div>
+     </main>
+ </body>
+ </html>
+ 
+EOF
+)
