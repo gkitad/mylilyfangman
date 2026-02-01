@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Griffin - 3D Model Viewer</title>
+    <title>Griffin 🐕 - 3D</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
         
@@ -15,10 +15,9 @@
         
         :root {
             --bg-dark: #0a0a0a;
-            --bg-gradient-1: #0f0f0f;
-            --bg-gradient-2: #1a1a1a;
             --accent-gold: #c9a227;
             --accent-gold-light: #e8c547;
+            --accent-pink: #ff7fb9;
             --text-primary: #f5f5f5;
             --text-secondary: #888;
             --glass-bg: rgba(255, 255, 255, 0.03);
@@ -42,21 +41,9 @@
             height: 100%;
             background: 
                 radial-gradient(ellipse at 20% 20%, rgba(201, 162, 39, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(201, 162, 39, 0.05) 0%, transparent 50%),
-                linear-gradient(180deg, var(--bg-gradient-1) 0%, var(--bg-dark) 50%, var(--bg-gradient-2) 100%);
+                radial-gradient(ellipse at 80% 80%, rgba(255, 127, 185, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 50%, #1a1a1a 100%);
             z-index: -1;
-        }
-        
-        .noise-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 1;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
         
         .header {
@@ -100,12 +87,6 @@
             background-clip: text;
         }
         
-        .header-info {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-        
         .model-badge {
             padding: 8px 16px;
             background: var(--glass-bg);
@@ -121,15 +102,9 @@
             color: var(--accent-gold);
         }
         
-        #viewer-container {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-        }
-        
         #canvas-container {
             width: 100%;
-            height: 100%;
+            height: 100vh;
         }
         
         .loading-screen {
@@ -150,6 +125,7 @@
         .loading-screen.hidden {
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
         }
         
         .loading-paw {
@@ -173,7 +149,7 @@
             margin-top: 20px;
             width: 200px;
             height: 3px;
-            background: var(--glass-bg);
+            background: rgba(255,255,255,0.1);
             border-radius: 2px;
             overflow: hidden;
         }
@@ -181,7 +157,7 @@
         .loading-bar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-pink));
             border-radius: 2px;
             transition: width 0.3s ease;
         }
@@ -246,14 +222,11 @@
             z-index: 100;
             opacity: 0;
             transform: translateY(20px);
-            animation: slideUp 0.6s ease 1s forwards;
+            animation: slideUp 0.6s ease 0.5s forwards;
         }
         
         @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .info-panel h3 {
@@ -278,23 +251,9 @@
             border-top: 1px solid var(--glass-border);
         }
         
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
         
         .instructions {
             position: fixed;
@@ -310,7 +269,7 @@
             color: var(--text-secondary);
             opacity: 0;
             transform: translateY(20px);
-            animation: slideUp 0.6s ease 1.2s forwards;
+            animation: slideUp 0.6s ease 0.7s forwards;
         }
         
         .instructions div {
@@ -320,41 +279,46 @@
             margin-bottom: 8px;
         }
         
-        .instructions div:last-child {
-            margin-bottom: 0;
+        .instructions div:last-child { margin-bottom: 0; }
+        .instructions span { color: var(--accent-gold); }
+        
+        /* Back button - Valentine style */
+        .back-btn {
+            position: fixed;
+            top: 24px;
+            right: 40px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-pink), #ffb3d6);
+            border: none;
+            border-radius: 20px;
+            color: #4c0f2a;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 100;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 127, 185, 0.3);
         }
         
-        .instructions span {
-            color: var(--accent-gold);
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 127, 185, 0.4);
         }
         
         @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
-            
-            .logo-text {
-                font-size: 22px;
-            }
-            
-            .model-badge {
-                display: none;
-            }
-            
-            .info-panel,
-            .instructions {
-                display: none;
-            }
-            
-            .controls-panel {
-                bottom: 20px;
-            }
+            .header { padding: 16px 20px; }
+            .logo-text { font-size: 22px; }
+            .model-badge { display: none; }
+            .info-panel, .instructions { display: none; }
+            .controls-panel { bottom: 20px; padding: 10px 16px; }
+            .control-btn { width: 38px; height: 38px; font-size: 16px; }
+            .back-btn { top: 16px; right: 20px; padding: 8px 16px; font-size: 12px; }
         }
     </style>
 </head>
 <body>
     <div class="bg-gradient"></div>
-    <div class="noise-overlay"></div>
     
     <div class="loading-screen" id="loading-screen">
         <div class="loading-paw">🐾</div>
@@ -369,14 +333,12 @@
             <div class="logo-icon">🐕</div>
             <span class="logo-text">GRIFFIN</span>
         </div>
-        <div class="header-info">
-            <div class="model-badge">Labrador Negro • <span>3D Interactive</span></div>
-        </div>
+        <div class="model-badge">Labrador Negro • <span>3D Interactive</span></div>
     </header>
     
-    <div id="viewer-container">
-        <div id="canvas-container"></div>
-    </div>
+    <a href="menu.html" class="back-btn">← Back to Menu</a>
+    
+    <div id="canvas-container"></div>
     
     <div class="info-panel">
         <h3>🐕 Griffin</h3>
@@ -409,7 +371,6 @@
         <button class="control-btn" id="btn-light" title="Cambiar iluminación">💡</button>
     </div>
 
-    <!-- Three.js from CDN -->
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
     <script type="importmap">
     {
@@ -430,6 +391,78 @@
         let clock = new THREE.Clock();
         let lightMode = 0;
         let ambientLight, directionalLight, fillLight, rimLight;
+        
+        // Function to convert texture to black fur
+        function convertToBlackFur(texture, callback) {
+            const image = texture.image;
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = image.width || 1024;
+            canvas.height = image.height || 1024;
+            
+            // Draw image
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // Process each pixel
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                
+                // Calculate brightness
+                const brightness = (r + g + b) / 3;
+                
+                // Detect special areas to preserve:
+                // Pink/Red (tongue, gums, inner mouth)
+                const isPinkRed = (r > 140 && r > g * 1.3 && r > b * 1.3);
+                
+                // Very dark already (nose, pupils, dark spots)
+                const isVeryDark = (brightness < 45);
+                
+                // White/very light (teeth, eye highlights)
+                const isVeryLight = (brightness > 230);
+                
+                // Amber/brown tones (eyes) - specific range
+                const isAmberEye = (r > 100 && r < 200 && g > 60 && g < 140 && b < 100 && r > g && g > b * 1.2);
+                
+                // Gray muzzle area (slightly lighter gray for older dogs)
+                const isGrayMuzzle = false; // We'll make this uniform black
+                
+                if (isPinkRed || isVeryDark || isVeryLight || isAmberEye) {
+                    // Preserve these colors - don't modify
+                    continue;
+                } else {
+                    // Convert fur to black
+                    // Use original brightness to maintain texture/depth
+                    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+                    
+                    // Map to very dark range (15-40) for black fur with subtle variation
+                    const blackValue = 15 + (luminance / 255) * 25;
+                    
+                    data[i] = blackValue;     // R
+                    data[i + 1] = blackValue; // G
+                    data[i + 2] = blackValue; // B
+                    // Alpha stays the same
+                }
+            }
+            
+            // Put modified data back
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Create new texture
+            const newTexture = new THREE.CanvasTexture(canvas);
+            newTexture.flipY = texture.flipY;
+            newTexture.colorSpace = THREE.SRGBColorSpace;
+            newTexture.needsUpdate = true;
+            
+            callback(newTexture);
+        }
         
         function init() {
             const container = document.getElementById('canvas-container');
@@ -452,6 +485,7 @@
             
             setupLights();
             
+            // Ground
             const groundGeometry = new THREE.CircleGeometry(10, 64);
             const groundMaterial = new THREE.MeshStandardMaterial({
                 color: 0x111111,
@@ -464,6 +498,7 @@
             ground.receiveShadow = true;
             scene.add(ground);
             
+            // Controls
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
@@ -482,27 +517,21 @@
         }
         
         function setupLights() {
-            ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambientLight);
             
-            directionalLight = new THREE.DirectionalLight(0xfff5e6, 1);
+            directionalLight = new THREE.DirectionalLight(0xfff5e6, 1.2);
             directionalLight.position.set(5, 8, 5);
             directionalLight.castShadow = true;
             directionalLight.shadow.mapSize.width = 2048;
             directionalLight.shadow.mapSize.height = 2048;
-            directionalLight.shadow.camera.near = 0.5;
-            directionalLight.shadow.camera.far = 50;
-            directionalLight.shadow.camera.left = -10;
-            directionalLight.shadow.camera.right = 10;
-            directionalLight.shadow.camera.top = 10;
-            directionalLight.shadow.camera.bottom = -10;
             scene.add(directionalLight);
             
-            fillLight = new THREE.DirectionalLight(0x8ec8ff, 0.3);
+            fillLight = new THREE.DirectionalLight(0x8ec8ff, 0.4);
             fillLight.position.set(-5, 3, -5);
             scene.add(fillLight);
             
-            rimLight = new THREE.DirectionalLight(0xc9a227, 0.5);
+            rimLight = new THREE.DirectionalLight(0xc9a227, 0.6);
             rimLight.position.set(0, 5, -8);
             scene.add(rimLight);
         }
@@ -516,6 +545,7 @@
                 function(gltf) {
                     model = gltf.scene;
                     
+                    // Center and scale
                     const box = new THREE.Box3().setFromObject(model);
                     const center = box.getCenter(new THREE.Vector3());
                     const size = box.getSize(new THREE.Vector3());
@@ -528,7 +558,25 @@
                     model.position.y = -box.min.y * scale;
                     model.position.z = -center.z * scale;
                     
-                    // Convert fur to BLACK
+                    // Process all meshes
+                    let texturesProcessed = 0;
+                    let totalTextures = 0;
+                    
+                    // Count textures first
+                    model.traverse((child) => {
+                        if (child.isMesh && child.material && child.material.map) {
+                            totalTextures++;
+                        }
+                    });
+                    
+                    if (totalTextures === 0) {
+                        // No textures, just add model
+                        scene.add(model);
+                        finishLoading();
+                        return;
+                    }
+                    
+                    // Process textures
                     model.traverse((child) => {
                         if (child.isMesh) {
                             child.castShadow = true;
@@ -538,85 +586,59 @@
                                 child.material = child.material.clone();
                                 
                                 if (child.material.map) {
-                                    const texture = child.material.map;
+                                    const originalTexture = child.material.map;
                                     
-                                    const waitForImage = () => {
-                                        const image = texture.image;
-                                        if (!image || !image.complete || image.width === 0) {
-                                            setTimeout(waitForImage, 100);
-                                            return;
-                                        }
-                                        
-                                        const canvas = document.createElement('canvas');
-                                        const ctx = canvas.getContext('2d');
-                                        canvas.width = image.width;
-                                        canvas.height = image.height;
-                                        ctx.drawImage(image, 0, 0);
-                                        
-                                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                                        const data = imageData.data;
-                                        
-                                        for (let i = 0; i < data.length; i += 4) {
-                                            const r = data[i];
-                                            const g = data[i + 1];
-                                            const b = data[i + 2];
-                                            
-                                            const isPink = (r > 120 && r > g * 1.2 && r > b * 1.2);
-                                            const isVeryDark = ((r + g + b) / 3 < 50);
-                                            const isWhite = ((r + g + b) / 3 > 220);
-                                            const isAmber = (r > 80 && r < 180 && g > 50 && g < 130 && b < 80 && r > g && g > b);
-                                            
-                                            if (!isPink && !isVeryDark && !isWhite && !isAmber) {
-                                                const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-                                                const newVal = 18 + (luminance / 255) * 25;
+                                    // Wait for texture to load
+                                    const checkAndConvert = () => {
+                                        const img = originalTexture.image;
+                                        if (img && img.complete && img.width > 0) {
+                                            convertToBlackFur(originalTexture, (blackTexture) => {
+                                                child.material.map = blackTexture;
+                                                child.material.needsUpdate = true;
+                                                texturesProcessed++;
                                                 
-                                                data[i] = newVal;
-                                                data[i + 1] = newVal;
-                                                data[i + 2] = newVal;
-                                            }
+                                                if (texturesProcessed >= totalTextures) {
+                                                    scene.add(model);
+                                                    finishLoading();
+                                                }
+                                            });
+                                        } else {
+                                            setTimeout(checkAndConvert, 50);
                                         }
-                                        
-                                        ctx.putImageData(imageData, 0, 0);
-                                        
-                                        const newTexture = new THREE.CanvasTexture(canvas);
-                                        newTexture.flipY = texture.flipY;
-                                        newTexture.colorSpace = THREE.SRGBColorSpace;
-                                        child.material.map = newTexture;
-                                        child.material.needsUpdate = true;
                                     };
-                                    
-                                    waitForImage();
+                                    checkAndConvert();
                                 }
                                 
-                                child.material.roughness = 0.7;
-                                child.material.metalness = 0.1;
+                                // Adjust material for black fur look
+                                child.material.roughness = 0.65;
+                                child.material.metalness = 0.05;
                             }
                         }
                     });
                     
-                    scene.add(model);
-                    
+                    // Setup animations
                     if (gltf.animations && gltf.animations.length > 0) {
                         mixer = new THREE.AnimationMixer(model);
                         const action = mixer.clipAction(gltf.animations[0]);
                         action.play();
                     }
                     
-                    loadingBar.style.width = '100%';
-                    setTimeout(() => {
-                        document.getElementById('loading-screen').classList.add('hidden');
-                    }, 500);
+                    function finishLoading() {
+                        loadingBar.style.width = '100%';
+                        setTimeout(() => {
+                            document.getElementById('loading-screen').classList.add('hidden');
+                        }, 300);
+                    }
                 },
                 function(xhr) {
                     if (xhr.total > 0) {
                         const percent = (xhr.loaded / xhr.total) * 100;
-                        loadingBar.style.width = percent + '%';
+                        loadingBar.style.width = Math.min(percent, 90) + '%';
                     }
                 },
                 function(error) {
                     console.error('Error loading model:', error);
-                    document.querySelector('.loading-text').textContent = 'Error al cargar el modelo';
-                    loadingBar.style.background = '#ff4444';
+                    document.querySelector('.loading-text').textContent = 'Error al cargar 😢';
                 }
             );
         }
@@ -647,28 +669,22 @@
                 lightMode = (lightMode + 1) % 3;
                 
                 switch(lightMode) {
-                    case 0:
-                        ambientLight.intensity = 0.4;
-                        directionalLight.intensity = 1;
+                    case 0: // Normal
+                        ambientLight.intensity = 0.5;
+                        directionalLight.intensity = 1.2;
                         directionalLight.color.setHex(0xfff5e6);
-                        fillLight.intensity = 0.3;
-                        rimLight.intensity = 0.5;
                         scene.background = new THREE.Color(0x0a0a0a);
                         break;
-                    case 1:
-                        ambientLight.intensity = 0.8;
-                        directionalLight.intensity = 1.5;
+                    case 1: // Bright
+                        ambientLight.intensity = 0.9;
+                        directionalLight.intensity = 1.8;
                         directionalLight.color.setHex(0xffffff);
-                        fillLight.intensity = 0.6;
-                        rimLight.intensity = 0.8;
                         scene.background = new THREE.Color(0x1a1a1a);
                         break;
-                    case 2:
-                        ambientLight.intensity = 0.15;
-                        directionalLight.intensity = 1.2;
+                    case 2: // Dramatic
+                        ambientLight.intensity = 0.2;
+                        directionalLight.intensity = 1.5;
                         directionalLight.color.setHex(0xffc080);
-                        fillLight.intensity = 0.1;
-                        rimLight.intensity = 1;
                         scene.background = new THREE.Color(0x050505);
                         break;
                 }
@@ -687,7 +703,7 @@
             const delta = clock.getDelta();
             
             if (mixer) mixer.update(delta);
-            if (autoRotate && model) model.rotation.y += 0.003;
+            if (autoRotate && model) model.rotation.y += 0.005;
             
             controls.update();
             renderer.render(scene, camera);
