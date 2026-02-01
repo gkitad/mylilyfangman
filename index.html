@@ -340,6 +340,16 @@
       color: rgba(42,31,37,.70);
       letter-spacing: .2px;
       line-height: 1.7;
+      
+      /* ✅ Ocultar contenido durante la animación de apertura */
+      opacity: 0;
+      transition: opacity 400ms ease;
+    }
+    
+    /* ✅ Mostrar contenido solo cuando está centrada */
+    .paper.centered .paperInner{
+      opacity: 1;
+      transition-delay: 300ms;
     }
 
     .letterTitle{
