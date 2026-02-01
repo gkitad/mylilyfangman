@@ -1,8 +1,37 @@
  (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
 diff --git a/pages/g.html b/pages/g.html
-index ff228b300376c621628f7c47580d50e23fe73753..efd35ceedd4f7af68702fb5350cff5568722c0d8 100644
+index ff228b300376c621628f7c47580d50e23fe73753..444b0c0bebadba7aafc6f8da6f3295bb2d5054b2 100644
 --- a/pages/g.html
 +++ b/pages/g.html
+@@ -1,27 +1,27 @@
+ <!DOCTYPE html>
+-<html lang="es">
++<html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Griffin 🐕</title>
+     <style>
+         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+         
+         * {
+             margin: 0;
+             padding: 0;
+             box-sizing: border-box;
+         }
+         
+         body {
+             font-family: 'DM Sans', sans-serif;
+             background: #0a0a0a;
+             color: #f5f5f5;
+             min-height: 100vh;
+             overflow-x: hidden;
+         }
+         
+         .bg-gradient {
+             position: fixed;
+             top: 0;
+             left: 0;
 @@ -243,60 +243,60 @@
  </head>
  <body>
