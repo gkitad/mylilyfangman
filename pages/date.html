@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Date 💕</title>
+
+  <style>
+    :root {
+      --bg1:#fff4fa;
+      --bg2:#ffd1e6;
+
+      --win:#ffe8f3;
+      --title1:#ff7fb9;
+      --title2:#ffb3d6;
+
+      --text:#2a2a2a;
+      --accent:#b3155a;
+
+      --hi:#ffffff;
+      --hi2:#ffe7f2;
+      --sh:#b86a8c;
+      --sh2:#7a3554;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: Tahoma, "MS Sans Serif", Verdana, Arial, sans-serif;
+      color:var(--text);
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M0,0 L0,12 L4,9 L6,14 L8,13 L6,8 L10,8 Z" fill="white" stroke="black"/></svg>'), auto;
+
+      background:
+        radial-gradient(900px 650px at 20% 15%, rgba(255,255,255,.85), transparent 60%),
+        radial-gradient(900px 650px at 80% 70%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(700px 450px at 50% 55%, rgba(255,79,163,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+
+      overflow-x:hidden;
+      padding: 20px;
+    }
+
+    /* 💗 floating hearts */
+    #heartLayer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      overflow:hidden;
+    }
+    .heart{
+      position:absolute;
+      opacity: .14;
+      animation: drift linear forwards;
+      user-select:none;
+      filter: blur(.1px);
+    }
+    @keyframes drift{
+      0%   { transform: translate(var(--x), 110vh) scale(var(--s)); opacity: 0; }
+      15%  { opacity: .14; }
+      50%  { transform: translate(calc(var(--x) + var(--wiggle)), 45vh) scale(var(--s)); }
+      100% { transform: translate(calc(var(--x) - var(--wiggle)), -20vh) scale(var(--s)); opacity: 0; }
+    }
+
+    /* Window */
+    .window {
+      width:min(520px, 95%);
+      background: var(--win);
+      border-radius: 0;
+      position: relative;
+      padding:0;
+      box-shadow: 
+        0 18px 55px rgba(0,0,0,.22),
+        0 8px 18px rgba(179,21,90,.12);
+
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--sh2);
+      border-bottom: 3px solid var(--sh2);
+
+      z-index: 5;
+      
+      animation: windowAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes windowAppear {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .window::before {
+      content:"";
+      position:absolute;
+      inset: 4px;
+      pointer-events:none;
+      border-top: 2px solid var(--hi2);
+      border-left: 2px solid var(--hi2);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+    }
+
+    .titlebar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 8px 10px;
+      background: linear-gradient(90deg, var(--title1), var(--title2));
+      border-bottom: 2px solid rgba(0,0,0,.12);
+      user-select:none;
+      gap: 10px;
+    }
+
+    .titlebar__text {
+      font-size: 13px;
+      font-weight: 800;
+      color:#4c0f2a;
+      white-space: nowrap;
+      text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    }
+
+    .win-controls {
+      display:flex;
+      gap:6px;
+    }
+
+    .winbtn {
+      width: 22px;
+      height: 18px;
+      background: #ffe3f0;
+      border-radius: 0;
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+      display:grid;
+      place-items:center;
+      font-size: 12px;
+      color:#5e1f3c;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .winbtn:hover {
+      background: #ffd9ec;
+    }
+
+    .winbtn:active {
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+    }
+
+    .window__body {
+      padding: 20px 24px 24px;
+      text-align:center;
+    }
+
+    /* Save the Date Header */
+    .date-header {
+      margin-bottom: 20px;
+    }
+
+    .date-header h1 {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 1.8rem;
+      margin: 0 0 5px;
+      color: var(--accent);
+      text-shadow: 2px 2px 0 rgba(255,255,255,.6);
+    }
+
+    .date-header p {
+      font-size: 13px;
+      color: #7a3554;
+      margin: 0;
+    }
+
+    /* Countdown */
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      background: linear-gradient(180deg, #fff5fb 0%, #ffeef6 100%);
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+      padding: 12px 14px;
+      min-width: 65px;
+    }
+
+    .countdown-value {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .countdown-label {
+      font-size: 10px;
+      color: #7a3554;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* Date Info Cards */
+    .date-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .info-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #fff5fb 0%, #ffeef6 100%);
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+      text-align: left;
+    }
+
+    .info-icon {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,127,185,0.2);
+      border-radius: 8px;
+    }
+
+    .info-content {
+      flex: 1;
+    }
+
+    .info-label {
+      font-size: 10px;
+      color: #7a3554;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* Map Container */
+    .map-container {
+      margin: 20px 0;
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--sh2);
+      border-bottom: 3px solid var(--sh2);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .map-container iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+      display: block;
+    }
+
+    .map-label {
+      background: linear-gradient(90deg, var(--title1), var(--title2));
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #4c0f2a;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Confirm Button */
+    .confirm-section {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 2px dashed rgba(179,21,90,0.2);
+    }
+
+    .confirm-text {
+      font-size: 13px;
+      color: #7a3554;
+      margin-bottom: 12px;
+    }
+
+    .confirm-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .confirm-btn {
+      padding: 12px 24px;
+      background: linear-gradient(180deg, #ff9ecd 0%, #ff7fb9 100%);
+      border: none;
+      border-top: 3px solid var(--hi);
+      border-left: 3px solid var(--hi);
+      border-right: 3px solid var(--sh2);
+      border-bottom: 3px solid var(--sh2);
+      font-size: 14px;
+      font-weight: 800;
+      color: #4c0f2a;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .confirm-btn:hover {
+      background: linear-gradient(180deg, #ffb3d9 0%, #ff9ecd 100%);
+      transform: translateY(-2px);
+    }
+
+    .confirm-btn:active {
+      border-top: 3px solid var(--sh2);
+      border-left: 3px solid var(--sh2);
+      border-right: 3px solid var(--hi);
+      border-bottom: 3px solid var(--hi);
+      transform: translateY(1px);
+    }
+
+    .confirm-btn.secondary {
+      background: linear-gradient(180deg, #fff0f5 0%, #ffe8f0 100%);
+    }
+
+    .confirm-btn.secondary:hover {
+      background: linear-gradient(180deg, #fff5f8 0%, #fff0f5 100%);
+    }
+
+    /* Confirmed message */
+    .confirmed-message {
+      display: none;
+      padding: 16px;
+      background: linear-gradient(180deg, #d4ffda 0%, #b8f5c0 100%);
+      border-top: 2px solid #8ce89a;
+      border-left: 2px solid #8ce89a;
+      border-right: 2px solid #4a9f54;
+      border-bottom: 2px solid #4a9f54;
+      font-size: 14px;
+      font-weight: 700;
+      color: #2d5a32;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .confirmed-message.show {
+      display: block;
+    }
+
+    .meme-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
+    /* Back link */
+    .back {
+      margin-top: 18px;
+      display:inline-block;
+      color: var(--accent);
+      text-decoration:none;
+      font-weight: 800;
+      font-family: "Courier New", monospace;
+      padding: 8px 16px;
+      border-radius: 0;
+      
+      border-top: 2px solid var(--hi);
+      border-left: 2px solid var(--hi);
+      border-right: 2px solid var(--sh);
+      border-bottom: 2px solid var(--sh);
+      
+      background: rgba(255,255,255,.4);
+      transition: all 0.15s ease;
+    }
+
+    .back:hover {
+      background: rgba(255,255,255,.6);
+      transform: translateY(-1px);
+    }
+
+    .back:active {
+      border-top: 2px solid var(--sh);
+      border-left: 2px solid var(--sh);
+      border-right: 2px solid var(--hi);
+      border-bottom: 2px solid var(--hi);
+      transform: translateY(1px);
+    }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      .window__body {
+        padding: 16px;
+      }
+
+      .date-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .countdown {
+        gap: 8px;
+      }
+
+      .countdown-item {
+        padding: 10px 12px;
+        min-width: 58px;
+      }
+
+      .countdown-value {
+        font-size: 20px;
+      }
+
+      .info-card {
+        padding: 12px;
+      }
+
+      .map-container iframe {
+        height: 180px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .heart, .window, .confirmed-message {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="heartLayer"></div>
+
+  <div class="window">
+    <div class="titlebar">
+      <div class="titlebar__text">💕 SAVE THE DATE 💕</div>
+      <div class="win-controls">
+        <div class="winbtn" title="Minimize">_</div>
+        <div class="winbtn" title="Maximize">□</div>
+        <div class="winbtn" title="Close">×</div>
+      </div>
+    </div>
+
+    <div class="window__body">
+      
+      <!-- Header -->
+      <div class="date-header">
+        <h1>Valentine's Date 🌹</h1>
+      </div>
+
+      <!-- Countdown -->
+      <div class="countdown" id="countdown">
+        <div class="countdown-item">
+          <div class="countdown-value" id="days">00</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-value" id="hours">00</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-value" id="minutes">00</div>
+          <div class="countdown-label">Mins</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-value" id="seconds">00</div>
+          <div class="countdown-label">Secs</div>
+        </div>
+      </div>
+
+      <!-- Date Info -->
+      <div class="date-info">
+        <div class="info-card">
+          <div class="info-icon">📅</div>
+          <div class="info-content">
+            <div class="info-label">Date</div>
+            <div class="info-value">February 14, 2025</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">🕖</div>
+          <div class="info-content">
+            <div class="info-label">Time</div>
+            <div class="info-value">7:00 PM</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">👗</div>
+          <div class="info-content">
+            <div class="info-label">Dresscode</div>
+            <div class="info-value">Casual</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <div class="map-label">📍 Location</div>
+        <!-- 
+          =====================================================
+          PARA CAMBIAR LA UBICACIÓN:
+          1. Ve a Google Maps
+          2. Busca el lugar
+          3. Click en "Compartir" > "Incorporar un mapa"
+          4. Copia el código del iframe
+          5. Reemplaza el iframe de abajo con el nuevo
+          =====================================================
+        -->
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3435.7833809221565!2d-97.64663532442653!3d30.555423674670163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644d0e7e25c3aeb%3A0x13ca3c484615e7e2!2s3801%20N%20A%20W%20Grimes%20Blvd%2C%20Round%20Rock%2C%20TX%2078665!5e0!3m2!1ses!2sus!4v1770039159846!5m2!1ses!2sus"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <!-- Confirm Section -->
+      <div class="confirm-section" id="confirmSection">
+        <div class="confirm-text">¿Vas a asistir?</div>
+        <div class="confirm-buttons">
+          <button class="confirm-btn" onclick="confirmDate()">Yes! 💖</button>
+        </div>
+      </div>
+
+      <!-- Confirmed Message with Meme (hidden initially) -->
+      <div class="confirmed-message" id="confirmedMessage">
+        <img src="meme-reaction.png" alt="I knew it" class="meme-image">
+      </div>
+
+      <a class="back" href="menu.html">← Back to Menu</a>
+    </div>
+  </div>
+
+  <!-- Hearts Script -->
+  <script>
+    const layer = document.getElementById("heartLayer");
+    const hearts = ["♡","♥","❥","❤","💕"];
+
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+
+      const x = Math.random()*100;
+      const s = 0.6 + Math.random()*1.2;
+      const wiggle = (Math.random()*40 - 20) + "vw";
+
+      h.style.setProperty("--x", x + "vw");
+      h.style.setProperty("--s", s.toFixed(2));
+      h.style.setProperty("--wiggle", wiggle);
+      h.style.fontSize = (16 + Math.random()*26) + "px";
+      h.style.animationDuration = (10 + Math.random()*10) + "s";
+
+      layer.appendChild(h);
+      setTimeout(()=>h.remove(), 22000);
+    }
+    setInterval(spawnHeart, 520);
+  </script>
+
+  <!-- Countdown Script -->
+  <script>
+    // Set the date: February 14, 2025 at 7:00 PM
+    const targetDate = new Date('2025-02-14T19:00:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance > 0) {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+      } else {
+        // Date has passed
+        document.getElementById('days').textContent = '00';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+      }
+    }
+
+    // Update immediately and then every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+  <!-- Confirm Script -->
+  <script>
+    function confirmDate() {
+      document.getElementById('confirmSection').style.display = 'none';
+      document.getElementById('confirmedMessage').classList.add('show');
+    }
+  </script>
+
+  <!-- Global music player (if you have one) -->
+  <script src="/assets/valentine-player.js?v=5"></script>
+</body>
+</html>
