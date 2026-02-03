@@ -519,11 +519,11 @@
   </style>
 </head>
 
-<body>
+<body data-track="/assets/intro.mp3">
 
   <div id="heartLayer"></div>
 
-  <button class="musicBtn posTopLeft" id="musicBtn" type="button">Music for you 💗</button>
+  <button class="musicBtn posTopLeft" id="songBtn" type="button">🎶 Music ▶</button>
 
   <!-- Backdrop -->
   <div class="letterBackdrop" id="letterBackdrop" aria-hidden="true"></div>
@@ -598,14 +598,8 @@
   </script>
 
   <!-- Music -->
-  <script src="/assets/valentine-player.js?v=5"></script>
+  <script src="/assets/valentine-player.js?v=6"></script>
   <script>
-    const musicBtn = document.getElementById("musicBtn");
-    musicBtn.addEventListener("click", () => {
-      const btn = document.getElementById("songBtn");
-      if (btn) btn.click();
-    });
-
     const env = document.getElementById("envelope");
     const paper = document.getElementById("paper");
     const scrEnv = document.getElementById("screenEnvelope");
@@ -738,6 +732,7 @@
         scrMain.classList.remove("hidden");
 
         // Move same music button into card
+        const musicBtn = document.getElementById("songBtn");
         card.insertBefore(musicBtn, card.firstChild);
         musicBtn.classList.remove("posTopLeft");
         musicBtn.classList.add("posCentered");
