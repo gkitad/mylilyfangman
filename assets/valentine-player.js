@@ -42,8 +42,13 @@
       audio.currentTime = savedState.position || 0;
       
       if (savedState.playing) {
-        // Intentar reproducir automáticamente
-        playAudio();
+        // ✅ Para iOS, intentar reanudar después de un pequeño delay
+        if (isIOSSafari()) {
+          tryAutoResumeForIOS();
+        } else {
+          // Intentar reproducir automáticamente en otros navegadores
+          playAudio();
+        }
       }
     }
 
@@ -88,7 +93,8 @@
         })
         .catch(error => {
           console.log('Autoplay prevented:', error);
-          // El navegador bloqueó el autoplay, el usuario debe dar click
+          // En iOS, el usuario necesita interactuar primero
+          // El botón ya está visible, solo esperamos el click
         });
     }
   }
@@ -169,6 +175,35 @@
       console.warn('Could not load music state:', e);
       return null;
     }
+  }
+
+  // ✅ NUEVO: Detectar si es iOS Safari
+  function isIOSSafari() {
+    const ua = navigator.userAgent;
+    const iOS = /iPad|iPhone|iPod/.test(ua);
+    const webkit = /WebKit/.test(ua);
+    const notChrome = !/CriOS/.test(ua);
+    return iOS && webkit && notChrome;
+  }
+
+  // ✅ NUEVO: Intentar reanudar automáticamente en iOS después de un delay
+  function tryAutoResumeForIOS() {
+    const savedState = loadState();
+    if (!savedState || !savedState.playing) return;
+    
+    // Esperar un momento para que la página cargue completamente
+    setTimeout(() => {
+      if (audio && audio.paused) {
+        // Intentar reproducir automáticamente
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Si falla, el usuario verá el botón y puede hacer click
+            console.log('iOS requires user interaction to resume');
+          });
+        }
+      }
+    }, 300);
   }
 
   // Limpiar al cerrar completamente
