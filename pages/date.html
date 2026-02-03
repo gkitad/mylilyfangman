@@ -130,6 +130,28 @@
       text-shadow: 0 1px 0 rgba(255,255,255,.5);
     }
 
+    .titlebar__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .playbtn {
+      flex-shrink: 0;
+      height: 20px;
+      padding: 0 8px;
+      background: #ffe3f0;
+      border: 2px solid;
+      border-color: var(--hi) var(--sh) var(--sh) var(--hi);
+      font-size: 11px;
+      font-weight: 900;
+      color: #5e1f3c;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .win-controls {
       display:flex;
       gap:6px;
@@ -461,16 +483,21 @@
   </style>
 </head>
 
-<body>
- <body data-track="../assets/cancionmenu.mp3">
+<body data-track="../assets/cancionmenu.mp3">
+  <div id="heartLayer"></div>
 
   <div class="window">
     <div class="titlebar">
       <div class="titlebar__text">💕 SAVE THE DATE 💕</div>
-      <div class="win-controls">
-        <div class="winbtn" title="Minimize">_</div>
-        <div class="winbtn" title="Maximize">□</div>
-        <div class="winbtn" title="Close">×</div>
+      
+      <div class="titlebar__actions">
+        <button class="playbtn" id="songBtn" type="button">🎶 Song</button>
+        
+        <div class="win-controls">
+          <div class="winbtn" title="Minimize">_</div>
+          <div class="winbtn" title="Maximize">□</div>
+          <div class="winbtn" title="Close">×</div>
+        </div>
       </div>
     </div>
 
@@ -531,16 +558,6 @@
       <!-- Map -->
       <div class="map-container">
         <div class="map-label">📍 Location</div>
-        <!-- 
-          =====================================================
-          PARA CAMBIAR LA UBICACIÓN:
-          1. Ve a Google Maps
-          2. Busca el lugar
-          3. Click en "Compartir" > "Incorporar un mapa"
-          4. Copia el código del iframe
-          5. Reemplaza el iframe de abajo con el nuevo
-          =====================================================
-        -->
         <iframe 
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3435.7833809221565!2d-97.64663532442653!3d30.555423674670163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8644d0e7e25c3aeb%3A0x13ca3c484615e7e2!2s3801%20N%20A%20W%20Grimes%20Blvd%2C%20Round%20Rock%2C%20TX%2078665!5e0!3m2!1ses!2sus!4v1770039159846!5m2!1ses!2sus"
           allowfullscreen=""
@@ -559,7 +576,7 @@
 
       <!-- Confirmed Message with Meme (hidden initially) -->
       <div class="confirmed-message" id="confirmedMessage">
-        <img src="meme-reaction.png" alt="I knew it" class="meme-image">
+        You said yes! I knew you would 💗
       </div>
 
       <a class="back" href="menu.html">← Back to Menu</a>
@@ -633,7 +650,7 @@
     }
   </script>
 
-  <!-- Global music player (if you have one) -->
-  <script src="/assets/valentine-player.js?v=5"></script>
+  <!-- Global music player -->
+  <script src="../assets/valentine-player.js?v=6"></script>
 </body>
 </html>
